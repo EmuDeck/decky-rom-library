@@ -1,0 +1,23 @@
+{
+  "startWatcherBody": "云同步准备就绪！",
+  "uploadingWatcherBody": "上传中... 请不要关闭您的设备",
+  "exitWatcherBody": "云同步完成！",
+  "noInternetWatcherBody": "CloudSync已禁用。您的游戏将在下次加载时使用互联网连接上传。",
+  "ControlsTitle": "热键",
+  "QuickSettingsTitle": "快速设置",
+  "CheatsheetButton": "打开速查表",
+  "AspectRatiosTitle": "画面比例",
+  "AspectRatiosSelect": "更改画面比例",
+  "LCDShader": "手持设备LCD着色器",
+  "CRTShader2D": "2D游戏CRT着色器",
+  "CRTShader3D": "3D游戏CRT着色器",
+  "Bezels": "边框",
+  "onlyEATitle": "Only Early access",
+  "onlyEA": "Right now this plugin is only available for EarlyAccess, follow us on Twitter to get updated when this public get released publicly",
+  "LauncherTitle": "启动游戏",
+  "LauncherBtn": "游戏启动器",
+  "UpdateEmusTitle": "更新模拟器",
+  "UpdateEmusFlatpakBtn": "更新 Flatpak",
+  "UpdateEmusAppImageBtn": "更新 AppImage",
+  "loadingGames": "正在生成数据库，请耐心等待"
+}

@@ -1,0 +1,58 @@
+{
+  "name": "decky-rom-launcher",
+  "version": "1.0.0",
+  "description": "A rom launcher for EmuDeck",
+  "scripts": {
+    "build": "shx rm -rf dist && rollup -c",
+    "watch": "rollup -c -w",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EmuDeck/decky-rom-launcher"
+  },
+  "keywords": [
+    "decky",
+    "plugin",
+    "steam-deck",
+    "deck",
+    "emudeck",
+    "roms"
+  ],
+  "author": "DragoonDorise",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/EmuDeck/decky-rom-launcher"
+  },
+  "homepage": "https://github.com/EmuDeck/decky-rom-launcher#readme",
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^21.1.0",
+    "@rollup/plugin-json": "^4.1.0",
+    "@rollup/plugin-node-resolve": "^13.3.0",
+    "@rollup/plugin-replace": "^4.0.0",
+    "@rollup/plugin-typescript": "^8.3.3",
+    "@types/react": "16.14.0",
+    "@types/uuid": "^9.0.1",
+    "@types/validator": "^13.7.17",
+    "@types/webpack": "^5.28.0",
+    "rollup": "^2.77.1",
+    "rollup-plugin-import-assets": "^1.1.1",
+    "shx": "^0.3.4",
+    "tslib": "^2.4.0",
+    "decky-frontend-lib": "^3.25.0",
+    "typescript": "^4.7.4"
+  },
+  "dependencies": {
+    "react-icons": "^4.8.0",
+    "uuid": "^9.0.0",
+    "validator": "^13.9.0"
+  },
+  "pnpm": {
+    "peerDependencyRules": {
+      "ignoreMissing": [
+        "react",
+        "react-dom"
+      ]
+    }
+  }
+}

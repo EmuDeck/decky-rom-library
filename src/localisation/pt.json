@@ -1,0 +1,23 @@
+{
+  "startWatcherBody": "CloudSync pronto!",
+  "uploadingWatcherBody": "A enviar... não desligue o dispositivo",
+  "exitWatcherBody": "CloudSync concluído!",
+  "noInternetWatcherBody": "CloudSync desativado. Seus jogos serão carregados na próxima vez que você os iniciar com conexão à internet.",
+  "ControlsTitle": "Atalhos",
+  "QuickSettingsTitle": "Definições Rápidas",
+  "CheatsheetButton": "Abrir Folha de Dicas",
+  "AspectRatiosTitle": "Relações de Aspecto",
+  "AspectRatiosSelect": "Alterar Relações de Aspecto",
+  "LCDShader": "Shader LCD para dispositivos portáteis",
+  "CRTShader2D": "Shader CRT para jogos 2D",
+  "CRTShader3D": "Shader CRT para jogos 3D",
+  "Bezels": "Biselas",
+  "onlyEATitle": "Only Early access",
+  "onlyEA": "Right now this plugin is only available for EarlyAccess, follow us on Twitter to get updated when this public get released publicly",
+  "LauncherTitle": "Lançar Jogos",
+  "LauncherBtn": "Lançador de Jogos",
+  "UpdateEmusTitle": "Atualizar Emuladores",
+  "UpdateEmusFlatpakBtn": "Atualizar Flatpaks",
+  "UpdateEmusAppImageBtn": "Atualizar AppImages",
+  "loadingGames": "Gerando banco de dados, por favor, seja paciente"
+}

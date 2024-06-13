@@ -1,0 +1,23 @@
+{
+  "startWatcherBody": "CloudSyncの準備完了！",
+  "uploadingWatcherBody": "アップロード中... デバイスを切らないでください",
+  "exitWatcherBody": "CloudSyncが完了しました！",
+  "noInternetWatcherBody": "CloudSyncが無効になっています。次回、インターネット接続時にゲームがアップロードされます。",
+  "ControlsTitle": "ホットキー",
+  "QuickSettingsTitle": "クイック設定",
+  "CheatsheetButton": "チートシートを開く",
+  "AspectRatiosTitle": "画面のアスペクト比",
+  "AspectRatiosSelect": "画面のアスペクト比を変更",
+  "LCDShader": "携帯ゲーム機用のLCDシェーダー",
+  "CRTShader2D": "2Dゲーム用のCRTシェーダー",
+  "CRTShader3D": "3Dゲーム用のCRTシェーダー",
+  "Bezels": "ベゼル",
+  "onlyEATitle": "Only Early access",
+  "onlyEA": "Right now this plugin is only available for EarlyAccess, follow us on Twitter to get updated when this public get released publicly",
+  "LauncherTitle": "ゲームを起動",
+  "LauncherBtn": "ゲームランチャー",
+  "UpdateEmusTitle": "エミュレーターを更新",
+  "UpdateEmusFlatpakBtn": "Flatpakを更新",
+  "UpdateEmusAppImageBtn": "AppImageを更新",
+  "loadingGames": "データベースを生成しています。しばらくお待ちください"
+}

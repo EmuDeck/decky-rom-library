@@ -1,7 +1,7 @@
 {
-  "name": "decky-rom-launcher",
+  "name": "decky-rom-library",
   "version": "1.0.0",
-  "description": "A rom launcher for EmuDeck",
+  "description": "A rom library for EmuDeck",
   "scripts": {
     "build": "shx rm -rf dist && rollup -c",
     "watch": "rollup -c -w",
@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/EmuDeck/decky-rom-launcher"
+    "url": "git+https://github.com/EmuDeck/decky-rom-library"
   },
   "keywords": [
     "decky",
@@ -22,9 +22,9 @@
   "author": "DragoonDorise",
   "license": "GPL-3.0",
   "bugs": {
-    "url": "https://github.com/EmuDeck/decky-rom-launcher"
+    "url": "https://github.com/EmuDeck/decky-rom-library"
   },
-  "homepage": "https://github.com/EmuDeck/decky-rom-launcher#readme",
+  "homepage": "https://github.com/EmuDeck/decky-rom-library#readme",
   "devDependencies": {
     "@rollup/plugin-commonjs": "^21.1.0",
     "@rollup/plugin-json": "^4.1.0",

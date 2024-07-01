@@ -33,6 +33,10 @@ const Games: VFC<{ serverAPI: any }> = ({ serverAPI }) => {
 
   useEffect(() => {
     getDataGames();
+    const TabLastID = localStorage.getItem("emudeck_rom_library_current_tab");
+    if (TabLastID) {
+      setCurrentTab(TabLastID);
+    }
   }, []);
 
   useEffect(() => {
@@ -65,7 +69,15 @@ const Games: VFC<{ serverAPI: any }> = ({ serverAPI }) => {
   }, [games]);
 
   const launchGame = (launcher: string, game: string, name: string) => {
-    const launcherComplete = launcher.replace(/{file.path}/g, `"${game}"`);
+    let launcherComplete = launcher.replace(/{file.path}/g, `"${game}"`);
+    launcherComplete = launcherComplete
+      .replace(/\\"\'/g, "")
+      .replace(/'\\\"/g, "")
+      .replace(/\\\\/g, "\\")
+      .replace(/\\:"/g, '"Z:');
+
+    console.log({ launcherComplete });
+
     launchApp(serverAPI, {
       name: name,
       exec: `${launcherComplete}`,
@@ -202,6 +214,7 @@ const Games: VFC<{ serverAPI: any }> = ({ serverAPI }) => {
           activeTab={currentTab}
           onShowTab={(tabID: string) => {
             setCurrentTab(tabID);
+            localStorage.setItem("emudeck_rom_library_current_tab", tabID);
           }}
           tabs={tabs}
         />

@@ -80,9 +80,5 @@ interface MenuItemWrapperProps extends MainMenuItemProps {
 const MenuItemWrapper: FC<MenuItemWrapperProps> = ({ MenuItemComponent, ...props }) => {
   const [_, setState] = useState(false);
 
-  return (
-    <MenuItemComponent {...props} onSecondaryActionDescription="Kill Cache" onSecondaryButton={undefined}>
-      {<PluginIcon />}
-    </MenuItemComponent>
-  );
+  return <MenuItemComponent {...props}>{<PluginIcon />}</MenuItemComponent>;
 };

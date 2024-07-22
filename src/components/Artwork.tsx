@@ -2,94 +2,62 @@ import { VFC, useState, useEffect } from "react";
 import { Tabs, Button, Focusable, SteamSpinner, Router } from "decky-frontend-lib";
 import { launchApp, getCurrentUserId } from "../common/steamshortcuts";
 import { getTranslateFunc } from "../TranslationsF";
-const Games: VFC<{ serverAPI: any }> = ({ serverAPI }) => {
+import { useFetchCond } from "../hooks/useFetchCond";
+
+const Artwork: VFC<{ serverAPI: any }> = ({ serverAPI }) => {
   const [state, setState] = useState<any>({ games: undefined, tabs: undefined });
   let { games, tabs } = state;
   const [currentTab, setCurrentTab] = useState<string>("Tab1");
   const t = getTranslateFunc();
-
-  const getDataGames = async () => {
-    const userId = getCurrentUserId();
-    await serverAPI.callPluginMethod("emudeck", {
-      command: `generateGameLists`,
-    });
-    serverAPI
-      .callPluginMethod("emudeck", {
-        command: `generateGameListsJson`,
-        strip: false,
-        args: [userId],
-      })
-      .then((response: any) => {
-        //serverAPI.callPluginMethod("generate_roms_json").then((response: any) => {
-        const result: any = response.result;
-        const gameList: any = JSON.parse(result);
-        gameList.sort((a: any, b: any) => a.title.localeCompare(b.title));
-        console.log({ gameList });
-        localStorage.setItem("emudecky_gamelist", result);
-        setState({ ...state, games: gameList });
-      });
-    //}
-  };
+  const gameSS = sessionStorage.getItem("game");
+  const imgsWS = useFetchCond(`https://bot.emudeck.com/steamdbimgs.php?name=${gameSS}`);
 
   useEffect(() => {
-    getDataGames();
-    const TabLastID = localStorage.getItem("emudeck_rom_library_current_tab");
-    if (TabLastID) {
-      setCurrentTab(TabLastID);
-    }
+    imgsWS.post({}).then((data) => {
+      console.log({ data });
+      setState({ ...state, games: data });
+    });
   }, []);
 
   useEffect(() => {
     if (games) {
-      const tabs = games.map((item: any) => {
-        return {
-          title: item.title,
-          id: item.id,
+      const tabs = [
+        {
+          title: "Artwork",
+          id: 1,
           content: (
             <Focusable className="games">
-              {item["games"].map((game: any) => {
-                const random = Math.floor(Math.random() * 10000);
+              {games.map((game: any) => {
                 return (
                   <Button
                     className="game"
-                    key={game.name}
+                    key={game.id}
                     onClick={() => {
-                      launchGame(item.launcher, game.filename, game.name);
-                    }}
-                    onSecondaryActionDescription="Fix Artwork"
-                    onSecondaryButton={() => fixArtwork(game.name)}>
-                    <img className="game__img" src={`${game.img}?id=${random}`} alt={game.name} />
-                    <img className="game__bg" src={`${game.img}?id=${random}`} alt={game.name} />
+                      getImage(game.thumb, gameSS);
+                    }}>
+                    <img className="game__img" src={game.thumb} />
+                    <img className="game__bg" src={game.thumb} />
                   </Button>
                 );
               })}
             </Focusable>
           ),
-        };
-      });
+        },
+      ];
+
       setState({ ...state, tabs: tabs });
     }
   }, [games]);
 
-  const launchGame = (launcher: string, game: string, name: string) => {
-    let launcherComplete = launcher.replace(/{file.path}/g, `"${game}"`);
-    launcherComplete = launcherComplete
-      .replace(/\\"\'/g, "")
-      .replace(/'\\\"/g, "")
-      .replace(/\\\\/g, "\\")
-      .replace(/\\:"/g, '"Z:');
-
-    console.log({ launcherComplete });
-
-    launchApp(serverAPI, {
-      name: name,
-      exec: `${launcherComplete}`,
-    });
-  };
-
-  const fixArtwork = (game) => {
-    sessionStorage.setItem("game", game);
-    Router.Navigate("/emudeck-rom-artwork");
+  const getImage = async (url: string, name: any) => {
+    const userId = getCurrentUserId();
+    await serverAPI
+      .callPluginMethod("emudeck", {
+        command: `saveImage ${url} ${name}`,
+      })
+      .then((response: any) => {
+        Router.Navigate("/emudeck-rom-library");
+      });
   };
 
   return (
@@ -222,7 +190,6 @@ const Games: VFC<{ serverAPI: any }> = ({ serverAPI }) => {
           activeTab={currentTab}
           onShowTab={(tabID: string) => {
             setCurrentTab(tabID);
-            localStorage.setItem("emudeck_rom_library_current_tab", tabID);
           }}
           tabs={tabs}
         />
@@ -231,4 +198,4 @@ const Games: VFC<{ serverAPI: any }> = ({ serverAPI }) => {
   );
 };
 
-export { Games };
+export { Artwork };

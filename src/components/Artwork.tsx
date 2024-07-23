@@ -1,18 +1,23 @@
 import { VFC, useState, useEffect } from "react";
-import { Tabs, Button, Focusable, SteamSpinner, Router } from "decky-frontend-lib";
+import { Tabs, Button, Focusable, SteamSpinner, Router, TextField, DialogButton } from "decky-frontend-lib";
 import { launchApp, getCurrentUserId } from "../common/steamshortcuts";
 import { getTranslateFunc } from "../TranslationsF";
 import { useFetchCond } from "../hooks/useFetchCond";
 
 const Artwork: VFC<{ serverAPI: any }> = ({ serverAPI }) => {
-  const [state, setState] = useState<any>({ games: undefined, tabs: undefined });
+  const [state, setState] = useState<any>({ games: [], tabs: undefined });
   let { games, tabs } = state;
+  const [stateSearch, setStateSearch] = useState<any>({ gamesSearch: undefined });
+  let { gamesSearch } = state;
+  const [stateInput, setStateInput] = useState<any>({ searchInput: undefined });
+  let { searchInput } = stateInput;
   const [currentTab, setCurrentTab] = useState<string>("Tab1");
   const t = getTranslateFunc();
   const gameSS = sessionStorage.getItem("game");
   const imgsWS = useFetchCond(`https://bot.emudeck.com/steamdbimgs.php?name=${gameSS}`);
 
   useEffect(() => {
+    setStateInput({ searchInput: sessionStorage.getItem("game") });
     imgsWS.post({}).then((data) => {
       console.log({ data });
       setState({ ...state, games: data });
@@ -20,11 +25,23 @@ const Artwork: VFC<{ serverAPI: any }> = ({ serverAPI }) => {
   }, []);
 
   useEffect(() => {
+    console.log({ state });
+  }, [state]);
+
+  useEffect(() => {
+    console.log({ stateSearch });
+  }, [stateSearch]);
+
+  useEffect(() => {
+    console.log({ stateInput });
+  }, [stateInput]);
+
+  useEffect(() => {
     if (games) {
       const tabs = [
         {
-          title: "Artwork",
-          id: 1,
+          title: `Alternatives to ${gameSS}`,
+          id: "Tab1",
           content: (
             <Focusable className="games">
               {games.map((game: any) => {
@@ -43,11 +60,109 @@ const Artwork: VFC<{ serverAPI: any }> = ({ serverAPI }) => {
             </Focusable>
           ),
         },
+        {
+          title: "Search",
+          id: "Tab2",
+          content: (
+            <Focusable>
+              <TextField
+                label="Search"
+                onChange={(e) => {
+                  console.log(e.target.value);
+                  setStateInput({ searchInput: e.target.value });
+                }}
+              />
+              <DialogButton
+                onClick={() => {
+                  console.log({ searchInput });
+                  getImages(searchInput);
+                }}>
+                <span>Search</span>
+              </DialogButton>
+            </Focusable>
+          ),
+        },
       ];
 
       setState({ ...state, tabs: tabs });
     }
   }, [games]);
+
+  useEffect(() => {
+    if (gamesSearch) {
+      const tabs = [
+        {
+          title: "Search Results",
+          id: "Tab1",
+          content: (
+            <Focusable className="games">
+              {gamesSearch.map((game: any) => {
+                return (
+                  <Button
+                    className="game"
+                    key={game.id}
+                    onClick={() => {
+                      getImage(game.thumb, gameSS);
+                    }}>
+                    <img className="game__img" src={game.thumb} />
+                    <img className="game__bg" src={game.thumb} />
+                  </Button>
+                );
+              })}
+            </Focusable>
+          ),
+        },
+        {
+          title: "Search",
+          id: "Tab2",
+          content: (
+            <Focusable>
+              <TextField
+                label="Search"
+                value="tron"
+                onChange={(e) => {
+                  console.log(e.target.value);
+                  setStateInput({ searchInput: e.target.value });
+                }}
+              />
+              <DialogButton
+                onClick={() => {
+                  console.log({ searchInput });
+                  getImages(searchInput);
+                }}>
+                <span>Search</span>
+              </DialogButton>
+            </Focusable>
+          ),
+        },
+      ];
+
+      setState({ ...state, tabs: tabs });
+    }
+  }, [gamesSearch]);
+
+  const getImages = (name: string) => {
+    console.log({ name });
+    const url = `https://bot.emudeck.com/steamdbimgs.php?name=${name}`;
+    fetch(url)
+      .then((response) => {
+        // Verificar si la respuesta es exitosa
+        if (!response.ok) {
+          throw new Error("Network response was not ok " + response.statusText);
+        }
+        // Convertir la respuesta a JSON
+        return response.json();
+      })
+      .then((data) => {
+        // Manejar los datos recibidos
+        setState({ ...state, games: data });
+        setCurrentTab("Tab1");
+      })
+      .catch((error) => {
+        // Manejar cualquier error que ocurra
+        console.error("There has been a problem with your fetch operation:", error);
+      });
+  };
 
   const getImage = async (url: string, name: any) => {
     const userId = getCurrentUserId();
@@ -127,6 +242,7 @@ const Artwork: VFC<{ serverAPI: any }> = ({ serverAPI }) => {
            line-height: 2;
            text-align: center;
            width:100%;
+           height:100%;
            position: relative;
         }
 

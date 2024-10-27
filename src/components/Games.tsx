@@ -16,16 +16,13 @@ const Games: VFC<{ serverAPI: any }> = ({ serverAPI }) => {
     serverAPI
       .callPluginMethod("emudeck", {
         command: `generateGameListsJson`,
-        strip: false,
-        args: [userId],
       })
       .then((response: any) => {
         //serverAPI.callPluginMethod("generate_roms_json").then((response: any) => {
+        console.log(response);
         const result: any = response.result;
         const gameList: any = JSON.parse(result);
         gameList.sort((a: any, b: any) => a.title.localeCompare(b.title));
-        console.log({ gameList });
-        localStorage.setItem("emudecky_gamelist", result);
         setState({ ...state, games: gameList });
       });
     //}
@@ -42,6 +39,7 @@ const Games: VFC<{ serverAPI: any }> = ({ serverAPI }) => {
   useEffect(() => {
     if (games) {
       const tabs = games.map((item: any) => {
+        console.log({ item });
         return {
           title: item.title,
           id: item.id,

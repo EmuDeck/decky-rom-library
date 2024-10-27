@@ -1,10 +1,10 @@
 {
-  "name": "EmuDeck Rom Library",
+  "name": "EmuDeck Retro Library",
   "author": "Dragoon Dorise",
   "flags": [],
   "publish": {
     "tags": ["emudeck", "emulation", "games"],
-    "description": "New Rom Library to play your favourite retro games",
+    "description": "New Retro Library to play your favourite retro games",
     "image": "https://raw.githubusercontent.com/EmuDeck/decky-rom-library/master/assets/screenshot.png"
   }
 }

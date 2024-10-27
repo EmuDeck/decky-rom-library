@@ -44,7 +44,7 @@ export const patchMenu = () => {
         const newItem = (
           <MenuItemWrapper
             route={routePath}
-            label="Roms Library"
+            label="Retro Library"
             onFocus={menuItemElement.props.onFocus}
             MenuItemComponent={menuItemElement.type}
           />

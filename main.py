@@ -21,6 +21,35 @@ if os.name == 'nt':
 
 class Plugin:
 
+    async def getSettings(self):
+      pattern = re.compile(r'([A-Za-z_][A-Za-z0-9_]*)=(.*)')
+      user_home = os.path.expanduser("~")
+      if os.name == 'nt':
+          config_file_path = os.path.join(user_home, 'emudeck', 'settings.ps1')
+      else:
+          config_file_path = os.path.join(user_home, 'emudeck', 'settings.sh')
+      configuration = {}
+
+      with open(config_file_path, 'r') as file:
+          for line in file:
+              match = pattern.search(line)
+              if match:
+                  variable = match.group(1)
+                  value = match.group(2).strip('"')
+                  configuration[variable] = value
+
+      if os.name == 'nt':
+          bash_command = f"cd {appdata_roaming_path}/EmuDeck/backend/ && git rev-parse --abbrev-ref HEAD"
+      else:
+          bash_command = "cd $HOME/.config/EmuDeck/backend/ && git rev-parse --abbrev-ref HEAD"
+      result = subprocess.run(bash_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+      configuration["branch"] = result.stdout.strip()
+
+      configuration["systemOS"] = os.name
+
+      json_configuration = json.dumps(configuration, indent=4)
+      return json_configuration
+
     async def _main(self):
         try:
             sc = open(os.path.join(confdir, "scid.txt"), "x")
@@ -63,7 +92,7 @@ class Plugin:
 
     async def emudeck_dirty(self, command):
       if os.name == 'nt':
-          bash_command = f". {appdata_roaming_path}/EmuDeck/backend/functions/all.ps1 && " + command
+          bash_command = f". {appdata_roaming_path}/EmuDeck/backend/functions/all.ps1 ; " + command
       else:
           bash_command = ". $HOME/.config/EmuDeck/backend/functions/all.sh && " + command
       result = subprocess.run(bash_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)

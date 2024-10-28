@@ -3,8 +3,28 @@ import { Tabs, Button, Focusable, SteamSpinner, Router } from "decky-frontend-li
 import { launchApp, getCurrentUserId } from "../common/steamshortcuts";
 import { getTranslateFunc } from "../TranslationsF";
 const Games: VFC<{ serverAPI: any }> = ({ serverAPI }) => {
-  const [state, setState] = useState<any>({ games: undefined, tabs: undefined });
-  let { games, tabs } = state;
+  const [state, setState] = useState<any>({
+    games: undefined,
+    tabs: undefined,
+    emuDeckConfig: {
+      cloud_sync_status: undefined,
+      netPlay: undefined,
+      RABezels: undefined,
+      RAHandClassic2D: undefined,
+      RAHandClassic3D: undefined,
+      RAHandHeldShader: undefined,
+      RAautoSave: undefined,
+      arClassic3D: undefined,
+      arDolphin: undefined,
+      arSega: undefined,
+      arSnes: undefined,
+      branch: null,
+      systemOS: "",
+      toolsPath: undefined,
+    },
+  });
+  let { games, tabs, emuDeckConfig } = state;
+  const { systemOS } = emuDeckConfig;
   const [currentTab, setCurrentTab] = useState<string>("Tab1");
   const t = getTranslateFunc();
 
@@ -19,7 +39,6 @@ const Games: VFC<{ serverAPI: any }> = ({ serverAPI }) => {
       })
       .then((response: any) => {
         //serverAPI.callPluginMethod("generate_roms_json").then((response: any) => {
-        console.log(response);
         const result: any = response.result;
         const gameList: any = JSON.parse(result);
         gameList.sort((a: any, b: any) => a.title.localeCompare(b.title));
@@ -28,18 +47,32 @@ const Games: VFC<{ serverAPI: any }> = ({ serverAPI }) => {
     //}
   };
 
+  const getData = async (update: Boolean) => {
+    await serverAPI.callPluginMethod("getSettings", {}).then((response: any) => {
+      const result: any = response.result;
+
+      const emuDeckConfig: any = JSON.parse(result);
+      setState({ ...state, emuDeckConfig });
+    });
+  };
+
   useEffect(() => {
-    getDataGames();
-    const TabLastID = localStorage.getItem("emudeck_rom_library_current_tab");
-    if (TabLastID) {
-      setCurrentTab(TabLastID);
+    if (emuDeckConfig.systemOS !== "") {
+      getDataGames();
+      const TabLastID = localStorage.getItem("emudeck_rom_library_current_tab");
+      if (TabLastID) {
+        setCurrentTab(TabLastID);
+      }
     }
+  }, [emuDeckConfig]);
+
+  useEffect(() => {
+    getData(false);
   }, []);
 
   useEffect(() => {
     if (games) {
       const tabs = games.map((item: any) => {
-        console.log({ item });
         return {
           title: item.title,
           id: item.id,
@@ -54,7 +87,7 @@ const Games: VFC<{ serverAPI: any }> = ({ serverAPI }) => {
                     onClick={() => {
                       launchGame(item.launcher, game.filename, game.name);
                     }}
-                    onSecondaryActionDescription="Fix Artwork"
+                    onSecondaryActionDescription={"Fix Artwork"}
                     onSecondaryButton={() => fixArtwork(game.name)}>
                     <img className="game__img" src={`${game.img}?id=${random}`} alt={game.name} />
                     <img className="game__bg" src={`${game.img}?id=${random}`} alt={game.name} />
@@ -71,17 +104,15 @@ const Games: VFC<{ serverAPI: any }> = ({ serverAPI }) => {
 
   const launchGame = (launcher: string, game: string, name: string) => {
     let launcherComplete = launcher.replace(/{file.path}/g, `"${game}"`);
+
     launcherComplete = launcherComplete
       .replace(/\\"\'/g, "")
       .replace(/'\\\"/g, "")
       .replace(/\\\\/g, "\\")
       .replace(/\\:"/g, '"Z:');
-
-    console.log({ launcherComplete });
-
     launchApp(serverAPI, {
       name: name,
-      exec: `${launcherComplete}`,
+      exec: "notepad",
     });
   };
 

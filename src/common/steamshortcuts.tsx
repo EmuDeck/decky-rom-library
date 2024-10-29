@@ -10,7 +10,7 @@ interface App {
 }
 
 const createShortcut = (name: string, launchOptions: string = "", target: string = "") => {
-  return SteamClient.Apps.AddShortcut(name, "/usr/bin/ifyouseethisyoufoundabug", target, launchOptions); //The Part after the last Slash does not matter because it should always be replaced when launching an app
+  return SteamClient.Apps.AddShortcut(name, "notepad.exe", target, launchOptions); //The Part after the last Slash does not matter because it should always be replaced when launching an app
 };
 
 // Convert from ShortAppId to AppId

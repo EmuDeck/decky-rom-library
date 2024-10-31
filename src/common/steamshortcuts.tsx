@@ -9,8 +9,11 @@ interface App {
   compatTool?: string;
 }
 
-const createShortcut = (name: string, launchOptions: string = "", target: string = "") => {
-  return SteamClient.Apps.AddShortcut(name, "notepad.exe", target, launchOptions); //The Part after the last Slash does not matter because it should always be replaced when launching an app
+const createShortcut = (name: string, system: string) => {
+  let appFake;
+  system == "nt" ? (appFake = "notepad.exe") : (appFake = "/user/bin/fail");
+
+  return SteamClient.Apps.AddShortcut(name, appFake, "", ""); //The Part after the last Slash does not matter because it should always be replaced when launching an app
 };
 
 // Convert from ShortAppId to AppId
@@ -18,20 +21,20 @@ function lengthenAppId(shortId: string) {
   return String((BigInt(shortId) << BigInt(32)) | BigInt(0x02000000));
 }
 
-const getShortcutID = async (sAPI: ServerAPI) => {
+const getShortcutID = async (sAPI: ServerAPI, system: string) => {
   const result = await sAPI.callPluginMethod<any, number>("get_id", {});
   console.log({ result });
   if (result.success) {
     let id: number = result.result;
     if (id == -1) {
-      id = await createShortcut("QuickLaunchEmuDeck");
+      id = await createShortcut("QuickLaunchEmuDeck", system);
       console.log("id1", id);
       sAPI.callPluginMethod("set_id", { id: id });
     } else {
       //@ts-ignore
       let game = appStore.GetAppOverviewByAppID(id);
       if (!game) {
-        id = await createShortcut("QuickLaunchEmuDeck");
+        id = await createShortcut("QuickLaunchEmuDeck", system);
         console.log("id2", id);
         sAPI.callPluginMethod("set_id", { id: id });
       }
@@ -59,8 +62,8 @@ export function getCurrentUserId(useU64 = false): string {
   return BigInt.asUintN(32, BigInt(window.App.m_CurrentUser.strSteamID)).toString();
 }
 
-export async function launchApp(sAPI: ServerAPI, app: App) {
-  let id: number = await getShortcutID(sAPI);
+export async function launchApp(sAPI: ServerAPI, app: App, system: string) {
+  let id: number = await getShortcutID(sAPI, system);
   SteamClient.Apps.SetShortcutName(id, `EmuDeck - ${app.name}`);
   SteamClient.Apps.SetShortcutLaunchOptions(id, getLaunchOptions(app));
   SteamClient.Apps.SetShortcutExe(id, `"${getTarget(app)}"`);

@@ -64,17 +64,29 @@ export function getCurrentUserId(useU64 = false): string {
 
 export async function launchApp(sAPI: ServerAPI, app: App, system: string) {
   let id: number = await getShortcutID(sAPI, system);
-  SteamClient.Apps.SetShortcutName(id, `EmuDeck - ${app.name}`);
+  let appNameBeauty = app.name;
+  appNameBeauty = appNameBeauty.replace(/_/g, " ");
+  SteamClient.Apps.SetShortcutName(id, `${appNameBeauty} - EmuDeck`);
   SteamClient.Apps.SetShortcutLaunchOptions(id, getLaunchOptions(app));
   SteamClient.Apps.SetShortcutExe(id, `"${getTarget(app)}"`);
   SteamClient.Apps.SpecifyCompatTool(id, app.compatTool === undefined ? "" : app.compatTool);
 
   await setTimeout(() => null, 500);
   let gid = lengthenAppId(id.toString());
+  console.warn(`${app.name}`);
+  await sAPI
+    .callPluginMethod("emudeck", {
+      command: `addGameListsArtwork ${app.name}`,
+    })
+    .then((response: any) => {
+      //Refresh picture
+      SteamClient.Apps.SetCustomArtworkForApp(id, "", "", 0);
+    });
+
   SteamClient.Apps.RunGame(gid, "", -1, 100);
   SteamClient.GameSessions.RegisterForAppLifetimeNotifications((data: LifetimeNotification) => {
     if (data.unAppID == id && !data.bRunning) {
-      SteamClient.Apps.RemoveShortcut(id);
+      //SteamClient.Apps.RemoveShortcut(id);
     }
   });
 }

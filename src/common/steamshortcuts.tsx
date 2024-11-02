@@ -46,7 +46,9 @@ const getShortcutID = async (sAPI: ServerAPI, system: string) => {
     localStorage.setItem(`rom_library_id_${counter}`, id.toString());
   }
   let updatedCounter: any;
-  if (counter == 3) {
+  let maxCounter: any = localStorage.getItem("rom_library_counter_max");
+  maxCounter = parseInt(maxCounter);
+  if (counter == maxCounter) {
     updatedCounter = 1;
   } else {
     updatedCounter = parseInt(counter);

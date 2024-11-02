@@ -5,6 +5,7 @@ import { PluginIcon } from "./native-components/PluginIcon";
 import { Games } from "./components/Games";
 import { Artwork } from "./components/Artwork";
 import { patchMenu } from "./menuPatch";
+import Content from "./components/Content";
 //import { appendStyles } from "./styling";
 //import { TabbedBrowser } from "./components/TabbedBrowser";
 //import { tabManager } from "./classes/TabManager";
@@ -30,7 +31,7 @@ export default definePlugin((serverApi: ServerAPI) => {
 
   return {
     title: <div>EmuDeck</div>,
-    content: <div />,
+    content: <Content serverAPI={serverApi} />,
     icon: <PluginIcon size="1em" />,
     onDismount() {
       serverApi.routerHook.removeRoute(routePath);

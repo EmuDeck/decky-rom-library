@@ -22,28 +22,41 @@ function lengthenAppId(shortId: string) {
 }
 
 const getShortcutID = async (sAPI: ServerAPI, system: string) => {
-  const result = await sAPI.callPluginMethod<any, number>("get_id", {});
-  console.log({ result });
-  if (result.success) {
-    let id: number = result.result;
-    if (id == -1) {
-      id = await createShortcut("QuickLaunchEmuDeck", system);
-      console.log("id1", id);
-      sAPI.callPluginMethod("set_id", { id: id });
-    } else {
-      //@ts-ignore
-      let game = appStore.GetAppOverviewByAppID(id);
-      if (!game) {
-        id = await createShortcut("QuickLaunchEmuDeck", system);
-        console.log("id2", id);
-        sAPI.callPluginMethod("set_id", { id: id });
-      }
-    }
-
-    return id;
+  //No existe contador? iniciamos
+  let counter: any;
+  if (!localStorage.getItem("rom_library_counter")) {
+    counter = 1;
+    localStorage.setItem("rom_library_counter", counter);
   }
-
-  return -1;
+  counter = localStorage.getItem("rom_library_counter");
+  //const result = await sAPI.callPluginMethod<any, number>("get_id", { id_file: counter });
+  const savedID = localStorage.getItem(`rom_library_id_${counter}`);
+  let id: any;
+  if (savedID) {
+    id = parseInt(savedID);
+    //@ts-ignore
+    let game = appStore.GetAppOverviewByAppID(id);
+    if (game == null) {
+      id = await createShortcut("QuickLaunchEmuDeck", system);
+      localStorage.setItem(`rom_library_id_${counter}`, id.toString());
+      counter = counter - 1;
+    }
+  } else {
+    id = await createShortcut("QuickLaunchEmuDeck", system);
+    localStorage.setItem(`rom_library_id_${counter}`, id.toString());
+  }
+  let updatedCounter: any;
+  if (counter == 3) {
+    updatedCounter = 1;
+  } else {
+    updatedCounter = parseInt(counter);
+    updatedCounter = updatedCounter + 1;
+  }
+  console.log(updatedCounter);
+  console.log(updatedCounter.toString());
+  localStorage.setItem("rom_library_counter", updatedCounter.toString());
+  console.log({ id });
+  return id;
 };
 
 function getLaunchOptions(app: App) {
@@ -66,7 +79,7 @@ export async function launchApp(sAPI: ServerAPI, app: App, system: string) {
   let id: number = await getShortcutID(sAPI, system);
   let appNameBeauty = app.name;
   appNameBeauty = appNameBeauty.replace(/_/g, " ");
-  SteamClient.Apps.SetShortcutName(id, `${appNameBeauty} - EmuDeck`);
+  SteamClient.Apps.SetShortcutName(id, `${appNameBeauty} - Retro Library`);
   SteamClient.Apps.SetShortcutLaunchOptions(id, getLaunchOptions(app));
   SteamClient.Apps.SetShortcutExe(id, `"${getTarget(app)}"`);
   SteamClient.Apps.SpecifyCompatTool(id, app.compatTool === undefined ? "" : app.compatTool);
@@ -76,7 +89,7 @@ export async function launchApp(sAPI: ServerAPI, app: App, system: string) {
   console.warn(`${app.name}`);
   await sAPI
     .callPluginMethod("emudeck", {
-      command: `addGameListsArtwork ${app.name}`,
+      command: `addGameListsArtwork ${app.name} ${id}`,
     })
     .then((response: any) => {
       //Refresh picture

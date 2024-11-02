@@ -52,7 +52,7 @@ class Plugin:
 
     async def _main(self):
         try:
-            sc = open(os.path.join(confdir, "scid.txt"), "x")
+            sc = open(os.path.join(confdir, "scid_1.txt"), "x")
             sc.close()
         except FileExistsError:
             pass
@@ -100,16 +100,16 @@ class Plugin:
 
 
       # START QL
-    async def get_id(self):
-        with open(os.path.join(confdir, "scid.txt"), "r") as sc:
-            id = sc.read()
-            try:
-                id = int(id)
-                return id
-            except ValueError:
-                return -1
+    async def get_id(self,  id_file):
+      with open(os.path.join(confdir, f'scid_{id_file}.txt'), "r") as sc:
+          id = sc.read()
+          try:
+              id = int(id)
+              return id
+          except ValueError:
+              return -1
 
-    async def set_id(self, id):
-        with open(os.path.join(confdir, "scid.txt"), "w") as sc:
-            sc.write(str(id))
+    async def set_id(self, id, id_file):
+      with open(os.path.join(confdir, f'scid_{id_file}.txt'), "w") as sc:
+          sc.write(str(id))
     # END QL

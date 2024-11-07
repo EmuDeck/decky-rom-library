@@ -64,6 +64,16 @@ const Games: VFC<{ serverAPI: any }> = ({ serverAPI }) => {
     getData(false);
   }, []);
 
+  const [visibleCount, setVisibleCount] = useState(20);
+
+  // Maneja el evento de scroll para cargar más elementos
+  const loadMore = () => {
+    //if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 100) {
+    // Aumenta el límite de elementos visibles en 20
+    setVisibleCount((prevCount) => prevCount + 5);
+    //}
+  };
+
   useEffect(() => {
     if (games) {
       const tabs = games.map((item: any) => {
@@ -85,7 +95,7 @@ const Games: VFC<{ serverAPI: any }> = ({ serverAPI }) => {
                 />
               </Focusable>
               <Focusable className="games">
-                {filteredGames.map((game: any) => {
+                {filteredGames.slice(0, visibleCount).map((game: any) => {
                   const random = Math.floor(Math.random() * 10000);
                   return (
                     <Button
@@ -98,7 +108,7 @@ const Games: VFC<{ serverAPI: any }> = ({ serverAPI }) => {
                       onOptionsActionDescription="Add to Favorites"
                       onMenuActionDescription="Options"
                       onSecondaryButton={() => fixArtwork(game.name)}
-                      onOptionsButton={() => setFav(game.name)}>
+                      onButtonDown={() => loadMore()}>
                       <img
                         loading="lazy"
                         className="game__img"
@@ -125,7 +135,7 @@ const Games: VFC<{ serverAPI: any }> = ({ serverAPI }) => {
       });
       setState({ ...state, tabs: tabs });
     }
-  }, [games, searchTerm]);
+  }, [games, searchTerm, visibleCount]);
 
   const setFav = async (game) => {
     console.log("HEY");

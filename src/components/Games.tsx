@@ -105,8 +105,6 @@ const Games: VFC<{ serverAPI: any }> = ({ serverAPI }) => {
                       onSecondaryActionDescription={"Fix Artwork"}
                       onOKActionDescription="Launch"
                       onCancelActionDescription="Exit"
-                      onOptionsActionDescription="Add to Favorites"
-                      onMenuActionDescription="Options"
                       onSecondaryButton={() => fixArtwork(game.name)}
                       onButtonDown={() => loadMore()}>
                       <img

@@ -1,6 +1,6 @@
 import { VFC, useState, useEffect } from "react";
 import { Tabs, Button, Focusable, SteamSpinner, Router, TextField } from "decky-frontend-lib";
-import { launchApp, getCurrentUserId } from "../common/steamshortcuts";
+import { launchApp } from "../common/steamshortcuts";
 import { getTranslateFunc } from "../TranslationsF";
 
 const Games: VFC<{ serverAPI: any }> = ({ serverAPI }) => {
@@ -30,28 +30,62 @@ const Games: VFC<{ serverAPI: any }> = ({ serverAPI }) => {
   const { systemOS } = emuDeckConfig;
   const [currentTab, setCurrentTab] = useState<string>("Tab1");
   const t = getTranslateFunc();
+  let intervalid;
+  const checkParserStatus = () => {
+    //console.log("checkCloudStatus");
+    serverAPI
+      .callPluginMethod("emudeck", { command: "generateGameLists_getPercentage" })
+      .then((response: any) => {
+        const result = response.result;
+        setPercentage(result);
+        if (result == "100") {
+          clearInterval(intervalid);
+        }
+      })
+      .catch((error: any) => {
+        console.log({ error });
+      });
+  };
+
+  useEffect(() => {
+    // Inicia el intervalo cuando el componente se monta
+    intervalid = setInterval(() => {
+      checkParserStatus();
+    }, 10000);
+
+    // Retorna una función de limpieza que se ejecutará al desmontar el componente
+    return () => {
+      clearInterval(intervalid);
+    };
+  }, []);
 
   const getDataGames = async () => {
-    const userId = getCurrentUserId();
+    console.log("Asking for Games");
     await serverAPI.callPluginMethod("emudeck", { command: `generateGameLists` });
     serverAPI.callPluginMethod("emudeck", { command: `generateGameListsJson` }).then((response: any) => {
       const result: any = response.result;
       const gameList: any = JSON.parse(result);
+      console.log({ result });
       gameList.sort((a: any, b: any) => a.title.localeCompare(b.title));
+      console.log("Saving Games to State");
       setState({ ...state, games: gameList });
     });
   };
 
-  const getData = async (update: Boolean) => {
+  const getData = async () => {
+    console.log("Asking for Settings");
     await serverAPI.callPluginMethod("getSettings", {}).then((response: any) => {
       const result: any = response.result;
       const emuDeckConfig: any = JSON.parse(result);
+      console.log({ result });
+      console.log("Saving Settings to State");
       setState({ ...state, emuDeckConfig });
     });
   };
 
   useEffect(() => {
     if (emuDeckConfig.systemOS !== "") {
+      console.log("getDataGames launched");
       getDataGames();
       const TabLastID = localStorage.getItem("emudeck_rom_library_current_tab");
       if (TabLastID) {
@@ -61,7 +95,8 @@ const Games: VFC<{ serverAPI: any }> = ({ serverAPI }) => {
   }, [emuDeckConfig]);
 
   useEffect(() => {
-    getData(false);
+    console.log("getData launched");
+    getData();
   }, []);
 
   const [visibleCount, setVisibleCount] = useState(20);
@@ -76,11 +111,12 @@ const Games: VFC<{ serverAPI: any }> = ({ serverAPI }) => {
 
   useEffect(() => {
     if (games) {
+      console.log("Generating tabs");
       const tabs = games.map((item: any) => {
         const filteredGames = item.games.filter((game: any) =>
           game.name.toLowerCase().includes(searchTerm.toLowerCase())
         );
-
+        console.log("Games filtered");
         return {
           title: item.title,
           id: item.id,
@@ -113,12 +149,12 @@ const Games: VFC<{ serverAPI: any }> = ({ serverAPI }) => {
                         src={`${game.img}?id=${random}`}
                         alt={game.name.replace(/_/g, " ")}
                       />
-                      <img
+                      {/* <img
                         loading="lazy"
                         className="game__cartridge"
                         src={`/customimages/emudeck/default/${game.platform}.png?id=${random}`}
                         alt="Super Nintendo"
-                      />
+                      /> */}
                       <img loading="lazy" className="game__bg" src={`${game.img}?id=${random}`} alt={game.name} />
                       <div className="game__file">
                         <span>{game.file}</span>
@@ -134,10 +170,6 @@ const Games: VFC<{ serverAPI: any }> = ({ serverAPI }) => {
       setState({ ...state, tabs: tabs });
     }
   }, [games, searchTerm, visibleCount]);
-
-  const setFav = async (game) => {
-    console.log("HEY");
-  };
 
   const launchGame = (launcher: string, game: string, name: string) => {
     let launcherComplete = launcher.replace(/{file.path}/g, `'${game}'`);
@@ -163,26 +195,6 @@ const Games: VFC<{ serverAPI: any }> = ({ serverAPI }) => {
     sessionStorage.setItem("game", game);
     Router.Navigate("/emudeck-rom-artwork");
   };
-
-  const checkParserStatus = () => {
-    //console.log("checkCloudStatus");
-    serverAPI
-      .callPluginMethod("emudeck", { command: "generateGameLists_getPercentage" })
-      .then((response: any) => {
-        const result = response.result;
-        setPercentage(result);
-        if (result == "100") {
-          clearInterval(intervalid);
-        }
-      })
-      .catch((error: any) => {
-        console.log({ error });
-      });
-  };
-
-  let intervalid = setInterval(() => {
-    checkParserStatus();
-  }, 2000);
 
   return (
     <div style={{ marginTop: "40px", height: "calc(100% - 40px)", background: "#0e141b" }}>

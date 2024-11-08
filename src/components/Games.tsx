@@ -218,11 +218,14 @@ const Games: VFC<{ serverAPI: any }> = ({ serverAPI }) => {
           padding: 8px 0px;
           grid-auto-flow: row;
           justify-content: space-between;
+          margin-top:50px;
         }
 
 
         .games__search{
           margin-bottom:12px;
+          position:absolute;
+          width: 93vw
         }
 
 

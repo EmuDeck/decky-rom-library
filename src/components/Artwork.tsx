@@ -12,6 +12,7 @@ const Artwork: VFC<{ serverAPI: any }> = ({ serverAPI }) => {
   const [stateInput, setStateInput] = useState<any>({ searchInput: undefined });
   let { searchInput } = stateInput;
   const [currentTab, setCurrentTab] = useState<string>("Tab1");
+  const [stateModal, setStateModal] = useState<any>(false);
   const t = getTranslateFunc();
   const gameSS = sessionStorage.getItem("game");
   const imgsWS = useFetchCond(`https://bot.emudeck.com/steamdbimgs.php?name=${gameSS}`);
@@ -165,12 +166,17 @@ const Artwork: VFC<{ serverAPI: any }> = ({ serverAPI }) => {
   };
 
   const getImage = async (url: string, name: any) => {
-    const userId = getCurrentUserId();
+    setStateModal(true);
+
+    console.log({ url });
+    console.log({ name });
+
     await serverAPI
       .callPluginMethod("emudeck", {
         command: `saveImage ${url} ${name}`,
       })
-      .then((response: any) => {
+      .then((result: any) => {
+        console.log({ result });
         Router.Navigate("/emudeck-rom-library");
       });
   };
@@ -291,6 +297,16 @@ const Artwork: VFC<{ serverAPI: any }> = ({ serverAPI }) => {
           transition-property: opacity, transform;
         }
       `}</style>
+
+      {stateModal && (
+        <div>
+          <div style={{ textAlign: "center", height: "100vh" }}>
+            <SteamSpinner>
+              <p>Downloading artwork...</p>
+            </SteamSpinner>
+          </div>
+        </div>
+      )}
       {!tabs && (
         <div>
           <div style={{ textAlign: "center", height: "100vh" }}>
@@ -301,7 +317,7 @@ const Artwork: VFC<{ serverAPI: any }> = ({ serverAPI }) => {
         </div>
       )}
 
-      {tabs && (
+      {tabs && !stateModal && (
         <Tabs
           activeTab={currentTab}
           onShowTab={(tabID: string) => {

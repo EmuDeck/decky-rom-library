@@ -24,7 +24,7 @@ const Games: VFC<{ serverAPI: any }> = ({ serverAPI }) => {
       toolsPath: undefined,
     },
   });
-
+  const [percentage, setPercentage] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
   let { games, tabs, emuDeckConfig } = state;
   const { systemOS } = emuDeckConfig;
@@ -159,10 +159,30 @@ const Games: VFC<{ serverAPI: any }> = ({ serverAPI }) => {
     launchApp(serverAPI, { name, exec: launcherComplete }, systemOS);
   };
 
-  const fixArtwork = (game) => {
+  const fixArtwork = (game: any) => {
     sessionStorage.setItem("game", game);
     Router.Navigate("/emudeck-rom-artwork");
   };
+
+  const checkParserStatus = () => {
+    //console.log("checkCloudStatus");
+    serverAPI
+      .callPluginMethod("emudeck", { command: "generateGameLists_getPercentage" })
+      .then((response: any) => {
+        const result = response.result;
+        setPercentage(result);
+        if (result == "100") {
+          clearInterval(intervalid);
+        }
+      })
+      .catch((error: any) => {
+        console.log({ error });
+      });
+  };
+
+  let intervalid = setInterval(() => {
+    checkParserStatus();
+  }, 2000);
 
   return (
     <div style={{ marginTop: "40px", height: "calc(100% - 40px)", background: "#0e141b" }}>
@@ -350,6 +370,16 @@ const Games: VFC<{ serverAPI: any }> = ({ serverAPI }) => {
           transform: translateY(0%) translateX(-100%) scaleX(1) scaleY(1);
           transition-property: opacity, transform;
         }
+
+        .parser-counter{
+          position: absolute;
+          bottom: 50px;
+          right: 0;
+          padding: 6px 20px;
+          font-size: 12px;
+          background: rgba(0, 0, 0, .8);
+        }
+
       `}</style>
       {!tabs && (
         <div style={{ textAlign: "center", height: "100vh" }}>
@@ -359,14 +389,17 @@ const Games: VFC<{ serverAPI: any }> = ({ serverAPI }) => {
         </div>
       )}
       {tabs && (
-        <Tabs
-          activeTab={currentTab}
-          onShowTab={(tabID: string) => {
-            setCurrentTab(tabID);
-            localStorage.setItem("emudeck_rom_library_current_tab", tabID);
-          }}
-          tabs={tabs}
-        />
+        <>
+          <Tabs
+            activeTab={currentTab}
+            onShowTab={(tabID: string) => {
+              setCurrentTab(tabID);
+              localStorage.setItem("emudeck_rom_library_current_tab", tabID);
+            }}
+            tabs={tabs}
+          />
+          {percentage != 100 && <div className="parser-counter">Artwork parsing: {percentage}%</div>}
+        </>
       )}
     </div>
   );

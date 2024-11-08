@@ -6,6 +6,9 @@ const Content: VFC<{ serverAPI: ServerAPI }> = () => {
   let counterMax: any;
   useEffect(() => {
     counterMax = localStorage.getItem("rom_library_counter_max");
+    if (!counterMax) {
+      counterMax = 1;
+    }
     counterMax = parseInt(counterMax);
     setState(counterMax);
   }, []);

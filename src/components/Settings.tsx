@@ -2,8 +2,22 @@ import { PanelSection, PanelSectionRow, ServerAPI, SliderField } from "decky-fro
 import { VFC, useState, useEffect } from "react"; //import { GlobalContext } from "./context/globalContext";
 
 const Content: VFC<{ serverAPI: ServerAPI }> = () => {
+  //
+  // State
+  //
   const [state, setState] = useState(1);
+
+  //
+  // Const & Vars
+  //
   let counterMax: any;
+  //
+  // Functions
+  //
+
+  //
+  // UseEffects
+  //
   useEffect(() => {
     counterMax = localStorage.getItem("rom_library_counter_max");
     if (!counterMax) {
@@ -12,6 +26,10 @@ const Content: VFC<{ serverAPI: ServerAPI }> = () => {
     counterMax = parseInt(counterMax);
     setState(counterMax);
   }, []);
+
+  //
+  // Render
+  //
   return (
     <>
       <PanelSection title="Settings">

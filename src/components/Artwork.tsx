@@ -5,6 +5,9 @@ import { getTranslateFunc } from "../TranslationsF";
 import { useFetchCond } from "../hooks/useFetchCond";
 
 const Artwork: VFC<{ serverAPI: any }> = ({ serverAPI }) => {
+  //
+  // State
+  //
   const [state, setState] = useState<any>({ games: [], tabs: undefined });
   let { games, tabs } = state;
   const [stateSearch, setStateSearch] = useState<any>({ gamesSearch: undefined });
@@ -13,9 +16,63 @@ const Artwork: VFC<{ serverAPI: any }> = ({ serverAPI }) => {
   let { searchInput } = stateInput;
   const [currentTab, setCurrentTab] = useState<string>("Tab1");
   const [stateModal, setStateModal] = useState<any>(false);
+
+  //
+  // Const & Vars
+  //
   const t = getTranslateFunc();
   const gameSS = sessionStorage.getItem("game");
+
+  //
+  // Web services
+  //
   const imgsWS = useFetchCond(`https://bot.emudeck.com/steamdbimgs.php?name=${gameSS}`);
+
+  //
+  // Functions
+  //
+  const getImages = (name: string) => {
+    console.log({ name });
+    const url = `https://bot.emudeck.com/steamdbimgs.php?name=${name}`;
+    fetch(url)
+      .then((response) => {
+        // Verificar si la respuesta es exitosa
+        if (!response.ok) {
+          throw new Error("Network response was not ok " + response.statusText);
+        }
+        // Convertir la respuesta a JSON
+        return response.json();
+      })
+      .then((data) => {
+        // Manejar los datos recibidos
+        setState({ ...state, games: data });
+        setCurrentTab("Tab1");
+      })
+      .catch((error) => {
+        // Manejar cualquier error que ocurra
+        console.error("There has been a problem with your fetch operation:", error);
+      });
+  };
+
+  const getImage = async (url: string, name: any) => {
+    setStateModal(true);
+
+    console.log({ url });
+    console.log({ name });
+
+    await serverAPI
+      .callPluginMethod("emudeck", {
+        command: `saveImage ${url} ${name}`,
+      })
+      .then((result: any) => {
+        console.log({ result });
+        Router.Navigate("/emudeck-rom-library");
+      });
+  };
+
+  //
+  // UseEffects
+  //
 
   useEffect(() => {
     setStateInput({ searchInput: sessionStorage.getItem("game") });
@@ -142,45 +199,13 @@ const Artwork: VFC<{ serverAPI: any }> = ({ serverAPI }) => {
     }
   }, [gamesSearch]);
 
-  const getImages = (name: string) => {
-    console.log({ name });
-    const url = `https://bot.emudeck.com/steamdbimgs.php?name=${name}`;
-    fetch(url)
-      .then((response) => {
-        // Verificar si la respuesta es exitosa
-        if (!response.ok) {
-          throw new Error("Network response was not ok " + response.statusText);
-        }
-        // Convertir la respuesta a JSON
-        return response.json();
-      })
-      .then((data) => {
-        // Manejar los datos recibidos
-        setState({ ...state, games: data });
-        setCurrentTab("Tab1");
-      })
-      .catch((error) => {
-        // Manejar cualquier error que ocurra
-        console.error("There has been a problem with your fetch operation:", error);
-      });
-  };
+  //
+  // Logic
+  //
 
-  const getImage = async (url: string, name: any) => {
-    setStateModal(true);
-
-    console.log({ url });
-    console.log({ name });
-
-    await serverAPI
-      .callPluginMethod("emudeck", {
-        command: `saveImage ${url} ${name}`,
-      })
-      .then((result: any) => {
-        console.log({ result });
-        Router.Navigate("/emudeck-rom-library");
-      });
-  };
-
+  //
+  // Render
+  //
   return (
     <div
       style={{

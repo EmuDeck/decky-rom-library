@@ -394,7 +394,7 @@ const Games: VFC<{ serverAPI: any }> = ({ serverAPI }) => {
             }}
             tabs={tabs}
           />
-          {percentage != 100 && <div className="parser-counter">Artwork parsing: {percentage}%</div>}
+          {percentage != 100 && <div className="parser-counter">Artwork parsing: {percentage}</div>}
         </>
       )}
     </div>

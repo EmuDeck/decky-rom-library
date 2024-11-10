@@ -212,7 +212,6 @@ const Games: VFC<{ serverAPI: any }> = ({ serverAPI }) => {
   });
   const [percentage, setPercentage] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
-  const [isFocus, setIsFocus] = useState(false);
   const [currentTab, setCurrentTab] = useState<string>("Tab1");
   const [visibleCount, setVisibleCount] = useState(20);
 
@@ -356,8 +355,6 @@ const Games: VFC<{ serverAPI: any }> = ({ serverAPI }) => {
                       launchGame={launchGame}
                       fixArtwork={fixArtwork}
                       loadMore={loadMore}
-                      setIsFocus={setIsFocus}
-                      isFocus={isFocus}
                     />
                   );
                 })}

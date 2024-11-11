@@ -1,7 +1,7 @@
 import { VFC, useState, useEffect, useRef } from "react";
 import { Button } from "decky-frontend-lib";
 
-const Game = ({ item, game, random, launchGame, fixArtwork, loadMore }) => {
+const Game = ({ item, game, random, launchGame, fixArtwork, loadMore, focus }) => {
   const [isFocus, setIsFocus] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const targetRef = useRef(null);
@@ -30,17 +30,29 @@ const Game = ({ item, game, random, launchGame, fixArtwork, loadMore }) => {
     };
   }, []);
 
+  useEffect(() => {
+    // Si 'focus' es verdadero, simula el foco en el elemento
+    if (focus && targetRef.current) {
+      setIsFocus(true); // Cambia el estado a enfocado
+      if (targetRef.current) {
+        const focusGame: any = targetRef.current;
+        focusGame.focus();
+        focusGame.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+    }
+  }, [focus]);
+
   return (
     <Button
       ref={targetRef}
       className="game"
       onGamepadFocus={() => setIsFocus(true)}
       onGamepadBlur={() => setIsFocus(false)}
-      onClick={() => launchGame(item.launcher, game.filename, game.name)}
+      onClick={() => launchGame(item.launcher, game.filename, game.name, game.platform)}
       onSecondaryActionDescription={"Fix Artwork"}
       onOKActionDescription="Launch"
       onCancelActionDescription="Exit"
-      onSecondaryButton={() => fixArtwork(game.name)}
+      onSecondaryButton={() => fixArtwork(game)}
       onButtonDown={() => loadMore()}>
       {isVisible && (
         <img loading="lazy" className="game__img" src={`${game.img}?id=${random}`} alt={game.name.replace(/_/g, " ")} />

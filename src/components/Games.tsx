@@ -213,7 +213,8 @@ const Games: VFC<{ serverAPI: any }> = ({ serverAPI }) => {
   const [percentage, setPercentage] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
   const [currentTab, setCurrentTab] = useState<string>("Tab1");
-  const [visibleCount, setVisibleCount] = useState(20);
+  const [visibleCount, setVisibleCount] = useState<any>(20);
+  const [lastSelectedGameKey, setLastSelectedGameKey] = useState<string | null>(null);
 
   let { games, tabs, emuDeckConfig } = state;
   const { systemOS } = emuDeckConfig;
@@ -269,7 +270,11 @@ const Games: VFC<{ serverAPI: any }> = ({ serverAPI }) => {
     setVisibleCount((prevCount) => prevCount + 5);
   };
 
-  const launchGame = (launcher: string, game: string, name: string) => {
+  const launchGame = (launcher: string, game: string, name: string, platform: string) => {
+    const gameKey = `${name}_${platform}`;
+    localStorage.setItem("last_selected_game_key", gameKey);
+    localStorage.setItem("current_visible_count", visibleCount);
+
     let launcherComplete = launcher.replace(/{file.path}/g, `'${game}'`);
     if (emuDeckConfig.systemOS == "nt") {
       launcherComplete = launcherComplete
@@ -290,13 +295,43 @@ const Games: VFC<{ serverAPI: any }> = ({ serverAPI }) => {
   };
 
   const fixArtwork = (game: any) => {
-    sessionStorage.setItem("game", game);
+    sessionStorage.setItem("game", game.name);
+    const gameKey = `${game.name}_${game.platform}`;
+    console.log({ gameKey });
+    localStorage.setItem("last_selected_game_key", gameKey);
+    localStorage.setItem("current_visible_count", visibleCount);
     Router.Navigate("/emudeck-rom-artwork");
   };
 
   //
   // UseEffects
   //
+
+  useEffect(() => {
+    // Recuperar el identificador del último juego enfocado desde localStorage
+    const storedGameKey = localStorage.getItem("last_selected_game_key");
+    let storedVisibleCount: any = localStorage.getItem("current_visible_count");
+    if (storedGameKey) {
+      let storedVisibleCount: any = localStorage.getItem("current_visible_count");
+      storedVisibleCount = parseInt(storedVisibleCount);
+      setVisibleCount(storedVisibleCount);
+      // setLastSelectedGameKey(storedGameKey);
+      // localStorage.removeItem("last_selected_game_key");
+    }
+  }, []);
+
+  useEffect(() => {
+    // Recuperar el identificador del último juego enfocado desde localStorage
+    const storedGameKey = localStorage.getItem("last_selected_game_key");
+    const storedVisibleCount: any = localStorage.getItem("current_visible_count");
+
+    if (storedGameKey && storedVisibleCount) {
+      setLastSelectedGameKey(storedGameKey);
+      localStorage.removeItem("last_selected_game_key");
+      localStorage.removeItem("current_visible_count");
+    }
+  }, [visibleCount]);
+
   useEffect(() => {
     console.log("getData launched");
     getData();
@@ -346,6 +381,8 @@ const Games: VFC<{ serverAPI: any }> = ({ serverAPI }) => {
               <Focusable className="games">
                 {filteredGames.slice(0, visibleCount).map((game: any) => {
                   const random = Math.floor(Math.random() * 10000);
+                  const gameKey = `${game.name}_${game.platform}`; // Identificador único
+
                   return (
                     <Game
                       key={game.name}
@@ -355,6 +392,7 @@ const Games: VFC<{ serverAPI: any }> = ({ serverAPI }) => {
                       launchGame={launchGame}
                       fixArtwork={fixArtwork}
                       loadMore={loadMore}
+                      focus={lastSelectedGameKey === gameKey}
                     />
                   );
                 })}

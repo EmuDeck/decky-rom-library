@@ -57,8 +57,8 @@ const Games: VFC<{ serverAPI: any }> = ({ serverAPI }) => {
     cursor: pointer;
     transform-origin: 50% 50%;
     transform-style: preserve-3d;
-    transform: scale(0.98)
-    background:#efefef
+    transform: scale(0.98);
+    background: transparent
 
   }
   .game.gpfocus, .game:hover{

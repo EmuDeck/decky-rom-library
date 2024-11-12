@@ -243,6 +243,7 @@ const Artwork: VFC<{ serverAPI: any }> = ({ serverAPI }) => {
               <DialogButton
                 onClick={() => {
                   console.log({ searchInput });
+                  setState({ ...state, games: [] }); // Reset games
                   getImages(searchInput);
                 }}>
                 <span>Search</span>
@@ -254,10 +255,14 @@ const Artwork: VFC<{ serverAPI: any }> = ({ serverAPI }) => {
 
       setState({ ...state, tabs: tabs });
     }
-  }, [games]);
+  }, [games, currentTab]); // Update tabs when games or currentTab changes
 
   useEffect(() => {
     if (gamesSearch) {
+      imgsWS.post({}).then((data) => {
+        console.log({ data });
+        setState({ ...state, games: data });
+      });
       const tabs = [
         {
           title: "Search Results",

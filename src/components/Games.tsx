@@ -111,8 +111,6 @@ const Games: VFC<{ serverAPI: any }> = ({ serverAPI }) => {
   }
 
   .game__file span{
-    transform:translateX(100%);
-    animation: marquee 5s linear infinite;
     display:block;
     color:#fff
   }
@@ -379,7 +377,7 @@ const Games: VFC<{ serverAPI: any }> = ({ serverAPI }) => {
               </Focusable>
 
               <Focusable className="games">
-                {filteredGames.slice(0, visibleCount).map((game: any) => {
+                {filteredGames.map((game: any) => {
                   const random = Math.floor(Math.random() * 10000);
                   const gameKey = `${game.name}_${game.platform}`; // Identificador único
 
@@ -403,7 +401,7 @@ const Games: VFC<{ serverAPI: any }> = ({ serverAPI }) => {
       });
       setState({ ...state, tabs: tabs });
     }
-  }, [games, searchTerm, visibleCount]);
+  }, [games, searchTerm]);
 
   //
   // Render

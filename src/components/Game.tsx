@@ -65,16 +65,6 @@ const Game = ({ item, game, random, launchGame, fixArtwork, loadMore, focus }) =
       /> */}
       {isFocus && (
         <>
-          {/* <div
-            className="_1sTuvqUAeproqHEae5sn9z"
-            style={{
-              position: "absolute",
-              width: "100%",
-              height: "100%",
-              top: "0px",
-              left: "0px",
-            }}></div>
-*/}
           <img loading="lazy" className="game__bg" src={`${game.img}?id=${random}`} alt={game.name} />
           <div className="game__file">
             <span>{game.file}</span>

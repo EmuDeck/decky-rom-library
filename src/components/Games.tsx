@@ -361,7 +361,7 @@ const Games: VFC<{ serverAPI: any }> = ({ serverAPI }) => {
         const filteredGames = item.games.filter((game: any) =>
           game.name.toLowerCase().includes(searchTerm.toLowerCase())
         );
-        console.log("Games filtered");
+        console.log({ filteredGames });
         return {
           title: item.title,
           id: item.id,
@@ -377,23 +377,27 @@ const Games: VFC<{ serverAPI: any }> = ({ serverAPI }) => {
               </Focusable>
 
               <Focusable className="games">
-                {filteredGames.map((game: any) => {
-                  const random = Math.floor(Math.random() * 10000);
-                  const gameKey = `${game.name}_${game.platform}`; // Identificador único
+                {filteredGames.length > 0 ? (
+                  filteredGames.map((game: any) => {
+                    const random = Math.floor(Math.random() * 10000);
+                    const gameKey = `${game.name}_${game.platform}`; // Identificador único
 
-                  return (
-                    <Game
-                      key={game.name}
-                      item={item}
-                      random={random}
-                      game={game}
-                      launchGame={launchGame}
-                      fixArtwork={fixArtwork}
-                      loadMore={loadMore}
-                      focus={lastSelectedGameKey === gameKey}
-                    />
-                  );
-                })}
+                    return (
+                      <Game
+                        key={`${game.name}${game.platform}${random}`}
+                        item={item}
+                        random={random}
+                        game={game}
+                        launchGame={launchGame}
+                        fixArtwork={fixArtwork}
+                        loadMore={loadMore}
+                        focus={lastSelectedGameKey === gameKey}
+                      />
+                    );
+                  })
+                ) : (
+                  <p>No matches</p>
+                )}
               </Focusable>
             </>
           ),

@@ -77,7 +77,7 @@ export function getCurrentUserId(useU64 = false): string {
   return BigInt.asUintN(32, BigInt(window.App.m_CurrentUser.strSteamID)).toString();
 }
 
-export async function launchApp(sAPI: ServerAPI, app: App, system: string) {
+export async function launchApp(sAPI: ServerAPI, app: App, system: string, platform:string) {
   let id: number = await getShortcutID(sAPI, system);
   let appNameBeauty = app.name;
   appNameBeauty = appNameBeauty.replace(/_/g, " ");
@@ -91,7 +91,7 @@ export async function launchApp(sAPI: ServerAPI, app: App, system: string) {
   console.warn(`${app.name}`);
   await sAPI
     .callPluginMethod("emudeck", {
-      command: `addGameListsArtwork ${app.name} ${id}`,
+      command: `addGameListsArtwork ${app.name} ${id} ${platform}`,
     })
     .then((response: any) => {
       //Refresh picture

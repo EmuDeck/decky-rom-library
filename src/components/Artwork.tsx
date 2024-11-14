@@ -132,7 +132,7 @@ const Artwork: VFC<{ serverAPI: any }> = ({ serverAPI }) => {
   const t = getTranslateFunc();
   let gameSS: any = "";
   gameSS = sessionStorage.getItem("game");
-
+  gameSS = gameSS.name
   //
   // Web services
   //
@@ -172,7 +172,7 @@ const Artwork: VFC<{ serverAPI: any }> = ({ serverAPI }) => {
 
     await serverAPI
       .callPluginMethod("emudeck", {
-        command: `saveImage ${url} ${name}`,
+        command: `saveImage ${url} ${name} ${gameSS.platform}`,
       })
       .then((result: any) => {
         console.log({ result });

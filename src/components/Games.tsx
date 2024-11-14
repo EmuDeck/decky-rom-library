@@ -27,11 +27,21 @@ const Games: VFC<{ serverAPI: any }> = ({ serverAPI }) => {
     margin-top:50px;
   }
 
+  .games--gb,
+  .games--psx,
+  .games--ps2,
+  .games--nds,
+  .games--dreamcast
+  {
+    grid-template-columns: repeat(auto-fill, 133px);
+    grid-auto-rows: 133px;
+  }
+
 
   .games__search{
     margin-bottom:12px;
     position:absolute;
-    width: 93vw
+    width: calc(100% - 30px);
   }
 
 
@@ -43,7 +53,7 @@ const Games: VFC<{ serverAPI: any }> = ({ serverAPI }) => {
     padding:0;
     line-height:0;
     // max-height:218px;
-    overflow: visible;
+    overflow: hidden;
     border: none;
     box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, .25);
     filter: brightness(0.9);
@@ -289,11 +299,11 @@ const Games: VFC<{ serverAPI: any }> = ({ serverAPI }) => {
         .replace(/\\\\/g, "\\")
         .replace(/\\:"/g, '"Z:');
     }
-    launchApp(serverAPI, { name, exec: launcherComplete }, systemOS);
+    launchApp(serverAPI, { name, exec: launcherComplete }, systemOS, platform );
   };
 
   const fixArtwork = (game: any) => {
-    sessionStorage.setItem("game", game.name);
+    sessionStorage.setItem("game", game);
     const gameKey = `${game.name}_${game.platform}`;
     console.log({ gameKey });
     localStorage.setItem("last_selected_game_key", gameKey);
@@ -376,7 +386,7 @@ const Games: VFC<{ serverAPI: any }> = ({ serverAPI }) => {
                 />
               </Focusable>
 
-              <Focusable className="games">
+              <Focusable className={`games games--${item.id}`}>
                 {filteredGames.length > 0 ? (
                   filteredGames.map((game: any) => {
                     const random = Math.floor(Math.random() * 10000);

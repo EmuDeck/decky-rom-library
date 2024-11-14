@@ -55,7 +55,7 @@ const Game = ({ item, game, random, launchGame, fixArtwork, loadMore, focus }) =
       onSecondaryButton={() => fixArtwork(game)}
       onButtonDown={() => loadMore()}>
       {isVisible && (
-        <img loading="lazy" className="game__img" src={`${game.img}?id=${random}`} alt={game.name.replace(/_/g, " ")} />
+        <img loading="lazy" className="game__img" src={`${item.id}/${game.img}?id=${random}`} alt={game.name.replace(/_/g, " ")} />
       )}
       {/* <img
         loading="lazy"
@@ -65,7 +65,7 @@ const Game = ({ item, game, random, launchGame, fixArtwork, loadMore, focus }) =
       /> */}
       {isFocus && (
         <>
-          <img loading="lazy" className="game__bg" src={`${game.img}?id=${random}`} alt={game.name} />
+          <img loading="lazy" className="game__bg" src={`${item.id}/${game.img}?id=${random}`} alt={game.name} />
           <div className="game__file">
             <span>{game.file}</span>
           </div>

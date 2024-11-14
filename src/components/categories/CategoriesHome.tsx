@@ -2,7 +2,7 @@ import { VFC, useState, useEffect } from "react";
 import { Tabs, Button, Focusable, SteamSpinner, Router, TextField } from "decky-frontend-lib";
 import { launchApp } from "../../common/steamshortcuts";
 import { getTranslateFunc } from "../../TranslationsF";
-import { Game } from "./Game";
+import { Game } from "../common/Game";
 
 const CategoriesHome: VFC<{ serverAPI: any }> = ({ serverAPI }) => {
   const styles = `.games{

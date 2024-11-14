@@ -5,7 +5,7 @@ interface GamesProps {
   serverAPI: any; // Reemplaza 'any' con el tipo específico de serverAPI si está disponible
 }
 
-const Games: VFC<GamesProps> = ({ serverAPI }) => {
+const CategoriesGames: VFC<GamesProps> = ({ serverAPI }) => {
   const items = [
     { id: 1, name: "Nintendo Entertainment System", description: "The iconic 8-bit console by Nintendo." },
     { id: 2, name: "Super Nintendo", description: "The 16-bit classic with titles like Super Mario World." },
@@ -61,4 +61,4 @@ const Games: VFC<GamesProps> = ({ serverAPI }) => {
   );
 };
 
-export { Games };
+export { CategoriesGames };

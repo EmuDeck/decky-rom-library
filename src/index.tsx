@@ -12,7 +12,7 @@ import { TabsHome } from "./components/tabs/TabsHome";
 import { CategoriesHome } from "./components/categories/CategoriesHome";
 
 export default definePlugin((serverApi: ServerAPI) => {
-  const theme: string = "tabs";
+  const theme: string = "categories";
 
   serverApi.routerHook.addRoute(routePath, () => {
     switch (theme) {

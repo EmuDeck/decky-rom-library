@@ -5,7 +5,29 @@ import { getTranslateFunc } from "../../TranslationsF";
 import { Game } from "../common/Game";
 
 const TabsHome: VFC<{ serverAPI: any }> = ({ serverAPI }) => {
-  const styles = `.games{
+  const styles = `
+
+  .container{
+    margin-top: 40px;
+    height: calc(100% - 40px);
+    background: #0e141b
+  }
+
+  .container{
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    padding-top: 58px;
+    padding-bottom: 40px;
+    padding-left: 2.8vw;
+    padding-right: 2.8vw;
+    scroll-padding-top: 116px;
+    scroll-padding-bottom: 80px;
+  }
+
+  .games{
     // display: flex;
     // flex-wrap: wrap;
     // gap:15px;
@@ -59,7 +81,6 @@ const TabsHome: VFC<{ serverAPI: any }> = ({ serverAPI }) => {
     transform-style: preserve-3d;
     transform: scale(0.98);
     background: transparent
-
   }
   .game.gpfocus, .game:hover{
     transition-duration: .05s;
@@ -413,7 +434,7 @@ const TabsHome: VFC<{ serverAPI: any }> = ({ serverAPI }) => {
   //
 
   return (
-    <div style={{ marginTop: "40px", height: "calc(100% - 40px)", background: "#0e141b" }}>
+    <div className="container">
       <style>{` ${styles} `}</style>
       {!tabs && (
         <div style={{ textAlign: "center", height: "100vh" }}>

@@ -3,8 +3,8 @@ import { Tabs, Button, Focusable, SteamSpinner, Router, TextField } from "decky-
 import { launchApp } from "../../common/steamshortcuts";
 import { getTranslateFunc } from "../../TranslationsF";
 import { Category } from "../common/Category";
-
-const CategoriesHome: VFC<{ serverAPI: any }> = ({ serverAPI }) => {
+import { getDataGames, getDataSettings } from "../../common/helpers";
+const CategoriesHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, version }) => {
   const styles = `
 
   .container{
@@ -33,7 +33,19 @@ const CategoriesHome: VFC<{ serverAPI: any }> = ({ serverAPI }) => {
         font-size: 16.8182px;
         padding-left: 0px;
         padding-right: 0px;
-    }
+  }
+
+  /* Full size cats */
+  .vertical.categories{
+    grid-template-columns: repeat(auto-fill, 25vw);
+    grid-auto-rows: calc(100vh - 114px);
+    height: 100vh;
+    width: 10000px;
+    overflow: scroll;
+  }
+
+  .vertical.categories .category ._3n796D6GS1fdlXhRnRUfRv{
+    display:none !important
   }
 
   .category{
@@ -92,43 +104,18 @@ const CategoriesHome: VFC<{ serverAPI: any }> = ({ serverAPI }) => {
   // Functions
   //
 
-  const getDataGames = async () => {
-    console.log("Asking for Games");
-    await serverAPI.callPluginMethod("emudeck", { command: `generateGameLists` });
-    serverAPI.callPluginMethod("emudeck", { command: `generateGameListsJson` }).then((response: any) => {
-      const result: any = response.result;
-      const gameList: any = JSON.parse(result);
-      console.log({ result });
-      gameList.sort((a: any, b: any) => a.title.localeCompare(b.title));
-      console.log("Saving Games to State");
-      console.log({ gameList });
-      setState({ ...state, games: gameList });
-    });
-  };
-
-  const getDataSettings = async () => {
-    console.log("Asking for Settings");
-    await serverAPI.callPluginMethod("getSettings", {}).then((response: any) => {
-      const result: any = response.result;
-      const emuDeckConfig: any = JSON.parse(result);
-      console.log({ result });
-      console.log("Saving Settings to State");
-      setState({ ...state, emuDeckConfig });
-    });
-  };
-
   //
   // UseEffects
   //
 
   useEffect(() => {
-    getDataSettings();
+    getDataSettings(serverAPI, setState, state);
   }, []);
 
   useEffect(() => {
     if (emuDeckConfig.systemOS !== "") {
       console.log("getDataGames launched");
-      getDataGames();
+      getDataGames(serverAPI, setState, state);
     }
   }, [emuDeckConfig]);
   //
@@ -146,7 +133,7 @@ const CategoriesHome: VFC<{ serverAPI: any }> = ({ serverAPI }) => {
         </div>
       )}
       {games && (
-        <Focusable className={`categories CSSGrid Grid Panel`}>
+        <Focusable className={`categories CSSGrid Grid Panel ${version}`}>
           {games.map((platform: any) => {
             return <Category platform={platform} />;
           })}

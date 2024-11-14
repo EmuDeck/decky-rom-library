@@ -3,7 +3,7 @@ import { Tabs, Button, Focusable, SteamSpinner, Router, TextField } from "decky-
 import { launchApp } from "../../common/steamshortcuts";
 import { getTranslateFunc } from "../../TranslationsF";
 import { Game } from "../common/Game";
-
+import { getDataGames, getDataSettings } from "../../common/helpers";
 const TabsHome: VFC<{ serverAPI: any }> = ({ serverAPI }) => {
   const styles = `
 
@@ -261,30 +261,6 @@ const TabsHome: VFC<{ serverAPI: any }> = ({ serverAPI }) => {
       });
   };
 
-  const getDataGames = async () => {
-    console.log("Asking for Games");
-    await serverAPI.callPluginMethod("emudeck", { command: `generateGameLists` });
-    serverAPI.callPluginMethod("emudeck", { command: `generateGameListsJson` }).then((response: any) => {
-      const result: any = response.result;
-      const gameList: any = JSON.parse(result);
-      console.log({ result });
-      gameList.sort((a: any, b: any) => a.title.localeCompare(b.title));
-      console.log("Saving Games to State");
-      setState({ ...state, games: gameList });
-    });
-  };
-
-  const getData = async () => {
-    console.log("Asking for Settings");
-    await serverAPI.callPluginMethod("getSettings", {}).then((response: any) => {
-      const result: any = response.result;
-      const emuDeckConfig: any = JSON.parse(result);
-      console.log({ result });
-      console.log("Saving Settings to State");
-      setState({ ...state, emuDeckConfig });
-    });
-  };
-
   const loadMore = () => {
     setVisibleCount((prevCount) => prevCount + 5);
   };
@@ -354,7 +330,7 @@ const TabsHome: VFC<{ serverAPI: any }> = ({ serverAPI }) => {
 
   useEffect(() => {
     console.log("getData launched");
-    getData();
+    getDataSettings(serverAPI, setState, state);
 
     intervalid = setInterval(() => {
       checkParserStatus();
@@ -368,7 +344,7 @@ const TabsHome: VFC<{ serverAPI: any }> = ({ serverAPI }) => {
   useEffect(() => {
     if (emuDeckConfig.systemOS !== "") {
       console.log("getDataGames launched");
-      getDataGames();
+      getDataGames(serverAPI, setState, state);
       const TabLastID = localStorage.getItem("emudeck_rom_library_current_tab");
       if (TabLastID) {
         setCurrentTab(TabLastID);

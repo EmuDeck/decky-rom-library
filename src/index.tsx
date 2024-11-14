@@ -19,7 +19,9 @@ export default definePlugin((serverApi: ServerAPI) => {
       case "tabs":
         return <TabsHome serverAPI={serverApi} />;
       case "categories":
-        return <CategoriesHome serverAPI={serverApi} />;
+        return <CategoriesHome version="grid" serverAPI={serverApi} />;
+      case "categories-vertical":
+        return <CategoriesHome version="vertical" serverAPI={serverApi} />;
       default:
         return <TabsHome serverAPI={serverApi} />;
     }

@@ -4,7 +4,7 @@ import { launchApp } from "../../common/steamshortcuts";
 import { getTranslateFunc } from "../../TranslationsF";
 import { Game } from "./Game";
 
-const Games: VFC<{ serverAPI: any }> = ({ serverAPI }) => {
+const CategoriesHome: VFC<{ serverAPI: any }> = ({ serverAPI }) => {
   const styles = `.games{
     // display: flex;
     // flex-wrap: wrap;
@@ -439,4 +439,4 @@ const Games: VFC<{ serverAPI: any }> = ({ serverAPI }) => {
   );
 };
 
-export { Games };
+export { CategoriesHome };

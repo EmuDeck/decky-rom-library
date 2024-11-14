@@ -1,34 +1,33 @@
 import { definePlugin, ServerAPI, staticClasses } from "decky-frontend-lib";
 import { routePath, SP_Window, routePathArtwork } from "./init";
-//import { QAMContent } from "./components/QAMContent";
 import { PluginIcon } from "./native-components/PluginIcon";
-import { Games } from "./components/tabs/Games";
-import { Artwork } from "./components/tabs/Artwork";
 import { patchMenu } from "./menuPatch";
 import Settings from "./components/Settings";
-//import { appendStyles } from "./styling";
-//import { TabbedBrowser } from "./components/TabbedBrowser";
-//import { tabManager } from "./classes/TabManager";
-// import { settingsManager } from "./classes/SettingsManager";
-// import { favoritesManager } from "./classes/FavoritesManager";
-// import { patchSearchBar, unpatchSearchBar } from "./searchBarPatch";
-// import { backendService } from "./classes/BackendService";
+import { Artwork } from "./components/common/Artwork";
+
+//Tabs theme
+import { TabsHome } from "./components/tabs/TabsHome";
+
+//Tabs theme
+import { CategoriesHome } from "./components/categories/CategoriesHome";
 
 export default definePlugin((serverApi: ServerAPI) => {
-  // backendService.init(serverApi);
-  // settingsManager.init();
-  // favoritesManager.init();
-  // appendStyles(SP_Window);
+  const theme: string = "tabs";
+
   serverApi.routerHook.addRoute(routePath, () => {
-    return <Games serverAPI={serverApi} />;
+    switch (theme) {
+      case "tabs":
+        return <TabsHome serverAPI={serverApi} />;
+      case "categories":
+        return <CategoriesHome serverAPI={serverApi} />;
+      default:
+        return <TabsHome serverAPI={serverApi} />;
+    }
   });
   serverApi.routerHook.addRoute(routePathArtwork, () => {
     return <Artwork serverAPI={serverApi} />;
   });
   const unpatchMenu = patchMenu();
-  // patchSearchBar();
-  // const unregisterOnResume = SteamClient.System.RegisterForOnResumeFromSuspend(patchSearchBar).unregister;
-
   return {
     title: <div>EmuDeck</div>,
     content: <Settings serverAPI={serverApi} />,
@@ -37,8 +36,6 @@ export default definePlugin((serverApi: ServerAPI) => {
       serverApi.routerHook.removeRoute(routePath);
       serverApi.routerHook.removeRoute(routePathArtwork);
       unpatchMenu();
-      //unpatchSearchBar?.();
-      //unregisterOnResume();
     },
   };
 });

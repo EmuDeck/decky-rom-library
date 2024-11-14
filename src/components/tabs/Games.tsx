@@ -1,7 +1,7 @@
 import { VFC, useState, useEffect } from "react";
 import { Tabs, Button, Focusable, SteamSpinner, Router, TextField } from "decky-frontend-lib";
-import { launchApp } from "../common/steamshortcuts";
-import { getTranslateFunc } from "../TranslationsF";
+import { launchApp } from "../../common/steamshortcuts";
+import { getTranslateFunc } from "../../TranslationsF";
 import { Game } from "./Game";
 
 const Games: VFC<{ serverAPI: any }> = ({ serverAPI }) => {
@@ -11,7 +11,7 @@ const Games: VFC<{ serverAPI: any }> = ({ serverAPI }) => {
     // gap:15px;
     // height:100%;
     grid-template-columns: repeat(auto-fill, 133px);
-    grid-auto-rows: 199.5px;
+    grid-auto-rows: auto;
     gap: 42px 16px;
     font-size: 18.1364px;
     padding-left: 8px;
@@ -25,16 +25,6 @@ const Games: VFC<{ serverAPI: any }> = ({ serverAPI }) => {
     grid-auto-flow: row;
     justify-content: space-between;
     margin-top:50px;
-  }
-
-  .games--gb,
-  .games--psx,
-  .games--ps2,
-  .games--nds,
-  .games--dreamcast
-  {
-    grid-template-columns: repeat(auto-fill, 133px);
-    grid-auto-rows: 133px;
   }
 
 
@@ -53,7 +43,7 @@ const Games: VFC<{ serverAPI: any }> = ({ serverAPI }) => {
     padding:0;
     line-height:0;
     // max-height:218px;
-    overflow: hidden;
+    overflow: visible;
     border: none;
     box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, .25);
     filter: brightness(0.9);
@@ -279,6 +269,7 @@ const Games: VFC<{ serverAPI: any }> = ({ serverAPI }) => {
   };
 
   const launchGame = (launcher: string, game: string, name: string, platform: string) => {
+    console.log({ launcher, game, name, platform });
     const gameKey = `${name}_${platform}`;
     localStorage.setItem("last_selected_game_key", gameKey);
     localStorage.setItem("current_visible_count", visibleCount);
@@ -299,7 +290,7 @@ const Games: VFC<{ serverAPI: any }> = ({ serverAPI }) => {
         .replace(/\\\\/g, "\\")
         .replace(/\\:"/g, '"Z:');
     }
-    launchApp(serverAPI, { name, exec: launcherComplete }, systemOS, platform );
+    launchApp(serverAPI, { name, exec: launcherComplete }, systemOS, platform);
   };
 
   const fixArtwork = (game: any) => {

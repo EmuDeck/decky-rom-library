@@ -1,8 +1,8 @@
 import { VFC, useState, useEffect } from "react";
 import { Tabs, Button, Focusable, SteamSpinner, Router, TextField, DialogButton } from "decky-frontend-lib";
-import { launchApp, getCurrentUserId } from "../common/steamshortcuts";
-import { getTranslateFunc } from "../TranslationsF";
-import { useFetchCond } from "../hooks/useFetchCond";
+import { launchApp, getCurrentUserId } from "../../common/steamshortcuts";
+import { getTranslateFunc } from "../../TranslationsF";
+import { useFetchCond } from "../../hooks/useFetchCond";
 
 const Artwork: VFC<{ serverAPI: any }> = ({ serverAPI }) => {
   const styles = `
@@ -132,7 +132,7 @@ const Artwork: VFC<{ serverAPI: any }> = ({ serverAPI }) => {
   const t = getTranslateFunc();
   let gameSS: any = "";
   gameSS = sessionStorage.getItem("game");
-  gameSS = gameSS.name
+  gameSS = gameSS.name;
   //
   // Web services
   //

@@ -261,10 +261,6 @@ const TabsHome: VFC<{ serverAPI: any }> = ({ serverAPI }) => {
       });
   };
 
-  const loadMore = () => {
-    setVisibleCount((prevCount) => prevCount + 5);
-  };
-
   const launchGame = (launcher: string, game: string, name: string, platform: string) => {
     console.log({ launcher, game, name, platform });
     const gameKey = `${name}_${platform}`;
@@ -388,7 +384,6 @@ const TabsHome: VFC<{ serverAPI: any }> = ({ serverAPI }) => {
                         game={game}
                         launchGame={launchGame}
                         fixArtwork={fixArtwork}
-                        loadMore={loadMore}
                         focus={lastSelectedGameKey === gameKey}
                       />
                     );

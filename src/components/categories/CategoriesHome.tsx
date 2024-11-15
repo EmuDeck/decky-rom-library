@@ -136,20 +136,23 @@ const CategoriesHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, v
         </div>
       )}
       {games && (
-        <div className="container container--scroll">
-          <Focusable className={`categories CSSGrid Grid Panel ${version}`}>
-            {games.map((platform: any) => {
-              return (
-                <Category
-                  platform={platform}
-                  onClick={() => {
-                    Router.Navigate(`${routePathGames}/${platform.id}`);
-                  }}
-                />
-              );
-            })}
-          </Focusable>
-        </div>
+        <>
+          <div className="container container--scroll">
+            <h1>EmuDeck Retro Library</h1>
+            <Focusable className={`categories CSSGrid Grid Panel ${version}`}>
+              {games.map((platform: any) => {
+                return (
+                  <Category
+                    platform={platform}
+                    onClick={() => {
+                      Router.Navigate(`${routePathGames}/${platform.id}`);
+                    }}
+                  />
+                );
+              })}
+            </Focusable>
+          </div>
+        </>
       )}
     </>
   );

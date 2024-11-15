@@ -55,8 +55,7 @@ const GameGrid: VFC<{ serverAPI: any; platform: any }> = ({ serverAPI, platform 
 
   .games__search{
     margin-bottom:12px;
-    position:absolute;
-    width: calc(100% - 30px);
+    width: 100%;
   }
 
 
@@ -230,7 +229,6 @@ const GameGrid: VFC<{ serverAPI: any; platform: any }> = ({ serverAPI, platform 
   });
   const [percentage, setPercentage] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
-  const [visibleCount, setVisibleCount] = useState<any>(20);
   const [lastSelectedGameKey, setLastSelectedGameKey] = useState<string | null>(null);
 
   let { games, tabs, emuDeckConfig } = state;
@@ -242,14 +240,10 @@ const GameGrid: VFC<{ serverAPI: any; platform: any }> = ({ serverAPI, platform 
   //
   // Functions
   //
-  const loadMore = () => {
-    setVisibleCount((prevCount) => prevCount + 5);
-  };
   const launchGame = (launcher: string, game: string, name: string, platform: string) => {
     console.log({ launcher, game, name, platform });
     const gameKey = `${name}_${platform}`;
     localStorage.setItem("last_selected_game_key", gameKey);
-    localStorage.setItem("current_visible_count", visibleCount);
 
     let launcherComplete = launcher.replace(/{file.path}/g, `'${game}'`);
     if (emuDeckConfig.systemOS == "nt") {
@@ -275,7 +269,6 @@ const GameGrid: VFC<{ serverAPI: any; platform: any }> = ({ serverAPI, platform 
     const gameKey = `${game.name}_${game.platform}`;
     console.log({ gameKey });
     localStorage.setItem("last_selected_game_key", gameKey);
-    localStorage.setItem("current_visible_count", visibleCount);
     Router.Navigate("/emudeck-rom-artwork");
   };
 
@@ -312,11 +305,28 @@ const GameGrid: VFC<{ serverAPI: any; platform: any }> = ({ serverAPI, platform 
       {games && (
         <>
           <div className="container container--scroll">
+            {games
+              .filter((category: any) => category.id === platform) // Filtra por plataforma antes de mapear
+              .map((category: any) => {
+                return <h1>{category.title}</h1>;
+              })}
+            <Focusable className="games__search">
+              <TextField
+                value={searchTerm}
+                placeholder="Search games..."
+                onChange={(e) => setSearchTerm(e.target.value)}
+                style={{ padding: "8px", width: "100%", fontSize: "1rem" }}
+              />
+            </Focusable>
             <Focusable className={`games CSSGrid Grid Panel`}>
               {games
                 .filter((category: any) => category.id === platform) // Filtra por plataforma antes de mapear
-                .map((category: any) =>
-                  category.games.map((game: any) => {
+                .map((category: any) => {
+                  // Mover la declaración de filteredGames aquí
+                  const filteredGames = category.games.filter((game: any) =>
+                    game.name.toLowerCase().includes(searchTerm.toLowerCase())
+                  );
+                  return filteredGames.map((game: any) => {
                     const random = Math.floor(Math.random() * 10000);
                     const gameKey = `${game.name}_${game.platform}`;
                     return (
@@ -327,12 +337,11 @@ const GameGrid: VFC<{ serverAPI: any; platform: any }> = ({ serverAPI, platform 
                         game={game}
                         launchGame={launchGame}
                         fixArtwork={fixArtwork}
-                        loadMore={loadMore}
                         focus={lastSelectedGameKey === gameKey}
                       />
-                    ); // Renderiza los juegos de la categoría filtrada
-                  })
-                )}
+                    );
+                  });
+                })}
             </Focusable>
           </div>
         </>

@@ -1,7 +1,7 @@
 import { VFC, useState, useEffect, useRef } from "react";
 import { Button } from "decky-frontend-lib";
 
-const Game = ({ item, game, random, launchGame, fixArtwork, loadMore, focus }) => {
+const Game = ({ item, game, random, launchGame, fixArtwork, focus }) => {
   const [isFocus, setIsFocus] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const targetRef = useRef(null);

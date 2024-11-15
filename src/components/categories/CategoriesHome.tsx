@@ -49,9 +49,6 @@ const CategoriesHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, v
   }
 
   .category{
-    //position:relative;
-    //width: calc(20% - 15px);
-    // transition: .5s;
     border:0px;
     padding:0;
     line-height:0;
@@ -83,8 +80,6 @@ const CategoriesHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, v
 
   `;
 
-  const { appid } = useParams<{ appid: string }>();
-  console.log({ appid });
   //
   // State
   //
@@ -117,7 +112,13 @@ const CategoriesHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, v
   useEffect(() => {
     if (emuDeckConfig.systemOS !== "") {
       console.log("getDataGames launched");
-      getDataGames(serverAPI, setState, state);
+      const gamesLS = sessionStorage.getItem("rom_library_games");
+      if (gamesLS) {
+        const gamesJson: any = JSON.parse(gamesLS);
+        setState({ ...state, games: gamesJson });
+      } else {
+        getDataGames(serverAPI, setState, state);
+      }
     }
   }, [emuDeckConfig]);
   //
@@ -125,7 +126,7 @@ const CategoriesHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, v
   //
 
   return (
-    <div className="container container--scroll">
+    <>
       <style>{` ${styles} `}</style>
       {!games && (
         <div style={{ textAlign: "center", height: "100vh" }}>
@@ -135,20 +136,22 @@ const CategoriesHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, v
         </div>
       )}
       {games && (
-        <Focusable className={`categories CSSGrid Grid Panel ${version}`}>
-          {games.map((platform: any) => {
-            return (
-              <Category
-                platform={platform}
-                onClick={() => {
-                  Router.Navigate(`${routePathGames}/${platform.id}`);
-                }}
-              />
-            );
-          })}
-        </Focusable>
+        <div className="container container--scroll">
+          <Focusable className={`categories CSSGrid Grid Panel ${version}`}>
+            {games.map((platform: any) => {
+              return (
+                <Category
+                  platform={platform}
+                  onClick={() => {
+                    Router.Navigate(`${routePathGames}/${platform.id}`);
+                  }}
+                />
+              );
+            })}
+          </Focusable>
+        </div>
       )}
-    </div>
+    </>
   );
 };
 

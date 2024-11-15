@@ -8,12 +8,6 @@ const GameGrid: VFC<{ serverAPI: any; platform: any }> = ({ serverAPI, platform 
   const styles = `
 
   .container{
-    margin-top: 40px;
-    height: calc(100% - 40px);
-    background: #0e141b
-  }
-
-  .container{
     position: absolute;
     top: 0;
     right: 0;
@@ -27,11 +21,21 @@ const GameGrid: VFC<{ serverAPI: any; platform: any }> = ({ serverAPI, platform 
     scroll-padding-bottom: 80px;
   }
 
+  .container--scroll{
+    overflow:scroll;
+  }
+
+  .categories{
+      display:grid;
+      grid-template-columns: repeat(auto-fill, 185px);
+      grid-auto-rows: 185px;
+      gap: 22px;
+      font-size: 16.8182px;
+      padding-left: 0px;
+      padding-right: 0px;
+  }
+
   .games{
-    // display: flex;
-    // flex-wrap: wrap;
-    // gap:15px;
-    // height:100%;
     grid-template-columns: repeat(auto-fill, 133px);
     grid-auto-rows: auto;
     gap: 42px 16px;
@@ -46,7 +50,6 @@ const GameGrid: VFC<{ serverAPI: any; platform: any }> = ({ serverAPI, platform 
     padding: 8px 0px;
     grid-auto-flow: row;
     justify-content: space-between;
-    margin-top:50px;
   }
 
 
@@ -58,13 +61,9 @@ const GameGrid: VFC<{ serverAPI: any; platform: any }> = ({ serverAPI, platform 
 
 
   .game{
-    //position:relative;
-    //width: calc(20% - 15px);
-    // transition: .5s;
     border:0px;
     padding:0;
     line-height:0;
-    // max-height:218px;
     overflow: visible;
     border: none;
     box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, .25);
@@ -88,7 +87,6 @@ const GameGrid: VFC<{ serverAPI: any; platform: any }> = ({ serverAPI, platform 
     filter: brightness(0.8) contrast(1.05) saturate(1);
     transform: scale(1.08)
   }
-
 
   .game__img{
     display: inline-block;
@@ -222,6 +220,7 @@ const GameGrid: VFC<{ serverAPI: any; platform: any }> = ({ serverAPI, platform 
   //
   // State
   //
+
   const [state, setState] = useState<any>({
     games: undefined,
     tabs: undefined,
@@ -231,7 +230,6 @@ const GameGrid: VFC<{ serverAPI: any; platform: any }> = ({ serverAPI, platform 
   });
   const [percentage, setPercentage] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
-  const [currentTab, setCurrentTab] = useState<string>("Tab1");
   const [visibleCount, setVisibleCount] = useState<any>(20);
   const [lastSelectedGameKey, setLastSelectedGameKey] = useState<string | null>(null);
 
@@ -241,30 +239,12 @@ const GameGrid: VFC<{ serverAPI: any; platform: any }> = ({ serverAPI, platform 
   // Const & Vars
   //
   const t = getTranslateFunc();
-  let intervalid: any;
   //
   // Functions
   //
-  const checkParserStatus = () => {
-    //console.log("checkCloudStatus");
-    serverAPI
-      .callPluginMethod("emudeck", { command: "generateGameLists_getPercentage" })
-      .then((response: any) => {
-        const result = response.result;
-        setPercentage(result);
-        if (result == "100") {
-          clearInterval(intervalid);
-        }
-      })
-      .catch((error: any) => {
-        console.log({ error });
-      });
-  };
-
   const loadMore = () => {
     setVisibleCount((prevCount) => prevCount + 5);
   };
-
   const launchGame = (launcher: string, game: string, name: string, platform: string) => {
     console.log({ launcher, game, name, platform });
     const gameKey = `${name}_${platform}`;
@@ -302,88 +282,47 @@ const GameGrid: VFC<{ serverAPI: any; platform: any }> = ({ serverAPI, platform 
   //
   // UseEffects
   //
-
   useEffect(() => {
-    // Recuperar el identificador del último juego enfocado desde localStorage
-    const storedGameKey = localStorage.getItem("last_selected_game_key");
-    let storedVisibleCount: any = localStorage.getItem("current_visible_count");
-    if (storedGameKey) {
-      let storedVisibleCount: any = localStorage.getItem("current_visible_count");
-      storedVisibleCount = parseInt(storedVisibleCount);
-      setVisibleCount(storedVisibleCount);
-      // setLastSelectedGameKey(storedGameKey);
-      // localStorage.removeItem("last_selected_game_key");
-    }
-  }, []);
-
-  useEffect(() => {
-    // Recuperar el identificador del último juego enfocado desde localStorage
-    const storedGameKey = localStorage.getItem("last_selected_game_key");
-    const storedVisibleCount: any = localStorage.getItem("current_visible_count");
-
-    if (storedGameKey && storedVisibleCount) {
-      setLastSelectedGameKey(storedGameKey);
-      localStorage.removeItem("last_selected_game_key");
-      localStorage.removeItem("current_visible_count");
-    }
-  }, [visibleCount]);
-
-  useEffect(() => {
-    console.log("getData launched");
-    getDataSettings(serverAPI, setState, state);
-
-    intervalid = setInterval(() => {
-      checkParserStatus();
-    }, 10000);
-
-    return () => {
-      clearInterval(intervalid);
-    };
-  }, []);
-
-  useEffect(() => {
-    if (emuDeckConfig.systemOS !== "") {
-      console.log("getDataGames launched");
-      getDataGames(serverAPI, setState, state);
-      const TabLastID = localStorage.getItem("emudeck_rom_library_current_tab");
-      if (TabLastID) {
-        setCurrentTab(TabLastID);
+    const gamesLS = sessionStorage.getItem("rom_library_games");
+    if (gamesLS) {
+      try {
+        const gamesJson: any = JSON.parse(gamesLS);
+        console.log({ gamesJson });
+        setState({ ...state, games: gamesJson });
+      } catch (error) {
+        console.error("Error al parsear los juegos:", error);
       }
     }
-  }, [emuDeckConfig]);
+  }, []);
 
   useEffect(() => {
     if (games) {
-      console.log("Generating tabs");
-      const tabs = games.map((item: any) => {
-        const filteredGames = item.games.filter((game: any) =>
-          game.name.toLowerCase().includes(searchTerm.toLowerCase())
-        );
-        console.log({ filteredGames });
-        return {
-          title: item.title,
-          id: item.id,
-          content: (
-            <>
-              <Focusable className="games__search">
-                <TextField
-                  value={searchTerm}
-                  placeholder="Search games..."
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  style={{ padding: "8px", width: "100%", fontSize: "1rem" }}
-                />
-              </Focusable>
+      console.log({ games });
+    }
+  }, [games]);
 
-              <Focusable className={`games games--${item.id}`}>
-                {filteredGames.length > 0 ? (
-                  filteredGames.map((game: any) => {
+  //
+  // Render
+  //
+
+  return (
+    <>
+      <style>{` ${styles} `}</style>
+      {!games && <div>NO GAMES YET, loading</div>}
+      {games && (
+        <>
+          <div className="container container--scroll">
+            <Focusable className={`games CSSGrid Grid Panel`}>
+              {games
+                .filter((category: any) => category.id === platform) // Filtra por plataforma antes de mapear
+                .map((category: any) =>
+                  category.games.map((game: any) => {
                     const random = Math.floor(Math.random() * 10000);
-                    const gameKey = `${game.name}_${game.platform}`; // Identificador único
-
+                    const gameKey = `${game.name}_${game.platform}`;
                     return (
                       <Game
                         key={`${game.name}${game.platform}${random}`}
-                        item={item}
+                        item={category}
                         random={random}
                         game={game}
                         launchGame={launchGame}
@@ -391,50 +330,14 @@ const GameGrid: VFC<{ serverAPI: any; platform: any }> = ({ serverAPI, platform 
                         loadMore={loadMore}
                         focus={lastSelectedGameKey === gameKey}
                       />
-                    );
+                    ); // Renderiza los juegos de la categoría filtrada
                   })
-                ) : (
-                  <p>No matches</p>
                 )}
-              </Focusable>
-            </>
-          ),
-        };
-      });
-      setState({ ...state, tabs: tabs });
-    }
-  }, [games, searchTerm]);
-
-  //
-  // Render
-  //
-
-  return (
-    <div className="container">
-      <style>{` ${styles} `}</style>
-      {!tabs && (
-        <div style={{ textAlign: "center", height: "100vh" }}>
-          <SteamSpinner>
-            <p>
-              {t("loadingGames")} {platform}{" "}
-            </p>
-          </SteamSpinner>
-        </div>
-      )}
-      {tabs && (
-        <>
-          <Tabs
-            activeTab={currentTab}
-            onShowTab={(tabID: string) => {
-              setCurrentTab(tabID);
-              localStorage.setItem("emudeck_rom_library_current_tab", tabID);
-            }}
-            tabs={tabs}
-          />
-          {percentage != 100 && <div className="parser-counter">Artwork parsing: {percentage}</div>}
+            </Focusable>
+          </div>
         </>
       )}
-    </div>
+    </>
   );
 };
 

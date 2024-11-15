@@ -52,8 +52,7 @@ const Game = ({ item, game, random, launchGame, fixArtwork, loadMore, focus }) =
       onSecondaryActionDescription={"Fix Artwork"}
       onOKActionDescription="Launch"
       onCancelActionDescription="Exit"
-      onSecondaryButton={() => fixArtwork(game)}
-      onButtonDown={() => loadMore()}>
+      onSecondaryButton={() => fixArtwork(game)}>
       {isVisible && (
         <img loading="lazy" className="game__img" src={`${game.img}?id=${random}`} alt={game.name.replace(/_/g, " ")} />
       )}

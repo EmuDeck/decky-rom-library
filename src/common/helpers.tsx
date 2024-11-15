@@ -9,6 +9,8 @@ export const getDataGames = async (serverAPI, setState, state) => {
     console.log("Saving Games to State");
     console.log({ gameList });
     setState({ ...state, games: gameList });
+    const gamesString = JSON.stringify(gameList);
+    sessionStorage.setItem("rom_library_games", gamesString);
   });
 };
 
@@ -20,5 +22,7 @@ export const getDataSettings = async (serverAPI, setState, state) => {
     console.log({ result });
     console.log("Saving Settings to State");
     setState({ ...state, emuDeckConfig });
+    const emuDeckConfigString = JSON.stringify(emuDeckConfig);
+    sessionStorage.setItem("rom_library_settings", emuDeckConfigString);
   });
 };

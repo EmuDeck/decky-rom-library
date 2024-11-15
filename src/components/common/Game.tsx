@@ -13,8 +13,8 @@ const Game = ({ item, game, random, launchGame, fixArtwork, focus }) => {
       },
       {
         root: null, // viewport
-        rootMargin: "300px", // no margin
-        threshold: 0.1, // 50% of target visible
+        rootMargin: "0px", // no margin
+        threshold: 0.3, // 50% of target visible
       }
     );
 
@@ -56,12 +56,6 @@ const Game = ({ item, game, random, launchGame, fixArtwork, focus }) => {
       {isVisible && (
         <img loading="lazy" className="game__img" src={`${game.img}?id=${random}`} alt={game.name.replace(/_/g, " ")} />
       )}
-      {/* <img
-        loading="lazy"
-        className="game__cartridge"
-        src={`/customimages/emudeck/default/${game.platform}.png?id=${random}`}
-        alt="Super Nintendo"
-      /> */}
       {isFocus && (
         <>
           <img loading="lazy" className="game__bg" src={`${game.img}?id=${random}`} alt={game.name} />

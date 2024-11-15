@@ -25,19 +25,11 @@ const GameGrid: VFC<{ serverAPI: any; platform: any }> = ({ serverAPI, platform 
     overflow:scroll;
   }
 
-  .categories{
-      display:grid;
-      grid-template-columns: repeat(auto-fill, 185px);
-      grid-auto-rows: 185px;
-      gap: 22px;
-      font-size: 16.8182px;
-      padding-left: 0px;
-      padding-right: 0px;
-  }
+
 
   .games{
     grid-template-columns: repeat(auto-fill, 133px);
-    grid-auto-rows: auto;
+    grid-auto-rows: 199px;
     gap: 42px 16px;
     font-size: 18.1364px;
     padding-left: 8px;
@@ -63,7 +55,7 @@ const GameGrid: VFC<{ serverAPI: any; platform: any }> = ({ serverAPI, platform 
     border:0px;
     padding:0;
     line-height:0;
-    overflow: visible;
+    overflow: hidden;
     border: none;
     box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, .25);
     filter: brightness(0.9);

@@ -44,6 +44,19 @@ const GameGrid: VFC<{ serverAPI: any; platform: any }> = ({ serverAPI, platform 
     justify-content: space-between;
   }
 
+  .games--square{
+    grid-auto-rows: 133px;
+  }
+
+  .games--square .game__img,
+  .games--rectangle .game__img{
+    object-fit:cover;
+    height:100%
+  }
+
+  .games--rectangle{
+    grid-auto-rows: 110px;
+  }
 
   .games__search{
     margin-bottom:12px;
@@ -286,6 +299,28 @@ const GameGrid: VFC<{ serverAPI: any; platform: any }> = ({ serverAPI, platform 
     }
   }, [games]);
 
+  const arraySquared = [
+    "psx",
+    "ps2",
+    "nds",
+    "3d0",
+    "gb",
+    "gbc",
+    "gba",
+    "pcengine",
+    "tf16",
+    "gameandwatch",
+    "virtualboy",
+    "dreamcast",
+    "ngpc",
+  ];
+  let extraCSS;
+  if (arraySquared.includes(platform)) {
+    extraCSS = "games--square";
+  } else if (platform == "snes" || platform == "n64") {
+    extraCSS = "games--rectangle";
+  }
+
   //
   // Render
   //
@@ -310,7 +345,8 @@ const GameGrid: VFC<{ serverAPI: any; platform: any }> = ({ serverAPI, platform 
                 style={{ padding: "8px", width: "100%", fontSize: "1rem" }}
               />
             </Focusable>
-            <Focusable className={`games CSSGrid Grid Panel`}>
+            {}
+            <Focusable className={`games ${extraCSS} CSSGrid Grid Panel`}>
               {games
                 .filter((category: any) => category.id === platform) // Filtra por plataforma antes de mapear
                 .map((category: any) => {

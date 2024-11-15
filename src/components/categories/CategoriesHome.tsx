@@ -1,6 +1,6 @@
 import { VFC, useState, useEffect } from "react";
-import { Tabs, Button, Focusable, SteamSpinner, Router, TextField } from "decky-frontend-lib";
-import { launchApp } from "../../common/steamshortcuts";
+import { Tabs, Button, Focusable, SteamSpinner, Router, TextField, useParams } from "decky-frontend-lib";
+import { routePathGames } from "../../init";
 import { getTranslateFunc } from "../../TranslationsF";
 import { Category } from "../common/Category";
 import { getDataGames, getDataSettings } from "../../common/helpers";
@@ -83,6 +83,8 @@ const CategoriesHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, v
 
   `;
 
+  const { appid } = useParams<{ appid: string }>();
+  console.log({ appid });
   //
   // State
   //
@@ -135,7 +137,14 @@ const CategoriesHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, v
       {games && (
         <Focusable className={`categories CSSGrid Grid Panel ${version}`}>
           {games.map((platform: any) => {
-            return <Category platform={platform} />;
+            return (
+              <Category
+                platform={platform}
+                onClick={() => {
+                  Router.Navigate(`${routePathGames}/${platform.id}`);
+                }}
+              />
+            );
           })}
         </Focusable>
       )}

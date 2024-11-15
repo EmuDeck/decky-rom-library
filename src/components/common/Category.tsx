@@ -1,7 +1,7 @@
 import { VFC, useState, useEffect, useRef } from "react";
 import { Button } from "decky-frontend-lib";
 
-const Category = ({ platform }) => {
+const Category = ({ platform, onClick }) => {
   const [isFocus, setIsFocus] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const targetRef = useRef(null);
@@ -43,7 +43,11 @@ const Category = ({ platform }) => {
   // }, [focus]);
 
   return (
-    <Button ref={targetRef} className="_3IWn-2rn7x98o5fDd0rAxb " unminified-class="Collection Focusable">
+    <Button
+      onClick={() => onClick()}
+      ref={targetRef}
+      className="_3IWn-2rn7x98o5fDd0rAxb "
+      unminified-class="Collection Focusable">
       <div className="_2ERAQD94mxjbyV0G5P9ic5" unminified-class="CollectionImage">
         <div className="akZKnBQkmOCFmiD2JWwfo" unminified-class="CollectionBG">
           <div

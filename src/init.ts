@@ -4,6 +4,7 @@ import { Router, getReactRoot } from "decky-frontend-lib";
 export const pluginName = "EmuDeck Retro Library";
 export const routePath = "/emudeck-rom-library";
 export const routePathArtwork = "/emudeck-rom-artwork";
+export const routePathGames = "/emudeck-rom-games";
 export const defaultUrl = "https://store.steampowered.com";
 
 export const windowRouter = Router.WindowStore?.GamepadUIMainWindowInstance;

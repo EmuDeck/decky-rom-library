@@ -1,14 +1,15 @@
-import { definePlugin, ServerAPI, staticClasses } from "decky-frontend-lib";
-import { routePath, SP_Window, routePathArtwork } from "./init";
+import { definePlugin, ServerAPI, useParams } from "decky-frontend-lib";
+import { routePath, routePathArtwork, routePathGames } from "./init";
 import { PluginIcon } from "./native-components/PluginIcon";
 import { patchMenu } from "./menuPatch";
 import Settings from "./components/Settings";
 import { Artwork } from "./components/common/Artwork";
+import { GameGrid } from "./components/common/GameGrid";
 
 //Tabs theme
 import { TabsHome } from "./components/tabs/TabsHome";
 
-//Tabs theme
+//Cats theme
 import { CategoriesHome } from "./components/categories/CategoriesHome";
 
 export default definePlugin((serverApi: ServerAPI) => {
@@ -28,6 +29,10 @@ export default definePlugin((serverApi: ServerAPI) => {
   });
   serverApi.routerHook.addRoute(routePathArtwork, () => {
     return <Artwork serverAPI={serverApi} />;
+  });
+  serverApi.routerHook.addRoute(`${routePathGames}/:platform`, () => {
+    const { platform } = useParams<{ platform: string }>();
+    return <GameGrid serverAPI={serverApi} platform={platform} />;
   });
   const unpatchMenu = patchMenu();
   return {

@@ -1,9 +1,9 @@
 import { VFC, useState, useEffect } from "react";
 import { Tabs, Button, Focusable, SteamSpinner, Router, TextField, useParams } from "decky-frontend-lib";
-import { routePathGames } from "../../init";
-import { getTranslateFunc } from "../../TranslationsF";
-import { Category } from "../common/Category";
-import { getDataGames, getDataSettings } from "../../common/helpers";
+import { routePathGames } from "init";
+import { getTranslateFunc } from "TranslationsF";
+import { Category } from "components/common/Category";
+import { getDataGames, getDataSettings } from "common/helpers";
 const CategoriesHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, version }) => {
   const styles = `
 

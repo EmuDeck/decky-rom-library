@@ -1,9 +1,9 @@
 import { VFC, useState, useEffect } from "react";
 import { Tabs, Button, Focusable, SteamSpinner, Router, TextField } from "decky-frontend-lib";
-import { launchApp } from "../../common/steamshortcuts";
-import { getTranslateFunc } from "../../TranslationsF";
-import { Game } from "../common/Game";
-import { getDataGames, getDataSettings } from "../../common/helpers";
+import { launchApp } from "common/steamshortcuts";
+import { getTranslateFunc } from "TranslationsF";
+import { Game } from "components/common/Game";
+import { getDataGames, getDataSettings } from "common/helpers";
 const GameGrid: VFC<{ serverAPI: any; platform: any }> = ({ serverAPI, platform = "" }) => {
   const styles = `
 
@@ -25,6 +25,10 @@ const GameGrid: VFC<{ serverAPI: any; platform: any }> = ({ serverAPI, platform 
     overflow:scroll;
   }
 
+  h1 small{
+    font-size:12px;
+    display:block
+  }
 
 
   .games{
@@ -303,7 +307,7 @@ const GameGrid: VFC<{ serverAPI: any; platform: any }> = ({ serverAPI, platform 
     "psx",
     "ps2",
     "nds",
-    "3d0",
+    "3do",
     "gb",
     "gbc",
     "gba",
@@ -335,7 +339,12 @@ const GameGrid: VFC<{ serverAPI: any; platform: any }> = ({ serverAPI, platform 
             {games
               .filter((category: any) => category.id === platform) // Filtra por plataforma antes de mapear
               .map((category: any) => {
-                return <h1>{category.title}</h1>;
+                return (
+                  <h1>
+                    {category.title}
+                    <small>{category.games.length} games</small>
+                  </h1>
+                );
               })}
             <Focusable className="games__search">
               <TextField

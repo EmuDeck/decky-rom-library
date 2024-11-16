@@ -1,9 +1,9 @@
 import { VFC, useState, useEffect } from "react";
 import { Tabs, Button, Focusable, SteamSpinner, Router, TextField } from "decky-frontend-lib";
-import { launchApp } from "../../common/steamshortcuts";
-import { getTranslateFunc } from "../../TranslationsF";
-import { Game } from "../common/Game";
-import { getDataGames, getDataSettings } from "../../common/helpers";
+import { launchApp } from "common/steamshortcuts";
+import { getTranslateFunc } from "TranslationsF";
+import { Game } from "components/common/Game";
+import { getDataGames, getDataSettings } from "common/helpers";
 const TabsHome: VFC<{ serverAPI: any }> = ({ serverAPI }) => {
   const styles = `
 

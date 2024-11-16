@@ -3,7 +3,7 @@ import { Button } from "decky-frontend-lib";
 
 const Game = ({ item, game, random, launchGame, fixArtwork, focus }) => {
   const [isFocus, setIsFocus] = useState(false);
-  const [isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
   const targetRef = useRef(null);
 
   useEffect(() => {

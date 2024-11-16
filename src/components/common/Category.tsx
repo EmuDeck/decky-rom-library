@@ -45,6 +45,8 @@ const Category = ({ platform, onClick }) => {
   return (
     <Button
       onClick={() => onClick()}
+      onGamepadFocus={() => setIsFocus(true)}
+      onGamepadBlur={() => setIsFocus(false)}
       ref={targetRef}
       className="_3IWn-2rn7x98o5fDd0rAxb "
       unminified-class="Collection Focusable">
@@ -90,6 +92,17 @@ const Category = ({ platform, onClick }) => {
               </div>
             </div>
           </div>
+        )}
+        {isFocus && (
+          <div
+            className="_1sTuvqUAeproqHEae5sn9z"
+            style={{
+              position: "absolute",
+              width: "100%",
+              height: "100%",
+              top: "0px",
+              left: "0px",
+            }}></div>
         )}
       </div>
       <div className="_1J1LQ0vGtpM3n0xw7XwQM6" unminified-class="CollectionLabel">

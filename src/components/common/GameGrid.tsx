@@ -72,7 +72,7 @@ const GameGrid: VFC<{ serverAPI: any; platform: any }> = ({ serverAPI, platform 
     border:0px;
     padding:0;
     line-height:0;
-    overflow: hidden;
+    overflow: visible;
     border: none;
     box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, .25);
     filter: brightness(0.9);
@@ -94,6 +94,10 @@ const GameGrid: VFC<{ serverAPI: any; platform: any }> = ({ serverAPI, platform 
     transition-timing-function: ease-out;
     filter: brightness(0.8) contrast(1.05) saturate(1);
     transform: scale(1.08)
+  }
+
+  .game__img-holder{
+    overflow: hidden;
   }
 
   .game__img{

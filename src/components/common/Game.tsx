@@ -3,7 +3,7 @@ import { Button } from "decky-frontend-lib";
 
 const Game = ({ item, game, random, launchGame, fixArtwork, focus }) => {
   const [isFocus, setIsFocus] = useState(false);
-  const [isVisible, setIsVisible] = useState(true);
+  const [isVisible, setIsVisible] = useState(false);
   const targetRef = useRef(null);
 
   useEffect(() => {
@@ -54,10 +54,26 @@ const Game = ({ item, game, random, launchGame, fixArtwork, focus }) => {
       onCancelActionDescription="Exit"
       onSecondaryButton={() => fixArtwork(game)}>
       {isVisible && (
-        <img loading="lazy" className="game__img" src={`${game.img}?id=${random}`} alt={game.name.replace(/_/g, " ")} />
+        <span className="game__img-holder">
+          <img
+            loading="lazy"
+            className="game__img"
+            src={`${game.img}?id=${random}`}
+            alt={game.name.replace(/_/g, " ")}
+          />
+        </span>
       )}
       {isFocus && (
         <>
+          <div
+            className="_1sTuvqUAeproqHEae5sn9z"
+            style={{
+              position: "absolute",
+              width: "100%",
+              height: "100%",
+              top: "0px",
+              left: "0px",
+            }}></div>
           <img loading="lazy" className="game__bg" src={`${game.img}?id=${random}`} alt={game.name} />
           <div className="game__file">
             <span>{game.file}</span>

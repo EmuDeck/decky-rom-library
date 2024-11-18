@@ -25,6 +25,11 @@ const CategoriesHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, v
     overflow:scroll;
   }
 
+  h1 small{
+    font-size:12px;
+    display:block
+  }
+
   .categories{
         display:grid;
         grid-template-columns: repeat(auto-fill, 185px);
@@ -92,6 +97,9 @@ const CategoriesHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, v
 
   let { games, emuDeckConfig } = state;
   const { systemOS } = emuDeckConfig;
+
+  const [percentage, setPercentage] = useState("...");
+
   //
   // Const & Vars
   //
@@ -100,13 +108,36 @@ const CategoriesHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, v
   //
   // Functions
   //
-
+  const checkParserStatus = () => {
+    //console.log("checkCloudStatus");
+    serverAPI
+      .callPluginMethod("emudeck", { command: "generateGameLists_getPercentage" })
+      .then((response: any) => {
+        const result = response.result;
+        setPercentage(result);
+        if (result == "100") {
+          clearInterval(intervalid);
+        }
+      })
+      .catch((error: any) => {
+        console.log({ error });
+      });
+  };
   //
   // UseEffects
   //
 
   useEffect(() => {
+    console.log("getData launched");
     getDataSettings(serverAPI, setState, state);
+
+    intervalid = setInterval(() => {
+      checkParserStatus();
+    }, 5000);
+
+    return () => {
+      clearInterval(intervalid);
+    };
   }, []);
 
   useEffect(() => {
@@ -138,7 +169,10 @@ const CategoriesHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, v
       {games && (
         <>
           <div className="container container--scroll">
-            <h1>EmuDeck Retro Library</h1>
+            <h1>
+              EmuDeck Retro Library
+              <small>Parsed: {percentage}</small>
+            </h1>
             <Focusable className={`categories CSSGrid Grid Panel ${version}`}>
               {games.map((platform: any) => {
                 return (

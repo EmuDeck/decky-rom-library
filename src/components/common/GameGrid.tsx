@@ -4,6 +4,7 @@ import { launchApp } from "common/steamshortcuts";
 import { getTranslateFunc } from "TranslationsF";
 import { Game } from "components/common/Game";
 import { getDataGames, getDataSettings } from "common/helpers";
+import { routePathGameDetail } from "init";
 const GameGrid: VFC<{ serverAPI: any; platform: any }> = ({ serverAPI, platform = "" }) => {
   const styles = `
 
@@ -277,6 +278,11 @@ const GameGrid: VFC<{ serverAPI: any; platform: any }> = ({ serverAPI, platform 
     launchApp(serverAPI, { name, exec: launcherComplete }, systemOS, platform);
   };
 
+  const loadGame = (name, platform) => {
+    console.log(`${routePathGameDetail}/${name}`);
+    Router.Navigate(`${routePathGameDetail}/${name}|||${platform}`);
+  };
+
   const fixArtwork = (game: any) => {
     sessionStorage.setItem("game", game);
     const gameKey = `${game.name}_${game.platform}`;
@@ -376,7 +382,7 @@ const GameGrid: VFC<{ serverAPI: any; platform: any }> = ({ serverAPI, platform 
                         item={category}
                         random={random}
                         game={game}
-                        launchGame={launchGame}
+                        loadGame={loadGame}
                         fixArtwork={fixArtwork}
                         focus={lastSelectedGameKey === gameKey}
                       />

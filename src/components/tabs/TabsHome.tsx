@@ -382,7 +382,7 @@ const TabsHome: VFC<{ serverAPI: any }> = ({ serverAPI }) => {
                         item={item}
                         random={random}
                         game={game}
-                        launchGame={launchGame}
+                        loadGame={launchGame}
                         fixArtwork={fixArtwork}
                         focus={lastSelectedGameKey === gameKey}
                       />

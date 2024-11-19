@@ -1,7 +1,7 @@
 import { VFC, useState, useEffect, useRef } from "react";
 import { Button } from "decky-frontend-lib";
 
-const Game = ({ item, game, random, launchGame, fixArtwork, focus }) => {
+const Game = ({ item, game, random, loadGame, fixArtwork, focus }) => {
   const [isFocus, setIsFocus] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const targetRef = useRef(null);
@@ -48,7 +48,7 @@ const Game = ({ item, game, random, launchGame, fixArtwork, focus }) => {
       className="game"
       onGamepadFocus={() => setIsFocus(true)}
       onGamepadBlur={() => setIsFocus(false)}
-      onClick={() => launchGame(item.launcher, game.filename, game.name, game.platform)}
+      onClick={() => loadGame(game.file, game.platform)}
       onSecondaryActionDescription={"Fix Artwork"}
       onOKActionDescription="Launch"
       onCancelActionDescription="Exit"

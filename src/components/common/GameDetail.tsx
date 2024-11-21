@@ -65,9 +65,9 @@ const GameDetail: VFC<{ serverAPI: any; game_name_platform: any }> = ({ serverAP
 
   .game-detail__logo{
     position:absolute;
-    left: 10px;
+    left: 20px;
     bottom: 10px;
-    height: 50%;
+    width: 50%;
   }
 
   .game-detail-data{
@@ -521,11 +521,11 @@ const GameDetail: VFC<{ serverAPI: any; game_name_platform: any }> = ({ serverAP
                 className="game-detail__blur"
               />
               <div className="game-detail__hero">
-                <img
+                {/* <img
                   className="game-detail__img"
                   src={`/customimages/retrolibrary/artwork/${game.platform}/media/screenshot/${game.name}.jpg`}
                   alt={game.name}
-                />
+                /> */}
                 <img
                   className="game-detail__logo"
                   src={`/customimages/retrolibrary/artwork/${game.platform}/media/wheel/${game.name}.png`}

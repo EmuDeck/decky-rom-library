@@ -1,4 +1,4 @@
-import { VFC, useState, useEffect } from "react";
+import { VFC, useState, useEffect, useRef } from "react";
 import { Tabs, Button, Focusable, SteamSpinner, Router, TextField } from "decky-frontend-lib";
 import { launchApp } from "common/steamshortcuts";
 import { getTranslateFunc } from "TranslationsF";
@@ -111,8 +111,15 @@ const GameDetail: VFC<{ serverAPI: any; game_name_platform: any }> = ({ serverAP
   }
 
   .game-detail__play-btn{
+    background: rgba(255,255,255,.2) !important;
 
   }
+  .game-detail__play-btn:focus{
+    background:  #59bf40 !important
+
+  }
+
+
 
   .game-detail__cloud{
     display: flex;
@@ -129,6 +136,7 @@ const GameDetail: VFC<{ serverAPI: any; game_name_platform: any }> = ({ serverAP
     letter-spacing: 0px;
     color: #fff;
     font-weight: 500;
+    margin-bottom:12px;
   }
   .game-detail__cloud span{
     text-transform:uppercase;
@@ -219,8 +227,18 @@ const GameDetail: VFC<{ serverAPI: any; game_name_platform: any }> = ({ serverAP
    color: #808486;
    line-height: 16px;
   }
+  .game-detail__tabs{
+    /* padding-bottom:100% Tabs fix */
+  }
+
+  .game-detail__tabs .Panel{
+    position:relative
+  }
 
 `;
+
+  const buttonRef = useRef<any>(null);
+
   //
   // State
   //
@@ -233,7 +251,7 @@ const GameDetail: VFC<{ serverAPI: any; game_name_platform: any }> = ({ serverAP
       systemOS: "",
     },
   });
-
+  const [stateTabs, setStateTabs] = useState<any>(undefined);
   const [stateAchievements, setStateAchievements] = useState<any>({
     achievements: null,
     earned: null,
@@ -241,7 +259,7 @@ const GameDetail: VFC<{ serverAPI: any; game_name_platform: any }> = ({ serverAP
     neither: null,
   });
   const [percentage, setPercentage] = useState(0);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [currentTab, setCurrentTab] = useState<string>("Tab1");
   const [dataState, setDataState] = useState<any>(undefined);
   const [lastSelectedGameKey, setLastSelectedGameKey] = useState<string | null>(null);
 
@@ -417,6 +435,8 @@ const GameDetail: VFC<{ serverAPI: any; game_name_platform: any }> = ({ serverAP
       });
   };
 
+  const tabRefs = useRef<any>(null);
+
   //
   // UseEffects
   //
@@ -424,6 +444,14 @@ const GameDetail: VFC<{ serverAPI: any; game_name_platform: any }> = ({ serverAP
   useEffect(() => {
     //console.log("getDataSettings launched");
     getDataSettings(serverAPI, setState, state);
+    console.log({ buttonRef });
+    const timeout = setTimeout(() => {
+      if (buttonRef.current) {
+        buttonRef.current.tabIndex = 0;
+        buttonRef.current.focus?.();
+      }
+    }, 1000);
+    return () => clearTimeout(timeout);
   }, []);
 
   useEffect(() => {
@@ -465,7 +493,7 @@ const GameDetail: VFC<{ serverAPI: any; game_name_platform: any }> = ({ serverAP
   useEffect(() => {
     if (platform != undefined) {
       const systemID = getIDByName(platform);
-      getDataAchievements(serverAPI, setStateAchievements, stateAchievements, systemID, game.hash);
+      //getDataAchievements(serverAPI, setStateAchievements, stateAchievements, systemID, game.hash);
 
       serverAPI
         .callPluginMethod("getJsonFromPlatform", {
@@ -536,8 +564,16 @@ const GameDetail: VFC<{ serverAPI: any; game_name_platform: any }> = ({ serverAP
                 <div className="game-detail__info">
                   <div className="game-detail__info-btn _3cI5TXsFX3bvpR-7EBOtxq">
                     <Button
+                      ref={buttonRef}
+                      focusable={true}
+                      noFocusRing={false}
                       className="game-detail__play-btn _3ydigb6zZAjJ0JCDgHwSYA _2AzIX5kl9k6JnxLfR5H4kX"
                       onClick={() => launchGame(launcher, game.filename, game.name, game.platform)}>
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36" fill="none">
+                        <path
+                          d="M7.5 32.135a1 1 0 0 1-1.5-.866V4.73a1 1 0 0 1 1.5-.866l22.999 13.269a1 1 0 0 1 0 1.732l-23 13.269Z"
+                          fill="currentColor"></path>
+                      </svg>{" "}
                       Play
                     </Button>
                   </div>
@@ -566,132 +602,138 @@ const GameDetail: VFC<{ serverAPI: any; game_name_platform: any }> = ({ serverAP
                     </>
                   )}
                 </div>
+
                 <div className="game-detail__cloud">
                   <span>CloudSync: Up to date</span>
                 </div>
 
-                {dataState && (
-                  <div>
-                    <h3>Game Info</h3>
-                    <div className="game-detail__more_info">
-                      <div className="game-detail__more_info-img">
-                        <img
-                          src={`/customimages/retrolibrary/artwork/${game.platform}/media/box2dfront/${game.name}.jpg`}
-                          alt={game.name}
-                        />
-                      </div>
-                      <div className="game-detail__more_info-data">
-                        <div className="game-detail__more_info-data__top">
-                          {dataState.description.substring(0, 180)}...
-                        </div>
-                        <div className="game-detail__more_info-data__bottom">
-                          <ul className="list">
-                            <li className="game-detail__more_info-data-developer">
-                              <span>Developer: </span>
-                              {dataState.developer ? dataState.developer : "???"}
-                            </li>
-                            <li className="game-detail__more_info-data-publisher">
-                              <span>Publisher: </span>
-                              {dataState.publisher ? dataState.publisher : "???"}
-                            </li>
-                            <li className="game-detail__more_info-data-date">
-                              <span>Release Date: </span>
-                              {dataState.release_date ? dataState.release_date : "???"}
-                            </li>
-                          </ul>
-                        </div>
-                      </div>
-                      <div className="game-detail__more_info-list">
-                        <ul className="list">
-                          <li>
-                            <span>Players: </span>
-                            {dataState.players}
-                          </li>
-                          <li>
-                            <span>Genre: </span>
-                            {dataState.genre}
-                          </li>
-                          <li>
-                            <span>Rating: </span>
-                            {dataState.rating}
-                          </li>
-                          <li>
-                            <span>Emulator: </span>RetroArch
-                          </li>
-                        </ul>
-                      </div>
-                    </div>{" "}
-                  </div>
-                )}
-
-                {stateAchievements.achievements != null && (
+                <div className="game-detail__tabs">
+                  {dataState && (
+                    <>
+                      <h3>Game Info</h3>
+                      <Focusable onActivate={() => console.log("activated")}>
+                        <div tabIndex={0} className="game-detail__more_info">
+                          <div className="game-detail__more_info-img">
+                            <img
+                              src={`/customimages/retrolibrary/artwork/${game.platform}/media/box2dfront/${game.name}.jpg`}
+                              alt={game.name}
+                            />
+                          </div>
+                          <div className="game-detail__more_info-data">
+                            <div className="game-detail__more_info-data__top">
+                              {dataState.description.substring(0, 180)}...
+                            </div>
+                            <div className="game-detail__more_info-data__bottom">
+                              <ul className="list">
+                                <li className="game-detail__more_info-data-developer">
+                                  <span>Developer: </span>
+                                  {dataState.developer ? dataState.developer : "???"}
+                                </li>
+                                <li className="game-detail__more_info-data-publisher">
+                                  <span>Publisher: </span>
+                                  {dataState.publisher ? dataState.publisher : "???"}
+                                </li>
+                                <li className="game-detail__more_info-data-date">
+                                  <span>Release Date: </span>
+                                  {dataState.release_date ? dataState.release_date : "???"}
+                                </li>
+                              </ul>
+                            </div>
+                          </div>
+                          <div className="game-detail__more_info-list">
+                            <ul className="list">
+                              <li>
+                                <span>Players: </span>
+                                {dataState.players}
+                              </li>
+                              <li>
+                                <span>Genre: </span>
+                                {dataState.genre}
+                              </li>
+                              <li>
+                                <span>Rating: </span>
+                                {dataState.rating}
+                              </li>
+                              <li>
+                                <span>Emulator: </span>RetroArch
+                              </li>
+                            </ul>
+                          </div>
+                        </div>{" "}
+                      </Focusable>
+                    </>
+                  )}
                   <>
-                    <h3>Achievements</h3>
-                    <Button className="game-detail__achievements">
-                      <div className="game-detail__achievements__progress">
-                        You've unclocked {stateAchievements.achievements.NumAwardedToUser} /{" "}
-                        {stateAchievements.achievements.NumAchievements}{" "}
-                      </div>
-                      <div className="game-detail__achievements__inner">
-                        <div className="game-detail__achievements__unlocked">
-                          {earned.map((item: any) => {
-                            return (
-                              <img
-                                className="_2V2sHETNfa62yMoDwSF3_t"
-                                src={`https://media.retroachievements.org/Badge/${item.BadgeName}.png`}
-                                loading="lazy"
-                              />
-                            );
-                          })}
-                        </div>
-                        <div className="game-detail__achievements__locked-title">Locked achievements</div>
-                        <div className="game-detail__achievements__locked">
-                          {neither.map((item: any) => {
-                            return (
-                              <img
-                                className="_2V2sHETNfa62yMoDwSF3_t"
-                                src={`https://media.retroachievements.org/Badge/${item.BadgeName}_lock.png`}
-                                loading="lazy"
-                              />
-                            );
-                          })}
-                        </div>
-                      </div>
-                    </Button>
-                    <h3>Achievements Hardcore</h3>
-                    <Button className="game-detail__achievements">
-                      <div className="game-detail__achievements__progress">
-                        You've unlocked {stateAchievements.achievements.NumAwardedToUserHardcore} /{" "}
-                        {stateAchievements.achievements.NumAchievements}
-                      </div>
-                      <div className="game-detail__achievements__inner">
-                        <div className="game-detail__achievements__unlocked">
-                          {earnedHardcore.map((item: any) => {
-                            return (
-                              <img
-                                className="_2V2sHETNfa62yMoDwSF3_t"
-                                src={`https://media.retroachievements.org/Badge/${item.BadgeName}.png`}
-                                loading="lazy"
-                              />
-                            );
-                          })}
-                        </div>
-                        <div className="game-detail__achievements__locked-title">Locked achievements</div>
-                        <div className="game-detail__achievements__locked">
-                          {neither.map((item: any) => {
-                            return (
-                              <img
-                                className="_2V2sHETNfa62yMoDwSF3_t"
-                                src={`https://media.retroachievements.org/Badge/${item.BadgeName}_lock.png`}
-                                loading="lazy"
-                              />
-                            );
-                          })}
-                        </div>
-                      </div>
-                    </Button>
+                    {stateAchievements.achievements != null && (
+                      <Focusable onFocus={() => console.log("focus")} onActivate={() => console.log("activated")}>
+                        <h3>Achievements</h3>
+                        <Button className="game-detail__achievements">
+                          <div className="game-detail__achievements__progress">
+                            You've unclocked {stateAchievements.achievements.NumAwardedToUser} /{" "}
+                            {stateAchievements.achievements.NumAchievements}{" "}
+                          </div>
+                          <div className="game-detail__achievements__inner">
+                            <div className="game-detail__achievements__unlocked">
+                              {earned.map((item: any) => {
+                                return (
+                                  <img
+                                    className="_2V2sHETNfa62yMoDwSF3_t"
+                                    src={`https://media.retroachievements.org/Badge/${item.BadgeName}.png`}
+                                    loading="lazy"
+                                  />
+                                );
+                              })}
+                            </div>
+                            <div className="game-detail__achievements__locked-title">Locked achievements</div>
+                            <div className="game-detail__achievements__locked">
+                              {neither.map((item: any) => {
+                                return (
+                                  <img
+                                    className="_2V2sHETNfa62yMoDwSF3_t"
+                                    src={`https://media.retroachievements.org/Badge/${item.BadgeName}_lock.png`}
+                                    loading="lazy"
+                                  />
+                                );
+                              })}
+                            </div>
+                          </div>
+                        </Button>
+                        <h3>Achievements Hardcore</h3>
+                        <Button className="game-detail__achievements">
+                          <div className="game-detail__achievements__progress">
+                            You've unlocked {stateAchievements.achievements.NumAwardedToUserHardcore} /{" "}
+                            {stateAchievements.achievements.NumAchievements}
+                          </div>
+                          <div className="game-detail__achievements__inner">
+                            <div className="game-detail__achievements__unlocked">
+                              {earnedHardcore.map((item: any) => {
+                                return (
+                                  <img
+                                    className="_2V2sHETNfa62yMoDwSF3_t"
+                                    src={`https://media.retroachievements.org/Badge/${item.BadgeName}.png`}
+                                    loading="lazy"
+                                  />
+                                );
+                              })}
+                            </div>
+                            <div className="game-detail__achievements__locked-title">Locked achievements</div>
+                            <div className="game-detail__achievements__locked">
+                              {neither.map((item: any) => {
+                                return (
+                                  <img
+                                    className="_2V2sHETNfa62yMoDwSF3_t"
+                                    src={`https://media.retroachievements.org/Badge/${item.BadgeName}_lock.png`}
+                                    loading="lazy"
+                                  />
+                                );
+                              })}
+                            </div>
+                          </div>
+                        </Button>
+                      </Focusable>
+                    )}
                   </>
-                )}
+                </div>
               </div>
             </div>
           </div>

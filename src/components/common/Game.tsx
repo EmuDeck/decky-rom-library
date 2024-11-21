@@ -49,10 +49,11 @@ const Game = ({ item, game, random, loadGame, fixArtwork, focus }) => {
       onGamepadFocus={() => setIsFocus(true)}
       onGamepadBlur={() => setIsFocus(false)}
       onClick={() => loadGame(game.file, game.platform)}
-      onSecondaryActionDescription={"Fix Artwork"}
+      //onSecondaryActionDescription={"Fix Artwork"}
       onOKActionDescription="Launch"
       onCancelActionDescription="Exit"
-      onSecondaryButton={() => fixArtwork(game)}>
+      //onSecondaryButton={() => fixArtwork(game)}
+    >
       {isVisible && (
         <span className="game__img-holder">
           <img

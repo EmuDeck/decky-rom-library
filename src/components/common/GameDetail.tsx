@@ -276,7 +276,6 @@ const GameDetail: VFC<{ serverAPI: any; game_name_platform: any }> = ({ serverAP
   // Functions
   //
   const launchGame = (launcher: string, game: string, name: string, platform: string) => {
-    //console.log({ launcher, game, name, platform });
     const gameKey = `${name}_${platform}`;
     localStorage.setItem("last_selected_game_key", gameKey);
 
@@ -380,17 +379,13 @@ const GameDetail: VFC<{ serverAPI: any; game_name_platform: any }> = ({ serverAP
     }
   }
 
-  const getDataAchievements = async (serverAPI, setStateAchievements, stateAchievements, platformID, hash) => {
-    //console.log("Asking for Achievements");
-    //console.log(`generateGameLists_retroAchievements ${hash} ${platformID}`);
-
+  const getDataAchievements = async (serverAPI, setStateAchievements, stateAchievements, platform, hash) => {
     serverAPI
-      .callPluginMethod("emudeck", { command: `generateGameLists_retroAchievements ${hash} ${platformID}` })
+      .callPluginMethod("emudeck", { command: `generateGameLists_retroAchievements ${hash} ${platform}` })
       .then((response: any) => {
-        //console.log({ response });
+        console.log({ response });
         const result = response.result;
         const achievements: any = JSON.parse(result);
-        //console.log("Saving Settings to StateAchievements");
 
         type Achievement = {
           DateEarned?: string;
@@ -442,9 +437,8 @@ const GameDetail: VFC<{ serverAPI: any; game_name_platform: any }> = ({ serverAP
   //
 
   useEffect(() => {
-    //console.log("getDataSettings launched");
     getDataSettings(serverAPI, setState, state);
-    console.log({ buttonRef });
+
     const timeout = setTimeout(() => {
       if (buttonRef.current) {
         buttonRef.current.tabIndex = 0;
@@ -491,23 +485,20 @@ const GameDetail: VFC<{ serverAPI: any; game_name_platform: any }> = ({ serverAP
 
   useEffect(() => {
     if (platform != undefined) {
-      //getDataAchievements(serverAPI, setStateAchievements, stateAchievements, platform, game.hash);
-
       serverAPI
         .callPluginMethod("getJsonFromPlatform", {
           platform: platform,
         })
         .then((response: any) => {
-          console.log({ response });
           if (response.success && response.result) {
             const additionalData = response.result;
-            console.log({ additionalData });
 
             const filteredData = additionalData.games.filter((item: any) =>
               item.name?.toLowerCase().includes(game.name.toLowerCase())
             );
             // Actualizar el estado con los datos del juego y los datos adicionales
             setDataState(filteredData[0]);
+            getDataAchievements(serverAPI, setStateAchievements, stateAchievements, platform, game.hash);
           }
         })
         .catch((error) => {
@@ -516,10 +507,9 @@ const GameDetail: VFC<{ serverAPI: any; game_name_platform: any }> = ({ serverAP
     }
   }, [platform]);
 
-  // useEffect(() => {
-  //   console.log({ stateAchievements });
-  //   console.log(typeof stateAchievements.earned);
-  // }, [stateAchievements]);
+  useEffect(() => {
+    console.log({ stateAchievements });
+  }, [stateAchievements]);
   //
   // Render
   //
@@ -606,7 +596,7 @@ const GameDetail: VFC<{ serverAPI: any; game_name_platform: any }> = ({ serverAP
                 </div>
 
                 <div className="game-detail__tabs">
-                  {dataState && (
+                  {dataState && dataState.description && (
                     <>
                       <h3>Game Info</h3>
                       <Focusable onActivate={() => console.log("activated")}>
@@ -663,9 +653,9 @@ const GameDetail: VFC<{ serverAPI: any; game_name_platform: any }> = ({ serverAP
                   )}
                   <>
                     {stateAchievements.achievements != null && (
-                      <Focusable onFocus={() => console.log("focus")} onActivate={() => console.log("activated")}>
+                      <Focusable onActivate={() => console.log("activated")}>
                         <h3>Achievements</h3>
-                        <Button className="game-detail__achievements">
+                        <div tabIndex={0} className="game-detail__achievements">
                           <div className="game-detail__achievements__progress">
                             You've unclocked {stateAchievements.achievements.NumAwardedToUser} /{" "}
                             {stateAchievements.achievements.NumAchievements}{" "}
@@ -695,9 +685,9 @@ const GameDetail: VFC<{ serverAPI: any; game_name_platform: any }> = ({ serverAP
                               })}
                             </div>
                           </div>
-                        </Button>
+                        </div>
                         <h3>Achievements Hardcore</h3>
-                        <Button className="game-detail__achievements">
+                        <div tabIndex={0} className="game-detail__achievements">
                           <div className="game-detail__achievements__progress">
                             You've unlocked {stateAchievements.achievements.NumAwardedToUserHardcore} /{" "}
                             {stateAchievements.achievements.NumAchievements}
@@ -727,7 +717,7 @@ const GameDetail: VFC<{ serverAPI: any; game_name_platform: any }> = ({ serverAP
                               })}
                             </div>
                           </div>
-                        </Button>
+                        </div>
                       </Focusable>
                     )}
                   </>

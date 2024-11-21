@@ -109,7 +109,7 @@ const CategoriesHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, v
   // Functions
   //
   const checkParserStatus = () => {
-    //console.log("checkCloudStatus");
+    ////console.log("checkCloudStatus");
     serverAPI
       .callPluginMethod("emudeck", { command: "generateGameLists_getPercentage" })
       .then((response: any) => {
@@ -120,7 +120,7 @@ const CategoriesHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, v
         }
       })
       .catch((error: any) => {
-        console.log({ error });
+        //console.log({ error });
       });
   };
   //
@@ -128,7 +128,7 @@ const CategoriesHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, v
   //
 
   useEffect(() => {
-    console.log("getData launched");
+    //console.log("getData launched");
     getDataSettings(serverAPI, setState, state);
 
     intervalid = setInterval(() => {
@@ -142,7 +142,7 @@ const CategoriesHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, v
 
   useEffect(() => {
     if (emuDeckConfig.systemOS !== "") {
-      console.log("getDataGames launched");
+      //console.log("getDataGames launched");
       const gamesLS = sessionStorage.getItem("rom_library_games");
       if (gamesLS) {
         const gamesJson: any = JSON.parse(gamesLS);

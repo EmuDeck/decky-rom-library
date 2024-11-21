@@ -255,7 +255,7 @@ const GameGrid: VFC<{ serverAPI: any; platform: any }> = ({ serverAPI, platform 
   // Functions
   //
   const launchGame = (launcher: string, game: string, name: string, platform: string) => {
-    console.log({ launcher, game, name, platform });
+    //console.log({ launcher, game, name, platform });
     const gameKey = `${name}_${platform}`;
     localStorage.setItem("last_selected_game_key", gameKey);
 
@@ -279,14 +279,14 @@ const GameGrid: VFC<{ serverAPI: any; platform: any }> = ({ serverAPI, platform 
   };
 
   const loadGame = (name, platform) => {
-    console.log(`${routePathGameDetail}/${name}`);
+    //console.log(`${routePathGameDetail}/${name}`);
     Router.Navigate(`${routePathGameDetail}/${name}|||${platform}`);
   };
 
   const fixArtwork = (game: any) => {
     sessionStorage.setItem("game", game);
     const gameKey = `${game.name}_${game.platform}`;
-    console.log({ gameKey });
+    //console.log({ gameKey });
     localStorage.setItem("last_selected_game_key", gameKey);
     Router.Navigate("/emudeck-rom-artwork");
   };
@@ -299,17 +299,17 @@ const GameGrid: VFC<{ serverAPI: any; platform: any }> = ({ serverAPI, platform 
     if (gamesLS) {
       try {
         const gamesJson: any = JSON.parse(gamesLS);
-        console.log({ gamesJson });
+        //console.log({ gamesJson });
         setState({ ...state, games: gamesJson });
       } catch (error) {
-        console.error("Error al parsear los juegos:", error);
+        //console.error("Error al parsear los juegos:", error);
       }
     }
   }, []);
 
   useEffect(() => {
     if (games) {
-      console.log({ games });
+      //console.log({ games });
     }
   }, [games]);
 

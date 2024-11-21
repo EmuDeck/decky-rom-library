@@ -462,7 +462,6 @@ const GameDetail: VFC<{ serverAPI: any; game_name_platform: any }> = ({ serverAP
         const name = partial[0];
         const platform = partial[1];
         const gamesJson: any = JSON.parse(gamesLS);
-        const systemID = getIDByName(platform);
         //Get Retro Achievements data
 
         const filteredPlatform = gamesJson.filter((item: any) =>
@@ -483,7 +482,7 @@ const GameDetail: VFC<{ serverAPI: any; game_name_platform: any }> = ({ serverAP
 
         const filteredGame = gamesArray.filter((game: any) => game.name?.toLowerCase().includes(name.toLowerCase()));
         setState({ ...state, game: filteredGame[0], launcher: filteredPlatform[0].launcher, platform: platform });
-        //getDataAchievements(serverAPI, setStateAchievements, stateAchievements, systemID, filteredGame[0].hash);
+        //getDataAchievements(serverAPI, setStateAchievements, stateAchievements, platform, filteredGame[0].hash);
       } catch (error) {
         console.error("Error al parsear los juegos:", error);
       }
@@ -492,8 +491,7 @@ const GameDetail: VFC<{ serverAPI: any; game_name_platform: any }> = ({ serverAP
 
   useEffect(() => {
     if (platform != undefined) {
-      const systemID = getIDByName(platform);
-      //getDataAchievements(serverAPI, setStateAchievements, stateAchievements, systemID, game.hash);
+      //getDataAchievements(serverAPI, setStateAchievements, stateAchievements, platform, game.hash);
 
       serverAPI
         .callPluginMethod("getJsonFromPlatform", {

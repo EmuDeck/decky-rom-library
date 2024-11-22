@@ -518,14 +518,8 @@ const GameDetail: VFC<{ serverAPI: any; game_name_platform: any }> = ({ serverAP
     <>
       <style>{` ${styles} `}</style>
       {!game && (
-        <div>
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          NO GAME YET, loading
+        <div style={{ textAlign: "center", height: "100vh" }}>
+          <SteamSpinner></SteamSpinner>
         </div>
       )}
       {game && (

@@ -5,11 +5,18 @@ const Content: VFC<{ serverAPI: ServerAPI }> = () => {
   //
   // State
   //
+
+  const defaultSettings = {
+    counter_max: 1,
+    counter: 1,
+    vertical: false,
+    logo_grid: false,
+  };
+
   const [state, setState] = useState<any>(() => {
     const settingsStorage = localStorage.getItem("rom_library_settings");
-    return settingsStorage
-      ? JSON.parse(settingsStorage)
-      : { counter_max: 1, counter: 1, vertical: false, logo_grid: false };
+    const storedSettings = settingsStorage ? JSON.parse(settingsStorage) : {};
+    return { ...defaultSettings, ...storedSettings };
   });
   const { counter_max, vertical, counter, logo_grid } = state;
   //

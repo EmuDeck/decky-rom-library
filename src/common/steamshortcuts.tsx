@@ -21,6 +21,16 @@ function lengthenAppId(shortId: string) {
   return String((BigInt(shortId) << BigInt(32)) | BigInt(0x02000000));
 }
 
+const getSettingsFromStorage = (): { counter_max: any } => {
+  try {
+    const settingsStorage = localStorage.getItem("rom_library_settings");
+    return settingsStorage ? JSON.parse(settingsStorage) : { counter_max: 1 };
+  } catch (error) {
+    console.error("Error accessing localStorage:", error);
+    return { counter_max: 1 }; // Valores predeterminados
+  }
+};
+
 const getShortcutID = async (sAPI: ServerAPI, system: string) => {
   //No existe contador? iniciamos
   let counter: any;
@@ -46,7 +56,9 @@ const getShortcutID = async (sAPI: ServerAPI, system: string) => {
     localStorage.setItem(`rom_library_id_${counter}`, id.toString());
   }
   let updatedCounter: any;
-  let maxCounter: any = localStorage.getItem("rom_library_counter_max");
+  const settings = getSettingsFromStorage();
+  const { counter_max } = settings;
+  let maxCounter: any = counter_max;
   maxCounter = parseInt(maxCounter);
   if (counter == maxCounter) {
     updatedCounter = 1;

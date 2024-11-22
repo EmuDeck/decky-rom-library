@@ -169,10 +169,12 @@ const CategoriesHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, v
       {games && (
         <>
           <div className="container container--scroll">
-            <h1>
-              EmuDeck Retro Library
-              <small>Parsed: {percentage}</small>
-            </h1>
+            {version == "grid" && (
+              <h1>
+                EmuDeck Retro Library
+                <small>Parsed: {percentage}</small>
+              </h1>
+            )}
             <Focusable className={`categories CSSGrid Grid Panel ${version}`}>
               {games.map((platform: any) => {
                 return (

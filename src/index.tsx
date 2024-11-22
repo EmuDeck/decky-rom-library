@@ -7,47 +7,65 @@ import { Artwork } from "./components/common/Artwork";
 import { GameGrid } from "./components/common/GameGrid";
 import { GameGridLogo } from "./components/common/GameGridLogo";
 import { GameDetail } from "./components/common/GameDetail";
-//Tabs theme
-import { TabsHome } from "./components/tabs/TabsHome";
-
-//Cats theme
 import { CategoriesHome } from "./components/categories/CategoriesHome";
 
+// Función para obtener configuraciones del localStorage de forma segura
+const getSettingsFromStorage = (): { vertical: boolean; logo_grid: boolean } => {
+  try {
+    const settingsStorage = localStorage.getItem("rom_library_settings");
+    return settingsStorage ? JSON.parse(settingsStorage) : { vertical: false, logo_grid: false };
+  } catch (error) {
+    console.error("Error accessing localStorage:", error);
+    return { vertical: false, logo_grid: false }; // Valores predeterminados
+  }
+};
+
 export default definePlugin((serverApi: ServerAPI) => {
-  const theme: string = "categories";
+  const settings = getSettingsFromStorage();
 
   serverApi.routerHook.addRoute(routePath, () => {
-    switch (theme) {
-      case "tabs":
-        return <TabsHome serverAPI={serverApi} />;
-      case "categories":
-        return <CategoriesHome version="grid" serverAPI={serverApi} />;
-      case "categories-vertical":
-        return <CategoriesHome version="vertical" serverAPI={serverApi} />;
-      default:
-        return <TabsHome serverAPI={serverApi} />;
-    }
+    const updatedSettings = getSettingsFromStorage(); // Obtener valores actuales
+    return <CategoriesHome version={updatedSettings.vertical ? "vertical" : "grid"} serverAPI={serverApi} />;
   });
+
   serverApi.routerHook.addRoute(routePathArtwork, () => {
     return <Artwork serverAPI={serverApi} />;
   });
+
   serverApi.routerHook.addRoute(`${routePathGames}/:platform`, () => {
+    const updatedSettings = getSettingsFromStorage(); // Obtener valores actuales
     const { platform } = useParams<{ platform: string }>();
-    return <GameGrid serverAPI={serverApi} platform={platform} />;
+
+    console.log({ logo_grid: updatedSettings.logo_grid });
+    switch (updatedSettings.logo_grid) {
+      case true:
+        return <GameGridLogo serverAPI={serverApi} platform={platform} />;
+      case false:
+        return <GameGrid serverAPI={serverApi} platform={platform} />;
+      default:
+        return <GameGrid serverAPI={serverApi} platform={platform} />;
+    }
   });
+
   serverApi.routerHook.addRoute(`${routePathGameDetail}/:game_name_platform`, () => {
     const { game_name_platform } = useParams<{ game_name_platform: string }>();
     return <GameDetail serverAPI={serverApi} game_name_platform={game_name_platform} />;
   });
+
   const unpatchMenu = patchMenu();
+
   return {
     title: <div>EmuDeck</div>,
     content: <Settings serverAPI={serverApi} />,
     icon: <PluginIcon size="1em" />,
     onDismount() {
-      serverApi.routerHook.removeRoute(routePath);
-      serverApi.routerHook.removeRoute(routePathArtwork);
-      unpatchMenu();
+      try {
+        serverApi.routerHook.removeRoute(routePath);
+        serverApi.routerHook.removeRoute(routePathArtwork);
+        unpatchMenu();
+      } catch (e) {
+        console.error("Error during onDismount:", e);
+      }
     },
   };
 });

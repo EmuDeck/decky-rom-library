@@ -5,6 +5,7 @@ import { patchMenu } from "./menuPatch";
 import Settings from "./components/Settings";
 import { Artwork } from "./components/common/Artwork";
 import { GameGrid } from "./components/common/GameGrid";
+import { GameGridLogo } from "./components/common/GameGridLogo";
 import { GameDetail } from "./components/common/GameDetail";
 //Tabs theme
 import { TabsHome } from "./components/tabs/TabsHome";

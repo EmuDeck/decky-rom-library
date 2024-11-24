@@ -4,7 +4,7 @@ import { routePathGames } from "init";
 import { getTranslateFunc } from "TranslationsF";
 import { Category } from "components/common/Category";
 import { getDataGames, getDataSettings, checkParserStatus } from "common/helpers";
-const CategoriesHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, version }) => {
+const SteamyHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, version }) => {
   const styles = `
 
   .container{
@@ -180,4 +180,4 @@ const CategoriesHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, v
   );
 };
 
-export { CategoriesHome };
+export { SteamyHome };

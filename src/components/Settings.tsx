@@ -1,17 +1,10 @@
 import { PanelSection, PanelSectionRow, ServerAPI, SliderField, ToggleField } from "decky-frontend-lib";
 import { VFC, useState, useEffect } from "react"; //import { GlobalContext } from "./context/globalContext";
-
+import defaultSettings from "defaults.js";
 const Content: VFC<{ serverAPI: ServerAPI }> = () => {
   //
   // State
   //
-
-  const defaultSettings = {
-    counter_max: 1,
-    counter: 1,
-    vertical: false,
-    logo_grid: false,
-  };
 
   const [state, setState] = useState<any>(() => {
     const settingsStorage = localStorage.getItem("rom_library_settings");

@@ -2,21 +2,21 @@ import { definePlugin, ServerAPI, useParams } from "decky-frontend-lib";
 import { routePath, routePathArtwork, routePathGames, routePathGameDetail } from "./init";
 import { PluginIcon } from "./native-components/PluginIcon";
 import { patchMenu } from "./menuPatch";
-import Settings from "./components/Settings";
-import { Artwork } from "./components/common/Artwork";
-import { GameGrid } from "./components/common/GameGrid";
-import { GameGridLogo } from "./components/common/GameGridLogo";
-import { GameDetail } from "./components/common/GameDetail";
-import { CategoriesHome } from "./components/categories/CategoriesHome";
-
+import Settings from "components/Settings";
+import { Artwork } from "components/common/Artwork";
+import { GameGrid } from "components/common/GameGrid";
+import { GameGridLogo } from "components/common/GameGridLogo";
+import { GameDetail } from "components/common/GameDetail";
+import { SteamyHome } from "./themes/steamy/SteamyHome";
+import defaultSettings from "defaults.js";
 // Función para obtener configuraciones del localStorage de forma segura
 const getSettingsFromStorage = (): { vertical: boolean; logo_grid: boolean } => {
   try {
     const settingsStorage = localStorage.getItem("rom_library_settings");
-    return settingsStorage ? JSON.parse(settingsStorage) : { vertical: false, logo_grid: false };
+    return settingsStorage ? JSON.parse(settingsStorage) : defaultSettings;
   } catch (error) {
     console.error("Error accessing localStorage:", error);
-    return { vertical: false, logo_grid: false }; // Valores predeterminados
+    return defaultSettings; // Valores predeterminados
   }
 };
 
@@ -25,7 +25,7 @@ export default definePlugin((serverApi: ServerAPI) => {
 
   serverApi.routerHook.addRoute(routePath, () => {
     const updatedSettings = getSettingsFromStorage(); // Obtener valores actuales
-    return <CategoriesHome version={updatedSettings.vertical ? "vertical" : "grid"} serverAPI={serverApi} />;
+    return <SteamyHome version={updatedSettings.vertical ? "vertical" : "grid"} serverAPI={serverApi} />;
   });
 
   serverApi.routerHook.addRoute(routePathArtwork, () => {

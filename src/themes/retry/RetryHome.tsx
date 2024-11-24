@@ -4,16 +4,15 @@ import { routePathGames } from "init";
 import { getTranslateFunc } from "TranslationsF";
 import { Category } from "components/common/Category";
 import { getDataGames, getDataSettings, checkParserStatus } from "common/helpers";
-const SteamyHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, version }) => {
+const RetryHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, version }) => {
   const styles = `
 
   .container{
     position: absolute;
-    top: 0;
+    top: auto;
     right: 0;
-    bottom: 0;
+    bottom: 22px;
     left: 0;
-    padding-top: 58px;
     padding-bottom: 40px;
     padding-left: 2.8vw;
     padding-right: 2.8vw;
@@ -43,8 +42,7 @@ const SteamyHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, versi
   /* Full size cats */
   .vertical.categories{
     grid-template-columns: repeat(auto-fill, 25vw);
-    grid-auto-rows: calc(100vh - 114px);
-    height: 100vh;
+    grid-auto-rows: calc(60vh - 114px);
     width: 10000px;
     overflow: scroll;
   }
@@ -83,6 +81,19 @@ const SteamyHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, versi
     transform: scale(1.08)
   }
 
+  .category-img{
+    width:100%
+    height:100%
+  }
+
+  .galeries-bg{
+    width:100%;
+    position:absolute;
+    left:0;
+    top:0;
+    z-index:0;
+  }
+
   `;
 
   //
@@ -93,9 +104,10 @@ const SteamyHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, versi
     emuDeckConfig: {
       systemOS: "",
     },
+    platformCurrent: undefined,
   });
 
-  let { games, emuDeckConfig } = state;
+  let { games, emuDeckConfig, platformCurrent } = state;
   const { systemOS } = emuDeckConfig;
 
   const [percentage, setPercentage] = useState("...");
@@ -142,6 +154,11 @@ const SteamyHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, versi
   // Render
   //
 
+  const handleFocus = (platform: any) => {
+    console.log({ platform });
+    setState({ ...state, platformCurrent: platform.id });
+  };
+
   return (
     <>
       <style>{` ${styles} `}</style>
@@ -154,6 +171,7 @@ const SteamyHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, versi
       )}
       {games && (
         <>
+          <img className="galeries-bg" src={`/customimages/retrolibrary/systems/backgrounds/${platformCurrent}.jpg`} />
           <div className="container container--scroll">
             {version == "grid" && (
               <h1>
@@ -161,12 +179,14 @@ const SteamyHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, versi
                 <small>Parsed: {percentage}</small>
               </h1>
             )}
+
             <Focusable className={`categories CSSGrid Grid Panel ${version}`}>
               {games.map((platform: any) => {
                 return (
                   <Category
-                    showGrid={true}
+                    showGrid={false}
                     platform={platform}
+                    handleFocus={() => handleFocus(platform)}
                     onClick={() => {
                       Router.Navigate(`${routePathGames}/${platform.id}`);
                     }}
@@ -181,4 +201,4 @@ const SteamyHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, versi
   );
 };
 
-export { SteamyHome };
+export { RetryHome };

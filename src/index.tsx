@@ -8,6 +8,7 @@ import { GameGrid } from "components/common/GameGrid";
 import { GameGridLogo } from "components/common/GameGridLogo";
 import { GameDetail } from "components/common/GameDetail";
 import { SteamyHome } from "./themes/steamy/SteamyHome";
+import { RetryHome } from "./themes/retry/RetryHome";
 import defaultSettings from "defaults.js";
 // Función para obtener configuraciones del localStorage de forma segura
 const getSettingsFromStorage = (): { vertical: boolean; logo_grid: boolean } => {
@@ -22,9 +23,15 @@ const getSettingsFromStorage = (): { vertical: boolean; logo_grid: boolean } => 
 
 export default definePlugin((serverApi: ServerAPI) => {
   const settings = getSettingsFromStorage();
-
+  const theme: string = "steamy";
   serverApi.routerHook.addRoute(routePath, () => {
     const updatedSettings = getSettingsFromStorage(); // Obtener valores actuales
+    switch (theme) {
+      case "steamy":
+        return <SteamyHome version={updatedSettings.vertical ? "vertical" : "grid"} serverAPI={serverApi} />;
+      case "retry":
+        return <RetryHome version="vertical" serverAPI={serverApi} />;
+    }
     return <SteamyHome version={updatedSettings.vertical ? "vertical" : "grid"} serverAPI={serverApi} />;
   });
 
@@ -32,19 +39,15 @@ export default definePlugin((serverApi: ServerAPI) => {
     return <Artwork serverAPI={serverApi} />;
   });
 
-  serverApi.routerHook.addRoute(`${routePathGames}/:platform`, () => {
+  serverApi.routerHook.addRoute(`${routePathGames}/:platform/`, () => {
     const updatedSettings = getSettingsFromStorage(); // Obtener valores actuales
     const { platform } = useParams<{ platform: string }>();
 
-    console.log({ logo_grid: updatedSettings.logo_grid });
-    switch (updatedSettings.logo_grid) {
-      case true:
-        return <GameGridLogo serverAPI={serverApi} platform={platform} />;
-      case false:
-        return <GameGrid serverAPI={serverApi} platform={platform} />;
-      default:
-        return <GameGrid serverAPI={serverApi} platform={platform} />;
-    }
+    return updatedSettings.logo_grid ? (
+      <GameGridLogo serverAPI={serverApi} platform={platform} />
+    ) : (
+      <GameGrid serverAPI={serverApi} platform={platform} />
+    );
   });
 
   serverApi.routerHook.addRoute(`${routePathGameDetail}/:game_name_platform`, () => {

@@ -1,7 +1,7 @@
 import { VFC, useState, useEffect, useRef } from "react";
 import { Button } from "decky-frontend-lib";
 
-const Category = ({ platform, onClick }) => {
+const Category = ({ platform, showGrid = true, onClick, handleFocus = (e) => {} }) => {
   const [isFocus, setIsFocus] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const targetRef = useRef(null);
@@ -45,30 +45,35 @@ const Category = ({ platform, onClick }) => {
   return (
     <Button
       onClick={() => onClick()}
-      onGamepadFocus={() => setIsFocus(true)}
+      onGamepadFocus={() => {
+        handleFocus(platform);
+        setIsFocus(true);
+      }}
       onGamepadBlur={() => setIsFocus(false)}
       ref={targetRef}
       className="_3IWn-2rn7x98o5fDd0rAxb "
       unminified-class="Collection Focusable">
       <div className="_2ERAQD94mxjbyV0G5P9ic5" unminified-class="CollectionImage">
-        <div className="akZKnBQkmOCFmiD2JWwfo" unminified-class="CollectionBG">
-          <div
-            className="_1R9r2OBCxAmtuUVrgBEUBw _2E7G8grj_-tgxXbTXs1t2E _3Ehhd5MxErV_bXQE4qVhzB undefined _2I7jw4GCsxatT6FjGyk7c8"
-            unminified-class="_1R9r2OBCxAmtuUVrgBEUBw GreyBackground _3Ehhd5MxErV_bXQE4qVhzB undefined BackgroundImage">
-            {platform.games.slice(-1).map((game: any) => {
-              const random = Math.floor(Math.random() * 10000);
-              return (
-                <img
-                  className="_24_AuLm54JVe1Zc0AApCDR _3d_bT685lnWotXxgzKW6am yDr03475kalWBTwAE-Rnw"
-                  alt={game.name.replace(/_/g, " ")}
-                  src={`${game.img}?id=${random}`}
-                  unminified-class="_24_AuLm54JVe1Zc0AApCDR Visibility yDr03475kalWBTwAE-Rnw"
-                />
-              );
-            })}
+        {showGrid && (
+          <div className="akZKnBQkmOCFmiD2JWwfo" unminified-class="CollectionBG">
+            <div
+              className="_1R9r2OBCxAmtuUVrgBEUBw _2E7G8grj_-tgxXbTXs1t2E _3Ehhd5MxErV_bXQE4qVhzB undefined _2I7jw4GCsxatT6FjGyk7c8"
+              unminified-class="_1R9r2OBCxAmtuUVrgBEUBw GreyBackground _3Ehhd5MxErV_bXQE4qVhzB undefined BackgroundImage">
+              {platform.games.slice(-1).map((game: any) => {
+                const random = Math.floor(Math.random() * 10000);
+                return (
+                  <img
+                    className="_24_AuLm54JVe1Zc0AApCDR _3d_bT685lnWotXxgzKW6am yDr03475kalWBTwAE-Rnw"
+                    alt={game.name.replace(/_/g, " ")}
+                    src={`${game.img}?id=${random}`}
+                    unminified-class="_24_AuLm54JVe1Zc0AApCDR Visibility yDr03475kalWBTwAE-Rnw"
+                  />
+                );
+              })}
+            </div>
           </div>
-        </div>
-        {isVisible && (
+        )}
+        {isVisible && showGrid && (
           <div className="_3n796D6GS1fdlXhRnRUfRv" unminified-class="DisplayCaseContainerBounds">
             <div className="_3vMgn8Qn1EVGWMwVbRBBUA" unminified-class="DisplayCaseContainer">
               <div className="_2UWA0lTcI8lQgQsbWucD8x" unminified-class="AppGrid">
@@ -93,6 +98,13 @@ const Category = ({ platform, onClick }) => {
             </div>
           </div>
         )}
+        {isVisible && !showGrid && (
+          <img
+            className="galery-img"
+            src={`/customimages/retrolibrary/systems/carousel-icons/${platform.id}.jpg`}
+            alt={platform.title}
+          />
+        )}
         {isFocus && (
           <div
             className="_1sTuvqUAeproqHEae5sn9z"
@@ -105,12 +117,14 @@ const Category = ({ platform, onClick }) => {
             }}></div>
         )}
       </div>
-      <div className="_1J1LQ0vGtpM3n0xw7XwQM6" unminified-class="CollectionLabel">
-        <div>{platform.title}</div>
-        <div className="_36QQLBgXFUVTOhU9jMkCWD" unminified-class="CollectionLabelCount">
-          ( {platform.games.length} )
+      {showGrid && (
+        <div className="_1J1LQ0vGtpM3n0xw7XwQM6" unminified-class="CollectionLabel">
+          <div>{platform.title}</div>
+          <div className="_36QQLBgXFUVTOhU9jMkCWD" unminified-class="CollectionLabelCount">
+            ( {platform.games.length} )
+          </div>
         </div>
-      </div>
+      )}
     </Button>
   );
 };

@@ -229,7 +229,17 @@ const GameGrid: VFC<{ serverAPI: any; platform: any }> = ({ serverAPI, platform 
     padding: 6px 20px;
     font-size: 12px;
     background: rgba(0, 0, 0, .8);
-  }`;
+  }
+
+  .galeries-bg{
+    width:100%;
+    position:absolute;
+    left:0;
+    top:0;
+    z-index:0;
+  }
+
+  `;
   //
   // State
   //
@@ -345,6 +355,7 @@ const GameGrid: VFC<{ serverAPI: any; platform: any }> = ({ serverAPI, platform 
       {!games && <div>NO GAMES YET, loading</div>}
       {games && (
         <>
+          // <img className="galeries-bg" src={`/customimages/retrolibrary/systems/backgrounds/${platform}.jpg`} />
           <div className="container container--scroll">
             {games
               .filter((category: any) => category.id === platform) // Filtra por plataforma antes de mapear

@@ -3,7 +3,7 @@ import { Tabs, Button, Focusable, SteamSpinner, Router, TextField } from "decky-
 import { launchApp } from "common/steamshortcuts";
 import { getTranslateFunc } from "TranslationsF";
 import { Game } from "components/common/Game";
-import { getDataGames, getDataSettings } from "common/helpers";
+import { getDataGames, getDataSettings, launchGame, getDataAchievements } from "common/helpers";
 const GameDetail: VFC<{ serverAPI: any; game_name_platform: any }> = ({ serverAPI, game_name_platform = "" }) => {
   const styles = `
 
@@ -275,162 +275,6 @@ const GameDetail: VFC<{ serverAPI: any; game_name_platform: any }> = ({ serverAP
   //
   // Functions
   //
-  const launchGame = (launcher: string, game: string, name: string, platform: string) => {
-    const gameKey = `${name}_${platform}`;
-    localStorage.setItem("last_selected_game_key", gameKey);
-
-    let launcherComplete = launcher.replace(/{file.path}/g, `'${game}'`);
-    if (emuDeckConfig.systemOS == "nt") {
-      launcherComplete = launcherComplete
-        .replace(
-          "powershell -ExecutionPolicy Bypass -NoProfile -File  '",
-          `C:\\Windows\\System32\\cmd.exe /k start /min "Loading PowerShell Launcher" "C:\\Windows\\System32\\WindowsPowershell\\v1.0\\powershell.exe" -NoProfile -ExecutionPolicy Bypass -Command "& {`
-        )
-        .replace("'", "");
-      launcherComplete = launcherComplete.slice(0, -1) + `'}" && exit " && exit --emudeck`;
-    } else {
-      launcherComplete = launcherComplete
-        .replace(/\\"\'/g, "")
-        .replace(/'\\\"/g, "")
-        .replace(/\\\\/g, "\\")
-        .replace(/\\:"/g, '"Z:');
-    }
-    launchApp(serverAPI, { name, exec: launcherComplete }, systemOS, platform);
-  };
-
-  function getIDByName(name) {
-    switch (name) {
-      case "genesis":
-        return 1;
-      case "n64":
-        return 2;
-      case "snes":
-        return 3;
-      case "gb":
-        return 4;
-      case "gba":
-        return 5;
-      case "gbc":
-        return 6;
-      case "nes":
-        return 7;
-      case "pcengine":
-        return 8;
-      case "segacd":
-        return 9;
-      case "sega32x":
-        return 10;
-      case "mastersystem":
-        return 11;
-      case "psx":
-        return 12;
-      case "lynx":
-        return 13;
-      case "ngp":
-        return 14;
-      case "gamegear":
-        return 15;
-      case "gc":
-        return 16;
-      case "atarijaguar":
-        return 17;
-      case "nds":
-        return 18;
-      case "ps2":
-        return 21;
-      case "atari2600":
-        return 25;
-      case "arcade":
-        return 27;
-      case "virtualboy":
-        return 28;
-      case "msx":
-        return 29;
-      case "sg-1000":
-        return 33;
-      case "amstradcpc":
-        return 37;
-      case "saturn":
-        return 39;
-      case "dreamcast":
-        return 40;
-      case "psp":
-        return 41;
-      case "3do":
-        return 43;
-      case "colecovision":
-        return 44;
-      case "intelivision":
-        return 45;
-      case "vectrex":
-        return 46;
-      case "atari7800":
-        return 51;
-      case "wonderswan":
-        return 53;
-      case "neogeocd":
-        return 56;
-      case "pcenginecd":
-        return 76;
-      case "atarijaguarcd":
-        return 77;
-      default:
-        return "ID desconocido";
-    }
-  }
-
-  const getDataAchievements = async (serverAPI, setStateAchievements, stateAchievements, platform, hash) => {
-    serverAPI
-      .callPluginMethod("emudeck", { command: `generateGameLists_retroAchievements ${hash} ${platform}` })
-      .then((response: any) => {
-        console.log({ response });
-        const result = response.result;
-        const achievements: any = JSON.parse(result);
-
-        type Achievement = {
-          DateEarned?: string;
-          DateEarnedHardcore?: string;
-          [key: string]: any; // Para permitir otras propiedades dinámicas
-        };
-        const isAchievement = (obj: unknown): obj is Achievement => {
-          return typeof obj === "object" && obj !== null && ("DateEarned" in obj || "DateEarnedHardcore" in obj);
-        };
-
-        let earned = {};
-        let earnedHardcore = {};
-        let neither = {};
-
-        // Iterar sobre cada entrada del objeto
-        Object.entries(achievements.Achievements).forEach(([key, value]) => {
-          if (isAchievement(value)) {
-            if (value.DateEarned && value.DateEarnedHardcore) {
-              earned[key] = value;
-            } else if (value.DateEarnedHardcore) {
-              earnedHardcore[key] = value;
-            } else {
-              neither[key] = value;
-            }
-          }
-        });
-
-        let earnedArray = Object.values(earned);
-        let earnedHardcoreArray = Object.values(earnedHardcore);
-        let neitherArray = Object.values(neither);
-
-        setStateAchievements({
-          ...stateAchievements,
-          achievements,
-          earned: earnedArray,
-          earnedHardcore: earnedHardcoreArray,
-          neither: neitherArray,
-        });
-      })
-      .catch((error: any) => {
-        console.log({ error });
-      });
-  };
-
-  const tabRefs = useRef<any>(null);
 
   //
   // UseEffects
@@ -550,7 +394,9 @@ const GameDetail: VFC<{ serverAPI: any; game_name_platform: any }> = ({ serverAP
                       focusable={true}
                       noFocusRing={false}
                       className="game-detail__play-btn _3ydigb6zZAjJ0JCDgHwSYA _2AzIX5kl9k6JnxLfR5H4kX"
-                      onClick={() => launchGame(launcher, game.filename, game.name, game.platform)}>
+                      onClick={() =>
+                        launchGame(serverAPI, launcher, game.filename, game.name, game.platform, emuDeckConfig)
+                      }>
                       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36" fill="none">
                         <path
                           d="M7.5 32.135a1 1 0 0 1-1.5-.866V4.73a1 1 0 0 1 1.5-.866l22.999 13.269a1 1 0 0 1 0 1.732l-23 13.269Z"

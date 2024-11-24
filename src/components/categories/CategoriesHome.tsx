@@ -3,7 +3,7 @@ import { Tabs, Button, Focusable, SteamSpinner, Router, TextField, useParams } f
 import { routePathGames } from "init";
 import { getTranslateFunc } from "TranslationsF";
 import { Category } from "components/common/Category";
-import { getDataGames, getDataSettings } from "common/helpers";
+import { getDataGames, getDataSettings, checkParserStatus } from "common/helpers";
 const CategoriesHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, version }) => {
   const styles = `
 
@@ -108,21 +108,7 @@ const CategoriesHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, v
   //
   // Functions
   //
-  const checkParserStatus = () => {
-    ////console.log("checkCloudStatus");
-    serverAPI
-      .callPluginMethod("emudeck", { command: "generateGameLists_getPercentage" })
-      .then((response: any) => {
-        const result = response.result;
-        setPercentage(result);
-        if (result == "100") {
-          clearInterval(intervalid);
-        }
-      })
-      .catch((error: any) => {
-        //console.log({ error });
-      });
-  };
+
   //
   // UseEffects
   //
@@ -132,7 +118,7 @@ const CategoriesHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, v
     getDataSettings(serverAPI, setState, state);
 
     intervalid = setInterval(() => {
-      checkParserStatus();
+      checkParserStatus(serverAPI, setPercentage, intervalid);
     }, 5000);
 
     return () => {

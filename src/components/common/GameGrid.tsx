@@ -328,6 +328,7 @@ const GameGrid: VFC<{ serverAPI: any; platform: any }> = ({ serverAPI, platform 
     "ps2",
     "nds",
     "3do",
+    "n3ds",
     "gb",
     "gbc",
     "gba",

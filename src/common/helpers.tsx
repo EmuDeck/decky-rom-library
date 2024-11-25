@@ -3,17 +3,29 @@ import { launchApp } from "./steamshortcuts";
 export const getDataGames = async (serverAPI, setState, state) => {
   //console.log("Asking for Games");
   await serverAPI.callPluginMethod("emudeck", { command: `generateGameLists` });
-  serverAPI.callPluginMethod("emudeck", { command: `generateGameListsJson` }).then((response: any) => {
-    const result: any = response.result;
-    const gameList: any = JSON.parse(result);
-    // console.log({ result });
-    gameList.sort((a: any, b: any) => a.title.localeCompare(b.title));
-    // console.log("Saving Games to State");
-    // console.log({ gameList });
-    setState({ ...state, games: gameList });
-    const gamesString = JSON.stringify(gameList);
-    sessionStorage.setItem("rom_library_games", gamesString);
-  });
+
+  const jsonUrl = "https://steamloopback.host/customimages/retrolibrary/artwork/roms_games.json";
+
+  // Llamada a fetch para obtener los datos
+  fetch(jsonUrl)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`Error al obtener JSON: ${response.statusText}`);
+      }
+      return response.json(); // Convierte la respuesta en JSON
+    })
+    .then((data) => {
+      console.log("Contenido del JSON:", data); // Muestra los datos en la consola
+      data.sort((a: any, b: any) => a.title.localeCompare(b.title));
+      const gamesString = JSON.stringify(data);
+      sessionStorage.setItem("rom_library_games", gamesString);
+      setState({ ...state, games: data });
+
+      serverAPI.callPluginMethod("emudeck", { command: `generateGameListsJson` }).then((response: any) => {});
+    })
+    .catch((error) => {
+      console.error("Error al acceder al JSON:", error); // Manejo de errores
+    });
 };
 
 export const getDataSettings = async (serverAPI, setState, state) => {

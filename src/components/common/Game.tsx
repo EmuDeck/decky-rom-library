@@ -59,7 +59,7 @@ const Game = ({ item, game, random, loadGame, fixArtwork, focus }) => {
           <img
             loading="lazy"
             className="game__img"
-            src={`${game.img}?id=${random}`}
+            src={`${game.img}/box2dfront/${game.name}.jpg?id=${random}`}
             alt={game.name.replace(/_/g, " ")}
           />
         </span>
@@ -75,7 +75,12 @@ const Game = ({ item, game, random, loadGame, fixArtwork, focus }) => {
               top: "0px",
               left: "0px",
             }}></div>
-          <img loading="lazy" className="game__bg" src={`${game.img}?id=${random}`} alt={game.name} />
+          <img
+            loading="lazy"
+            className="game__bg"
+            src={`${game.img}/box2dfront/${game.name}.jpg?id=${random}`}
+            alt={game.name}
+          />
           <div className="game__file">
             <span>{game.file}</span>
           </div>

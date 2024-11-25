@@ -98,7 +98,7 @@ const SteamyHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, versi
   let { games, emuDeckConfig } = state;
   const { systemOS } = emuDeckConfig;
 
-  const [percentage, setPercentage] = useState("...");
+  const [percentage, setPercentage] = useState("Loading...");
 
   //
   // Const & Vars

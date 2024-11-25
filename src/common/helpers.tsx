@@ -28,6 +28,29 @@ export const getDataGames = async (serverAPI, setState, state) => {
     });
 };
 
+export const getDataStates = async (serverAPI, setState, state, name) => {
+  const jsonUrl = "https://steamloopback.host/customimages/retrolibrary/cache/saves_states.json";
+
+  // Llamada a fetch para obtener los datos
+  fetch(jsonUrl)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`Error al obtener JSON: ${response.statusText}`);
+      }
+      return response.json(); // Convierte la respuesta en JSON
+    })
+    .then((data) => {
+      console.log("Contenido del JSON DataStates:", data); // Muestra los datos en la consola
+      console.log({ name });
+      const filteredResults = data.filter((item) => item.name.includes(name));
+      console.log({ filteredResults });
+      setState({ ...state, states: filteredResults });
+    })
+    .catch((error) => {
+      console.error("Error al acceder al JSON:", error); // Manejo de errores
+    });
+};
+
 export const getDataSettings = async (serverAPI, setState, state) => {
   //console.log("Asking for Settings");
   await serverAPI.callPluginMethod("getSettings", {}).then((response: any) => {

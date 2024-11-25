@@ -3,7 +3,7 @@ import { Tabs, Button, Focusable, SteamSpinner, Router, TextField } from "decky-
 import { launchApp } from "common/steamshortcuts";
 import { getTranslateFunc } from "TranslationsF";
 import { Game } from "components/common/Game";
-import { getDataGames, getDataSettings, launchGame, getDataAchievements } from "common/helpers";
+import { getDataSettings, launchGame, getDataAchievements, getDataStates } from "common/helpers";
 const GameDetail: VFC<{ serverAPI: any; game_name_platform: any }> = ({ serverAPI, game_name_platform = "" }) => {
   const styles = `
 
@@ -247,6 +247,7 @@ const GameDetail: VFC<{ serverAPI: any; game_name_platform: any }> = ({ serverAP
     game: undefined,
     platform: undefined,
     launcher: undefined,
+    states: undefined,
     emuDeckConfig: {
       systemOS: "",
     },
@@ -343,6 +344,7 @@ const GameDetail: VFC<{ serverAPI: any; game_name_platform: any }> = ({ serverAP
             // Actualizar el estado con los datos del juego y los datos adicionales
             setDataState(filteredData[0]);
             getDataAchievements(serverAPI, setStateAchievements, stateAchievements, platform, game.hash);
+            getDataStates(serverAPI, setState, state, game.name);
           }
         })
         .catch((error) => {
@@ -352,8 +354,8 @@ const GameDetail: VFC<{ serverAPI: any; game_name_platform: any }> = ({ serverAP
   }, [platform]);
 
   useEffect(() => {
-    console.log({ stateAchievements });
-  }, [stateAchievements]);
+    console.log({ state });
+  }, [state]);
   //
   // Render
   //
@@ -492,6 +494,27 @@ const GameDetail: VFC<{ serverAPI: any; game_name_platform: any }> = ({ serverAP
                     </>
                   )}
                   <>
+                    {state.states != null && (
+                      <Focusable onActivate={() => console.log("activated")}>
+                        <h3>Save States</h3>
+                        <div tabIndex={0} className="game-detail__achievements">
+                          <div className="game-detail__achievements__inner">
+                            <div className="game-detail__achievements__unlocked">
+                              {state.states.map((item: any) => {
+                                return (
+                                  <img
+                                    className="_2V2sHETNfa62yMoDwSF3_t"
+                                    src={`/customimages/retrolibrary/artwork/${game.platform}/media/box2dfront/${game.name}.jpg`}
+                                    loading="lazy"
+                                  />
+                                );
+                              })}
+                            </div>
+                          </div>
+                        </div>
+                      </Focusable>
+                    )}
+
                     {stateAchievements.achievements != null && (
                       <Focusable onActivate={() => console.log("activated")}>
                         <h3>Achievements</h3>

@@ -4,7 +4,7 @@ export const getDataGames = async (serverAPI, setState, state) => {
   //console.log("Asking for Games");
   await serverAPI.callPluginMethod("emudeck", { command: `generateGameLists` });
 
-  const jsonUrl = "https://steamloopback.host/customimages/retrolibrary/artwork/roms_games.json";
+  const jsonUrl = "https://steamloopback.host/customimages/retrolibrary/cache/roms_games.json";
 
   // Llamada a fetch para obtener los datos
   fetch(jsonUrl)

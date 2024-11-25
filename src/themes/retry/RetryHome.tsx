@@ -81,10 +81,12 @@ const RetryHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, versio
     transform: scale(1.08)
   }
 
-  .category-img{
-    width:100%
-    height:100%
+  .galery-img{
+    width:100%;
+    object-fit:cover
   }
+
+
 
   .galeries-bg{
     width:100%;

@@ -1,5 +1,5 @@
 import { PanelSection, PanelSectionRow, ServerAPI, SliderField, ToggleField } from "decky-frontend-lib";
-import { VFC, useState, useEffect } from "react"; //import { GlobalContext } from "./context/globalContext";
+import { VFC, useState, useEffect } from "react";
 import defaultSettings from "defaults.js";
 const Content: VFC<{ serverAPI: ServerAPI }> = () => {
   //

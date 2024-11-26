@@ -4,6 +4,8 @@ import { launchApp } from "common/steamshortcuts";
 import { getTranslateFunc } from "TranslationsF";
 import { Game } from "components/common/Game";
 import { getDataSettings, launchGame, getDataAchievements, getDataStates } from "common/helpers";
+import { useFetchCond } from "hooks/useFetchCond";
+
 const GameDetail: VFC<{ serverAPI: any; game_name_platform: any }> = ({ serverAPI, game_name_platform = "" }) => {
   const styles = `
 
@@ -273,6 +275,10 @@ const GameDetail: VFC<{ serverAPI: any; game_name_platform: any }> = ({ serverAP
   // Const & Vars
   //
   const t = getTranslateFunc();
+  const dataWS = useFetchCond(
+    `https://steamloopback.host/customimages/retrolibrary/data/${game_name_platform.split("|||")[1]}.json`
+  );
+  console.log({ dataWS });
   //
   // Functions
   //
@@ -330,26 +336,17 @@ const GameDetail: VFC<{ serverAPI: any; game_name_platform: any }> = ({ serverAP
 
   useEffect(() => {
     if (platform != undefined) {
-      serverAPI
-        .callPluginMethod("getJsonFromPlatform", {
-          platform: platform,
-        })
-        .then((response: any) => {
-          if (response.success && response.result) {
-            const additionalData = response.result;
-
-            const filteredData = additionalData.games.filter((item: any) =>
-              item.name?.toLowerCase().includes(game.name.toLowerCase())
-            );
-            // Actualizar el estado con los datos del juego y los datos adicionales
-            setDataState(filteredData[0]);
-            getDataAchievements(serverAPI, setStateAchievements, stateAchievements, platform, game.hash);
-            getDataStates(serverAPI, setState, state, game.name);
-          }
-        })
-        .catch((error) => {
-          console.error("Error al llamar al método del plugin:", error);
-        });
+      dataWS.post({}).then((data) => {
+        const additionalData = data;
+        console.log({ additionalData });
+        const filteredData = additionalData.games.filter((item: any) =>
+          item.name?.toLowerCase().includes(game.name.toLowerCase())
+        );
+        // Actualizar el estado con los datos del juego y los datos adicionales
+        setDataState(filteredData[0]);
+        getDataAchievements(serverAPI, setStateAchievements, stateAchievements, platform, game.hash);
+        getDataStates(serverAPI, setState, state, game.name);
+      });
     }
   }, [platform]);
 

@@ -21,29 +21,6 @@ if os.name == 'nt':
 class Plugin:
 
     @staticmethod
-    async def getJsonFromPlatform(self, platform):
-        """
-        Reads and returns the JSON data from the specified path.
-        """
-        #settings = await getSettings(self)
-        #storage_path = settings.get("storagePath")
-
-        storage_path = "/home/deck/Emulation/storage"
-
-        json_path = os.path.join(storage_path, "retrolibrary", "data", f"{platform}.json")
-
-        if not os.path.exists(json_path):
-            warn(f"JSON file not found at: {json_path}")
-            return {"error": f"File not found: {json_path}"}
-        try:
-            with open(json_path, 'r') as json_file:
-                data = json.load(json_file)
-                log(f"Loaded {len(data.get('games', []))} games from JSON.")
-                return data  # Retorna el contenido completo del JSON
-        except Exception as e:
-            error(f"Error reading JSON file: {e}")
-            return {"error": str(e)}
-
     async def getSettings(self):
         pattern = re.compile(r'([A-Za-z_][A-Za-z0-9_]*)=(.*)')
         user_home = os.path.expanduser("~")
@@ -73,13 +50,6 @@ class Plugin:
         json_configuration = json.dumps(configuration, indent=4)
         return json_configuration
 
-    async def _main(self):
-        try:
-            sc = open(os.path.join(confdir, "scid_1.txt"), "x")
-            sc.close()
-        except FileExistsError:
-            pass
-
     async def emudeck(self, command):
         if os.name == 'nt':
             ps1_file = os.path.join(os.environ['APPDATA'], 'EmuDeck', 'backend', 'functions', 'all.ps1')
@@ -106,18 +76,3 @@ class Plugin:
             bash_command = ". $HOME/.config/EmuDeck/backend/functions/all.sh && " + command
         result = subprocess.run(bash_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
         return result.stdout
-
-    # START QL
-    async def get_id(self, id_file):
-        with open(os.path.join(confdir, f'scid_{id_file}.txt'), "r") as sc:
-            id = sc.read()
-            try:
-                id = int(id)
-                return id
-            except ValueError:
-                return -1
-
-    async def set_id(self, id, id_file):
-        with open(os.path.join(confdir, f'scid_{id_file}.txt'), "w") as sc:
-            sc.write(str(id))
-    # END QL

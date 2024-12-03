@@ -370,18 +370,18 @@ const GameDetail: VFC<{ serverAPI: any; game_name_platform: any }> = ({ serverAP
           <div className="container--scroll">
             <div className="game-detail">
               <img
-                src={`/customimages/retrolibrary/artwork/${game.platform}/media/box2dfront/${game.name}.jpg`}
+                src={`/customimages/retrolibrary/artwork/${game.platform}/media/box2dfront/${game.name}.webp`}
                 className="game-detail__blur"
               />
               <div className="game-detail__hero">
                 {/* <img
                   className="game-detail__img"
-                  src={`/customimages/retrolibrary/artwork/${game.platform}/media/screenshot/${game.name}.jpg`}
+                  src={`/customimages/retrolibrary/artwork/${game.platform}/media/screenshot/${game.name}.webp`}
                   alt={game.name}
                 /> */}
                 <img
                   className="game-detail__logo"
-                  src={`/customimages/retrolibrary/artwork/${game.platform}/media/wheel/${game.name}.png`}
+                  src={`/customimages/retrolibrary/artwork/${game.platform}/media/wheel/${game.name}.webp`}
                   alt={game.name}
                 />
               </div>
@@ -442,7 +442,7 @@ const GameDetail: VFC<{ serverAPI: any; game_name_platform: any }> = ({ serverAP
                         <div tabIndex={0} className="game-detail__more_info">
                           <div className="game-detail__more_info-img">
                             <img
-                              src={`/customimages/retrolibrary/artwork/${game.platform}/media/box2dfront/${game.name}.jpg`}
+                              src={`/customimages/retrolibrary/artwork/${game.platform}/media/box2dfront/${game.name}.webp`}
                               alt={game.name}
                             />
                           </div>
@@ -501,7 +501,7 @@ const GameDetail: VFC<{ serverAPI: any; game_name_platform: any }> = ({ serverAP
                                 return (
                                   <img
                                     className="_2V2sHETNfa62yMoDwSF3_t"
-                                    src={`/customimages/retrolibrary/artwork/${game.platform}/media/box2dfront/${game.name}.jpg`}
+                                    src={`/customimages/retrolibrary/artwork/${game.platform}/media/box2dfront/${game.name}.webp`}
                                     loading="lazy"
                                   />
                                 );
@@ -526,7 +526,7 @@ const GameDetail: VFC<{ serverAPI: any; game_name_platform: any }> = ({ serverAP
                                 return (
                                   <img
                                     className="_2V2sHETNfa62yMoDwSF3_t"
-                                    src={`https://media.retroachievements.org/Badge/${item.BadgeName}.png`}
+                                    src={`https://media.retroachievements.org/Badge/${item.BadgeName}.webp`}
                                     loading="lazy"
                                   />
                                 );
@@ -538,7 +538,7 @@ const GameDetail: VFC<{ serverAPI: any; game_name_platform: any }> = ({ serverAP
                                 return (
                                   <img
                                     className="_2V2sHETNfa62yMoDwSF3_t"
-                                    src={`https://media.retroachievements.org/Badge/${item.BadgeName}_lock.png`}
+                                    src={`https://media.retroachievements.org/Badge/${item.BadgeName}_lock.webp`}
                                     loading="lazy"
                                   />
                                 );
@@ -558,7 +558,7 @@ const GameDetail: VFC<{ serverAPI: any; game_name_platform: any }> = ({ serverAP
                                 return (
                                   <img
                                     className="_2V2sHETNfa62yMoDwSF3_t"
-                                    src={`https://media.retroachievements.org/Badge/${item.BadgeName}.png`}
+                                    src={`https://media.retroachievements.org/Badge/${item.BadgeName}.webp`}
                                     loading="lazy"
                                   />
                                 );
@@ -570,7 +570,7 @@ const GameDetail: VFC<{ serverAPI: any; game_name_platform: any }> = ({ serverAP
                                 return (
                                   <img
                                     className="_2V2sHETNfa62yMoDwSF3_t"
-                                    src={`https://media.retroachievements.org/Badge/${item.BadgeName}_lock.png`}
+                                    src={`https://media.retroachievements.org/Badge/${item.BadgeName}_lock.webp`}
                                     loading="lazy"
                                   />
                                 );

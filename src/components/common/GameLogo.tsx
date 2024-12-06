@@ -59,15 +59,15 @@ const GameLogo = ({ item, game, random, loadGame, fixArtwork, focus }) => {
           <img
             loading="lazy"
             className="game__logo"
-            src={`${game.img}/wheel/${game.name}.webp?id=${random}`}
+            src={`${game.img}/wheel/${game.name}.png?id=${random}`}
             onError={(e: any) => (e.target.style.display = "none")}
             alt={game.name.replace(/_/g, " ")}
           />
           <img
-            onError={(e: any) => (e.target.src = `/customimages/platforms/${game.platform}.webp`)}
+            onError={(e: any) => (e.target.src = `/customimages/platforms/${game.platform}.jpg`)}
             loading="lazy"
             className="game__ss"
-            src={`${game.img}/screenshot/${game.name}.webp?id=${random}`}
+            src={`${game.img}/screenshot/${game.name}.jpg?id=${random}`}
             alt={game.name.replace(/_/g, " ")}
           />
           <div className="game__tint"></div>
@@ -88,7 +88,7 @@ const GameLogo = ({ item, game, random, loadGame, fixArtwork, focus }) => {
             onError={(e: any) => (e.target.style.display = "none")}
             loading="lazy"
             className="game__bg"
-            src={`${game.img}/screenshot/${game.name}.webp?id=${random}`}
+            src={`${game.img}/screenshot/${game.name}.jpg?id=${random}`}
             alt={game.name}
           />
           <div className="game__file">

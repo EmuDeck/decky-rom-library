@@ -65,7 +65,7 @@ const Category = ({ platform, showGrid = true, onClick, handleFocus = (e) => {} 
                   <img
                     className="_24_AuLm54JVe1Zc0AApCDR _3d_bT685lnWotXxgzKW6am yDr03475kalWBTwAE-Rnw"
                     alt={game.name.replace(/_/g, " ")}
-                    src={`${game.img}/box2dfront/${game.name}.webp?id=${random}`}
+                    src={`${game.img}/box2dfront/${game.name}.jpg?id=${random}`}
                     unminified-class="_24_AuLm54JVe1Zc0AApCDR Visibility yDr03475kalWBTwAE-Rnw"
                   />
                 );
@@ -86,7 +86,7 @@ const Category = ({ platform, showGrid = true, onClick, handleFocus = (e) => {} 
                         unminified-class="_1R9r2OBCxAmtuUVrgBEUBw GreyBackground _3Ehhd5MxErV_bXQE4qVhzB undefined _1Nb1zAXqh_mFJMZDAHu6L6">
                         <img
                           className="_24_AuLm54JVe1Zc0AApCDR _3d_bT685lnWotXxgzKW6am yDr03475kalWBTwAE-Rnw"
-                          src={`${game.img}/box2dfront/${game.name}.webp?id=${random}`}
+                          src={`${game.img}/box2dfront/${game.name}.jpg?id=${random}`}
                           alt={game.name.replace(/_/g, " ")}
                           unminified-class="_24_AuLm54JVe1Zc0AApCDR Visibility yDr03475kalWBTwAE-Rnw"
                         />
@@ -101,7 +101,7 @@ const Category = ({ platform, showGrid = true, onClick, handleFocus = (e) => {} 
         {isVisible && !showGrid && (
           <img
             className="galery-img"
-            src={`/customimages/retrolibrary/systems/carousel-icons/${platform.id}.webp`}
+            src={`/customimages/retrolibrary/systems/carousel-icons/${platform.id}.jpg`}
             alt={platform.title}
           />
         )}

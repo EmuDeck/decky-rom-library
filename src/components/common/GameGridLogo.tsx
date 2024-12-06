@@ -395,7 +395,7 @@ const GameGridLogo: VFC<{ serverAPI: any; platform: any }> = ({ serverAPI, platf
       {!games && <div>NO GAMES YET, loading</div>}
       {games && (
         <>
-          {/* <img className="galeries-bg" src={`/customimages/retrolibrary/systems/backgrounds/${platform}.webp`} /> */}
+          {/* <img className="galeries-bg" src={`/customimages/retrolibrary/systems/backgrounds/${platform}.jpg`} /> */}
           <div className="container container--scroll">
             {games
               .filter((category: any) => category.id === platform) // Filtra por plataforma antes de mapear

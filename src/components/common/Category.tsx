@@ -89,6 +89,7 @@ const Category = ({ platform, showGrid = true, onClick, handleFocus = (e) => {} 
                           src={`${game.img}/box2dfront/${game.name}.jpg?id=${random}`}
                           alt={game.name.replace(/_/g, " ")}
                           unminified-class="_24_AuLm54JVe1Zc0AApCDR Visibility yDr03475kalWBTwAE-Rnw"
+                          onError={(e: any) => (e.target.style.display = "none")}
                         />
                       </div>
                     </div>

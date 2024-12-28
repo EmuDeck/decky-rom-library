@@ -3,7 +3,7 @@ import { Tabs, Button, Focusable, SteamSpinner, Router, TextField, useParams } f
 import { routePathGames } from "init";
 import { getTranslateFunc } from "TranslationsF";
 import { Category } from "components/common/Category";
-import { getDataGames, getDataSettings, checkParserStatus } from "common/helpers";
+import { getDataGames, getDataSettings, checkParserStatus, checkStatus } from "common/helpers";
 const SteamyHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, version }) => {
   const styles = `
 
@@ -99,6 +99,7 @@ const SteamyHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, versi
   const { systemOS } = emuDeckConfig;
 
   const [percentage, setPercentage] = useState("Loading...");
+  const [msg, setMsg] = useState("Loading...");
 
   //
   // Const & Vars
@@ -117,14 +118,33 @@ const SteamyHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, versi
     //console.log("getData launched");
     getDataSettings(serverAPI, setState, state);
 
+    //     intervalid = setInterval(() => {
+    //       checkParserStatus(serverAPI, setPercentage, intervalid);
+    //     }, 5000);
+    //
+    //     return () => {
+    //       clearInterval(intervalid);
+    //     };
+  }, []);
+
+  useEffect(() => {
+    //console.log("getData launched");
     intervalid = setInterval(() => {
+      checkStatus(serverAPI, setMsg, intervalid);
       checkParserStatus(serverAPI, setPercentage, intervalid);
-    }, 5000);
+    }, 500);
 
     return () => {
       clearInterval(intervalid);
     };
   }, []);
+
+  useEffect(() => {
+    console.log({ msg });
+  }, [msg]);
+  useEffect(() => {
+    console.log({ percentage });
+  }, [percentage]);
 
   useEffect(() => {
     if (emuDeckConfig.systemOS !== "") {
@@ -148,7 +168,7 @@ const SteamyHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, versi
       {!games && (
         <div style={{ textAlign: "center", height: "100vh" }}>
           <SteamSpinner>
-            <p>{t("loadingGames")}</p>
+            <p>{msg}</p>
           </SteamSpinner>
         </div>
       )}
@@ -158,7 +178,7 @@ const SteamyHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, versi
             {version == "grid" && (
               <h1>
                 EmuDeck Retro Library
-                <small>Parsed: {percentage}</small>
+                <small>Parser: {percentage}</small>
               </h1>
             )}
             <Focusable className={`categories CSSGrid Grid Panel ${version}`}>

@@ -80,6 +80,22 @@ export const checkParserStatus = (serverAPI, setState, interval) => {
     });
 };
 
+export const checkStatus = (serverAPI, setState, interval) => {
+  ////console.log("checkCloudStatus");
+  serverAPI
+    .callPluginMethod("emudeck", { command: 'cat "$MSG"' })
+    .then((response: any) => {
+      const result = response.result;
+      setState(result);
+      if (result == "100") {
+        clearInterval(interval);
+      }
+    })
+    .catch((error: any) => {
+      //console.log({ error });
+    });
+};
+
 export const launchGame = (
   serverAPI,
   launcher: string,

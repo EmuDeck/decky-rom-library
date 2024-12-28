@@ -69,7 +69,7 @@ const GameDetail: VFC<{ serverAPI: any; game_name_platform: any }> = ({ serverAP
     position:absolute;
     left: 20px;
     bottom: 10px;
-    width: 50%;
+    height: 180px;
   }
 
   .game-detail-data{

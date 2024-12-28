@@ -1,6 +1,6 @@
 {
   "name": "decky-rom-library",
-  "version": "1.4.1",
+  "version": "1.4.3",
   "description": "A retro library for EmuDeck",
   "scripts": {
     "build": "shx rm -rf dist && rollup -c",

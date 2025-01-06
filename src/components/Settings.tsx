@@ -11,7 +11,7 @@ const Content: VFC<{ serverAPI: ServerAPI }> = () => {
     const storedSettings = settingsStorage ? JSON.parse(settingsStorage) : {};
     return { ...defaultSettings, ...storedSettings };
   });
-  const { counter_max, vertical, counter, logo_grid } = state;
+  const { counter_max, vertical, counter, logo_grid, theme } = state;
   //
   // Const & Vars
   //
@@ -64,6 +64,13 @@ const Content: VFC<{ serverAPI: ServerAPI }> = () => {
             layout="below"
             onChange={() => setState({ ...state, logo_grid: !logo_grid })}
           />
+          <ToggleField
+            label="Retro theme"
+            checked={theme == true ? true : false}
+            layout="below"
+            onChange={() => setState({ ...state, theme: !theme })}
+          />
+
         </PanelSectionRow>
       </PanelSection>
     </>

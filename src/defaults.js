@@ -3,6 +3,7 @@ const defaultSettings = {
   counter: 1,
   vertical: false,
   logo_grid: false,
+  theme: false
 };
 
 export default defaultSettings;

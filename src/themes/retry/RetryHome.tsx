@@ -41,9 +41,10 @@ const RetryHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, versio
 
   /* Full size cats */
   .vertical.categories{
-    grid-template-columns: repeat(auto-fill, 25vw);
-    grid-auto-rows: calc(60vh - 114px);
+    grid-template-columns: repeat(auto-fill, 15vw);
+    grid-auto-rows: calc(46vh - 118px);
     overflow: scroll;
+    padding: 20px 25px
   }
 
   .vertical.categories .category ._3n796D6GS1fdlXhRnRUfRv{
@@ -93,6 +94,19 @@ const RetryHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, versio
     left:0;
     top:0;
     z-index:0;
+    height:100vh
+  }
+
+  .BasicUI ._3IWn-2rn7x98o5fDd0rAxb{
+    opacity:0.6;
+    transition: .5s;
+    border: 4px solid transparent;
+  }
+  .BasicUI ._3IWn-2rn7x98o5fDd0rAxb:focus{
+    opacity: 1;
+    transform: scale(1.2);
+    border: 4px solid #8acaf1;
+    transition: .5s
   }
 
   `;
@@ -182,7 +196,7 @@ const RetryHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, versio
               </h1>
             )}
 
-            <Focusable className={`categories CSSGrid Grid Panel ${version}`} style={{width: `${games.length*25}vw`}}>
+            <Focusable className={`categories CSSGrid Grid Panel ${version}`} style={{width: `${games.length*28}vw`}}>
 
               {games.map((platform: any) => {
                 return (

@@ -11,7 +11,7 @@ import { SteamyHome } from "./themes/steamy/SteamyHome";
 import { RetryHome } from "./themes/retry/RetryHome";
 import defaultSettings from "defaults.js";
 // Función para obtener configuraciones del localStorage de forma segura
-const getSettingsFromStorage = (): { vertical: boolean; logo_grid: boolean } => {
+const getSettingsFromStorage = (): { vertical: boolean; logo_grid: boolean; theme: boolean } => {
   try {
     const settingsStorage = localStorage.getItem("rom_library_settings");
     return settingsStorage ? JSON.parse(settingsStorage) : defaultSettings;
@@ -23,16 +23,15 @@ const getSettingsFromStorage = (): { vertical: boolean; logo_grid: boolean } => 
 
 export default definePlugin((serverApi: ServerAPI) => {
   const settings = getSettingsFromStorage();
-  const theme: string = "steamy";
+  const theme = settings.theme;
   serverApi.routerHook.addRoute(routePath, () => {
     const updatedSettings = getSettingsFromStorage(); // Obtener valores actuales
-    switch (theme) {
-      case "steamy":
-        return <SteamyHome version={updatedSettings.vertical ? "vertical" : "grid"} serverAPI={serverApi} />;
-      case "retry":
+    if (theme) {
         return <RetryHome version="vertical" serverAPI={serverApi} />;
+    }else{
+        return <SteamyHome version={updatedSettings.vertical ? "vertical" : "grid"} serverAPI={serverApi} />;
     }
-    return <SteamyHome version={updatedSettings.vertical ? "vertical" : "grid"} serverAPI={serverApi} />;
+   // return <SteamyHome version={updatedSettings.vertical ? "vertical" : "grid"} serverAPI={serverApi} />;
   });
 
   serverApi.routerHook.addRoute(routePathArtwork, () => {

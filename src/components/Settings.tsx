@@ -59,7 +59,7 @@ const Content: VFC<{ serverAPI: ServerAPI }> = () => {
             onChange={() => setState({ ...state, vertical: !vertical })}
           />
           <ToggleField
-            label="Logo Grid"
+            label="Logo Grid Games List"
             checked={logo_grid == true ? true : false}
             layout="below"
             onChange={() => setState({ ...state, logo_grid: !logo_grid })}

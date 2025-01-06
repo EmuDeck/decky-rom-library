@@ -1,5 +1,9 @@
 import { launchApp } from "./steamshortcuts";
 
+export const getArtwork = async(serverAPI) => {
+  await serverAPI.callPluginMethod("emudeck", { command: `generateGameLists_artwork` });
+}
+
 export const getDataGames = async (serverAPI, setState, state) => {
   //console.log("Asking for Games");
   await serverAPI.callPluginMethod("emudeck", { command: `generateGameLists` });

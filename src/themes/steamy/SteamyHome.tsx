@@ -3,7 +3,7 @@ import { Tabs, Button, Focusable, SteamSpinner, Router, TextField, useParams } f
 import { routePathGames } from "init";
 import { getTranslateFunc } from "TranslationsF";
 import { Category } from "components/common/Category";
-import { getDataGames, getDataSettings, checkParserStatus, checkStatus } from "common/helpers";
+import { getDataGames, getDataSettings, checkParserStatus, checkStatus, getArtwork } from "common/helpers";
 const SteamyHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, version }) => {
   const styles = `
 
@@ -153,6 +153,7 @@ const SteamyHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, versi
       if (gamesLS) {
         const gamesJson: any = JSON.parse(gamesLS);
         setState({ ...state, games: gamesJson });
+        //getArtwork(serverAPI);
       } else {
         getDataGames(serverAPI, setState, state);
       }

@@ -64,7 +64,7 @@ const GameLogo = ({ item, game, random, loadGame, fixArtwork, focus }) => {
             alt={game.name.replace(/_/g, " ")}
           />
           <img
-            onError={(e: any) => (e.target.src = `/customimages/platforms/${game.platform}.jpg`)}
+            onError={(e: any) => (e.target.src = `/customimages/retrolibrary/systems/carousel-icons/${game.platform}.jpg`)}
             loading="lazy"
             className="game__ss"
             src={`${game.img}/screenshot/${game.name}.jpg?id=${random}`}

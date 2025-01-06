@@ -3,7 +3,7 @@ import { Tabs, Button, Focusable, SteamSpinner, Router, TextField, useParams } f
 import { routePathGames } from "init";
 import { getTranslateFunc } from "TranslationsF";
 import { Category } from "components/common/Category";
-import { getDataGames, getDataSettings, checkParserStatus } from "common/helpers";
+import { getDataGames, getDataSettings, checkParserStatus, getArtwork } from "common/helpers";
 const RetryHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, version }) => {
   const styles = `
 
@@ -43,7 +43,6 @@ const RetryHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, versio
   .vertical.categories{
     grid-template-columns: repeat(auto-fill, 25vw);
     grid-auto-rows: calc(60vh - 114px);
-    width: 10000px;
     overflow: scroll;
   }
 
@@ -147,6 +146,7 @@ const RetryHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, versio
       if (gamesLS) {
         const gamesJson: any = JSON.parse(gamesLS);
         setState({ ...state, games: gamesJson });
+        //getArtwork(serverAPI);
       } else {
         getDataGames(serverAPI, setState, state);
       }
@@ -182,7 +182,8 @@ const RetryHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, versio
               </h1>
             )}
 
-            <Focusable className={`categories CSSGrid Grid Panel ${version}`}>
+            <Focusable className={`categories CSSGrid Grid Panel ${version}`} style={{width: `${games.length*25}vw`}}>
+
               {games.map((platform: any) => {
                 return (
                   <Category

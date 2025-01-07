@@ -65,7 +65,7 @@ const GameLogo = ({ item, game, random, loadGame, fixArtwork, focus }) => {
           />
           <img
             onError={(e: any) =>
-              (e.target.src = `/customimages/retrolibrary/assets/bright/carousel-icons/${game.platform}.jpg`)
+              (e.target.src = `/customimages/retrolibrary/assets/alekfull/carousel-icons/${game.platform}.jpg`)
             }
             loading="lazy"
             className="game__ss"

@@ -65,12 +65,11 @@ const Content: VFC<{ serverAPI: ServerAPI }> = () => {
             onChange={() => setState({ ...state, logo_grid: !logo_grid })}
           />
           <ToggleField
-            label="Retro theme"
+            label="Alekfull theme"
             checked={theme == true ? true : false}
             layout="below"
             onChange={() => setState({ ...state, theme: !theme })}
           />
-
         </PanelSectionRow>
       </PanelSection>
     </>

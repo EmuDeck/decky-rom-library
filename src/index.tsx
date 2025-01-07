@@ -23,15 +23,14 @@ const getSettingsFromStorage = (): { vertical: boolean; logo_grid: boolean; them
 
 export default definePlugin((serverApi: ServerAPI) => {
   const settings = getSettingsFromStorage();
-  const theme = settings.theme;
   serverApi.routerHook.addRoute(routePath, () => {
     const updatedSettings = getSettingsFromStorage(); // Obtener valores actuales
-    if (theme) {
-        return <RetryHome version="vertical" serverAPI={serverApi} />;
-    }else{
-        return <SteamyHome version={updatedSettings.vertical ? "vertical" : "grid"} serverAPI={serverApi} />;
+    if (updatedSettings.theme === true) {
+      return <RetryHome version="vertical" serverAPI={serverApi} />;
+    } else {
+      return <SteamyHome version={updatedSettings.vertical ? "vertical" : "grid"} serverAPI={serverApi} />;
     }
-   // return <SteamyHome version={updatedSettings.vertical ? "vertical" : "grid"} serverAPI={serverApi} />;
+    // return <SteamyHome version={updatedSettings.vertical ? "vertical" : "grid"} serverAPI={serverApi} />;
   });
 
   serverApi.routerHook.addRoute(routePathArtwork, () => {

@@ -190,7 +190,10 @@ const RetryHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, versio
       )}
       {games && (
         <>
-          <img className="galeries-bg" src={`/customimages/retrolibrary/systems/backgrounds/${platformCurrent}.jpg`} />
+          <img
+            className="galeries-bg"
+            src={`/customimages/retrolibrary/assets/alekfull/backgrounds/${platformCurrent}.jpg`}
+          />
           <div className="container container--scroll">
             {version == "grid" && (
               <h1>

@@ -14,7 +14,6 @@ const RetryHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, versio
     bottom: 22px;
     left: 0;
     padding-bottom: 40px;
-    padding-left: 2.8vw;
     padding-right: 2.8vw;
     scroll-padding-top: 116px;
     scroll-padding-bottom: 80px;
@@ -109,6 +108,10 @@ const RetryHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, versio
     transition: .5s
   }
 
+  .BasicUI ._3IWn-2rn7x98o5fDd0rAxb:nth-child(n+6).transform:focus{
+    transform-origin: 150%
+  }
+
   `;
 
   //
@@ -196,8 +199,9 @@ const RetryHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, versio
               </h1>
             )}
 
-            <Focusable className={`categories CSSGrid Grid Panel ${version}`} style={{width: `${games.length*28}vw`}}>
-
+            <Focusable
+              className={`categories CSSGrid Grid Panel ${version}`}
+              style={{ width: `${games.length * 28}vw` }}>
               {games.map((platform: any) => {
                 return (
                   <Category

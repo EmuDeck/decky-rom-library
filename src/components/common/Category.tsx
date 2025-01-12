@@ -1,12 +1,14 @@
 import { VFC, useState, useEffect, useRef } from "react";
 import { Button } from "decky-frontend-lib";
 
-const Category = ({ platform, showGrid = true, onClick, handleFocus = (e) => {} }) => {
-  const [isFocus, setIsFocus] = useState(false);
+const Category = ({ platform, showGrid = true, onClick, handleFocus = (e) => {}, focused = false }) => {
+  const [isFocus, setIsFocus] = useState(focused);
   const [isVisible, setIsVisible] = useState(false);
   const targetRef = useRef(null);
 
   useEffect(() => {
+    focused ? setIsFocus(true) : setIsFocus(false);
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         setIsVisible(entry.isIntersecting);

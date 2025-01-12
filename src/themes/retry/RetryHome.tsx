@@ -97,9 +97,10 @@ const RetryHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, versio
   }
 
   .BasicUI ._3IWn-2rn7x98o5fDd0rAxb{
-    opacity:0.6;
+    opacity:0.8;
     transition: .5s;
     border: 4px solid transparent;
+    border-radius:4px
   }
   .BasicUI ._3IWn-2rn7x98o5fDd0rAxb:focus{
     opacity: 1;
@@ -169,6 +170,14 @@ const RetryHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, versio
       }
     }
   }, [emuDeckConfig]);
+
+  useEffect(() => {
+    if (games) {
+      const firstID = games[0].id;
+      setState({ ...state, platformCurrent: firstID });
+    }
+  }, [games]);
+
   //
   // Render
   //
@@ -205,15 +214,18 @@ const RetryHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, versio
             <Focusable
               className={`categories CSSGrid Grid Panel ${version}`}
               style={{ width: `${games.length * 28}vw` }}>
-              {games.map((platform: any) => {
+              {games.map((platform: any, index: number = 0) => {
+                index = index + 1;
                 return (
                   <Category
+                    key={platform.id}
                     showGrid={false}
                     platform={platform}
                     handleFocus={() => handleFocus(platform)}
                     onClick={() => {
                       Router.Navigate(`${routePathGames}/${platform.id}`);
                     }}
+                    focused={index === 1 ? true : false}
                   />
                 );
               })}

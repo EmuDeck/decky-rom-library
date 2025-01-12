@@ -385,7 +385,8 @@ const GameGrid: VFC<{ serverAPI: any; platform: any }> = ({ serverAPI, platform 
                   const filteredGames = category.games.filter((game: any) =>
                     game.name.toLowerCase().includes(searchTerm.toLowerCase())
                   );
-                  return filteredGames.map((game: any) => {
+                  return filteredGames.map((game: any, index: number) => {
+                    index = index + 1;
                     const random = Math.floor(Math.random() * 10000);
                     const gameKey = `${game.name}_${game.platform}`;
                     return (
@@ -396,7 +397,7 @@ const GameGrid: VFC<{ serverAPI: any; platform: any }> = ({ serverAPI, platform 
                         game={game}
                         loadGame={loadGame}
                         fixArtwork={fixArtwork}
-                        focus={lastSelectedGameKey === gameKey}
+                        focus={lastSelectedGameKey === gameKey || (index === 1 ? true : false)}
                       />
                     );
                   });

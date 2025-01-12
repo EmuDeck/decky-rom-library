@@ -83,6 +83,19 @@ const SteamyHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, versi
     transform: scale(1.08)
   }
 
+  ._3IWn-2rn7x98o5fDd0rAxb{
+    overflow: none
+  }
+
+  ._3IWn-2rn7x98o5fDd0rAxb:after{
+    width: 106%;
+    height: 106%;
+    top: -3%;
+    left: -3%;
+    background: #fff;
+    mix-blend-mode: color-dodge;
+  }
+
   `;
 
   //
@@ -183,9 +196,12 @@ const SteamyHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, versi
               </h1>
             )}
             <Focusable className={`categories CSSGrid Grid Panel ${version}`}>
-              {games.map((platform: any) => {
+              {games.map((platform: any, index: number = 0) => {
+                index = index + 1;
                 return (
                   <Category
+                    focused={index === 1 ? true : false}
+                    key={platform.id}
                     showGrid={true}
                     platform={platform}
                     onClick={() => {

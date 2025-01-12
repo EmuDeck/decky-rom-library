@@ -17,6 +17,9 @@ const RetryHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, versio
     padding-right: 2.8vw;
     scroll-padding-top: 116px;
     scroll-padding-bottom: 80px;
+    scroll-padding-right: 75vw;
+    scroll-padding-left: 25vw;
+    scroll-behavior: smooth
   }
 
   .container--scroll{
@@ -98,20 +101,63 @@ const RetryHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, versio
 
   .BasicUI ._3IWn-2rn7x98o5fDd0rAxb{
     opacity:0.8;
-    transition: .5s;
-    border: 4px solid transparent;
-    border-radius:4px
+    transition: .8s;
+    border-radius:6px
+    outline: 4px solid transparent;
+    outline-color: transparent;
+
   }
   .BasicUI ._3IWn-2rn7x98o5fDd0rAxb:focus{
     opacity: 1;
     transform: scale(1.2);
-    border: 4px solid #8acaf1;
-    transition: .5s
+    outline: 4px solid #8acaf1;
+    outline-color:  #8acaf1;
+    transition: .8s;
+    border-radius:0
   }
 
   .BasicUI ._3IWn-2rn7x98o5fDd0rAxb:nth-child(n+6).transform:focus{
     transform-origin: 150%
   }
+
+  .BasicUI ._3IWn-2rn7x98o5fDd0rAxb > ._2ERAQD94mxjbyV0G5P9ic5{
+      border-radius:6px
+  }
+
+  .categories-bg{
+      transition: opacity 0.5s ease-in-out;
+      opacity: 0;
+      position:absolute;
+      height:100%;
+      top:38px;
+  }
+
+ .fade-in {
+   animation: fadeIn 1s ease-in-out forwards; /* Aplica la animación */
+ }
+
+ @keyframes fadeIn {
+   from {
+     opacity: 0;
+   }
+   to {
+     opacity: 1;
+   }
+ }
+
+ .fade-out {
+    animation: fadeOut 0.5s ease-in-out forwards; /* Aplica la animación */
+  }
+
+  @keyframes fadeOut {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
+  }
+
 
   `;
 
@@ -124,9 +170,12 @@ const RetryHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, versio
       systemOS: "",
     },
     platformCurrent: undefined,
+    platformPrev: undefined,
   });
 
-  let { games, emuDeckConfig, platformCurrent } = state;
+  const [visible, setVisible] = useState(false);
+
+  let { games, emuDeckConfig, platformCurrent, platformPrev } = state;
   const { systemOS } = emuDeckConfig;
 
   const [percentage, setPercentage] = useState("...");
@@ -174,9 +223,21 @@ const RetryHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, versio
   useEffect(() => {
     if (games) {
       const firstID = games[0].id;
-      setState({ ...state, platformCurrent: firstID });
+      setState({ ...state, platformCurrent: firstID, platformPrev: firstID });
     }
   }, [games]);
+
+  useEffect(() => {
+    // Ocultar la imagen al inicio del cambio
+    setVisible(false);
+
+    // Esperar un momento antes de actualizar el src y mostrarla
+    const timeout = setTimeout(() => {
+      setVisible(true);
+    }, 300); // Tiempo para sincronizar la ocultación (ajustable)
+
+    return () => clearTimeout(timeout);
+  }, [platformCurrent]);
 
   //
   // Render
@@ -184,7 +245,8 @@ const RetryHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, versio
 
   const handleFocus = (platform: any) => {
     console.log({ platform });
-    setState({ ...state, platformCurrent: platform.id });
+    const platformPrevious = platformCurrent;
+    setState({ ...state, platformCurrent: platform.id, platformPrev: platformPrevious });
   };
 
   return (
@@ -199,8 +261,17 @@ const RetryHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, versio
       )}
       {games && (
         <>
+          {/*
           <img
-            className="galeries-bg"
+            className={`categories-bg ${visible ? "fade-in" : ""}`}
+            src={`/customimages/retrolibrary/assets/alekfull/backgrounds/${platformCurrent}.jpg`}
+          />
+          <img
+            className={`categories-bg ${visible ? "" : "fade-out"}`}
+            src={`/customimages/retrolibrary/assets/alekfull/backgrounds/${platformPrev}.jpg`}
+          />*/}
+          <img
+            className={`categories-bg fade-in`}
             src={`/customimages/retrolibrary/assets/alekfull/backgrounds/${platformCurrent}.jpg`}
           />
           <div className="container container--scroll">

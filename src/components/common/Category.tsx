@@ -1,14 +1,12 @@
 import { VFC, useState, useEffect, useRef } from "react";
 import { Button } from "decky-frontend-lib";
 
-const Category = ({ platform, showGrid = true, onClick, handleFocus = (e) => {}, focused = false }) => {
-  const [isFocus, setIsFocus] = useState(focused);
+const Category = ({ platform, showGrid = true, onClick, handleFocus = (e) => {}, focus }) => {
+  const [isFocus, setIsFocus] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const targetRef = useRef(null);
 
   useEffect(() => {
-    focused ? setIsFocus(true) : setIsFocus(false);
-
     const observer = new IntersectionObserver(
       ([entry]) => {
         setIsVisible(entry.isIntersecting);
@@ -32,17 +30,17 @@ const Category = ({ platform, showGrid = true, onClick, handleFocus = (e) => {},
     };
   }, []);
 
-  // useEffect(() => {
-  //   // Si 'focus' es verdadero, simula el foco en el elemento
-  //   if (focus && targetRef.current) {
-  //     setIsFocus(true); // Cambia el estado a enfocado
-  //     if (targetRef.current) {
-  //       const focusGame: any = targetRef.current;
-  //       focusGame.focus();
-  //       focusGame.scrollIntoView({ behavior: "smooth", block: "center" });
-  //     }
-  //   }
-  // }, [focus]);
+  useEffect(() => {
+    // Si 'focus' es verdadero, simula el foco en el elemento
+    if (focus && targetRef.current) {
+      setIsFocus(true); // Cambia el estado a enfocado
+      if (targetRef.current) {
+        const focusGame: any = targetRef.current;
+        focusGame.focus();
+        focusGame.scrollIntoView({ behavior: "instant", block: "center" });
+      }
+    }
+  }, []);
 
   return (
     <Button

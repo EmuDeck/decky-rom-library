@@ -3,7 +3,7 @@ import { Tabs, Button, Focusable, SteamSpinner, Router, TextField, useParams } f
 import { routePathGames } from "init";
 import { getTranslateFunc } from "TranslationsF";
 import { Category } from "components/common/Category";
-import { getDataGames, getDataSettings, checkParserStatus, getArtwork } from "common/helpers";
+import { getDataGames, getDataSettings, checkParserStatus } from "common/helpers";
 const RetryHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, version }) => {
   const styles = `
 
@@ -129,7 +129,6 @@ const RetryHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, versio
       opacity: 0;
       position:absolute;
       height:100%;
-      top:38px;
   }
 
  .fade-in {
@@ -172,6 +171,7 @@ const RetryHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, versio
     platformCurrent: undefined,
     platformPrev: undefined,
   });
+  const [lastSelectedGameKey, setLastSelectedGameKey] = useState<any | null>(null);
 
   const [visible, setVisible] = useState(false);
 
@@ -189,6 +189,15 @@ const RetryHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, versio
   // Functions
   //
 
+  const handleFocus = (platform: any, gameKey: any) => {
+    const platformPrevious = platformCurrent;
+    setState({ ...state, platformCurrent: platform.id, platformPrev: platformPrevious });
+    setLastSelectedGameKey(gameKey);
+    localStorage.setItem("last_selected_category", gameKey);
+  };
+
+  const isFocused = (gameKey: string) => lastSelectedGameKey === gameKey;
+
   //
   // UseEffects
   //
@@ -203,6 +212,25 @@ const RetryHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, versio
 
     return () => {
       clearInterval(intervalid);
+    };
+  }, []);
+
+  useEffect(() => {
+    const readLastCategory = () => {
+      const categoryLast = localStorage.getItem("last_selected_category");
+      if (categoryLast) {
+        setLastSelectedGameKey(categoryLast);
+      }
+      console.log({ lastSelectedGameKey });
+    };
+
+    readLastCategory();
+
+    // Agregar el listener para el evento popstate
+    window.addEventListener("popstate", readLastCategory);
+
+    return () => {
+      window.removeEventListener("popstate", readLastCategory);
     };
   }, []);
 
@@ -227,27 +255,9 @@ const RetryHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, versio
     }
   }, [games]);
 
-  useEffect(() => {
-    // Ocultar la imagen al inicio del cambio
-    setVisible(false);
-
-    // Esperar un momento antes de actualizar el src y mostrarla
-    const timeout = setTimeout(() => {
-      setVisible(true);
-    }, 300); // Tiempo para sincronizar la ocultación (ajustable)
-
-    return () => clearTimeout(timeout);
-  }, [platformCurrent]);
-
   //
   // Render
   //
-
-  const handleFocus = (platform: any) => {
-    console.log({ platform });
-    const platformPrevious = platformCurrent;
-    setState({ ...state, platformCurrent: platform.id, platformPrev: platformPrevious });
-  };
 
   return (
     <>
@@ -261,15 +271,6 @@ const RetryHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, versio
       )}
       {games && (
         <>
-          {/*
-          <img
-            className={`categories-bg ${visible ? "fade-in" : ""}`}
-            src={`/customimages/retrolibrary/assets/alekfull/backgrounds/${platformCurrent}.jpg`}
-          />
-          <img
-            className={`categories-bg ${visible ? "" : "fade-out"}`}
-            src={`/customimages/retrolibrary/assets/alekfull/backgrounds/${platformPrev}.jpg`}
-          />*/}
           <img
             className={`categories-bg fade-in`}
             src={`/customimages/retrolibrary/assets/alekfull/backgrounds/${platformCurrent}.jpg`}
@@ -287,16 +288,17 @@ const RetryHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, versio
               style={{ width: `${games.length * 28}vw` }}>
               {games.map((platform: any, index: number = 0) => {
                 index = index + 1;
+                const gameKey = `${platform.name}_${platform.id}`;
                 return (
                   <Category
+                    focus={isFocused(gameKey)}
                     key={platform.id}
                     showGrid={false}
                     platform={platform}
-                    handleFocus={() => handleFocus(platform)}
+                    handleFocus={() => handleFocus(platform, gameKey)}
                     onClick={() => {
                       Router.Navigate(`${routePathGames}/${platform.id}`);
                     }}
-                    focused={index === 1 ? true : false}
                   />
                 );
               })}

@@ -3,7 +3,7 @@ import { Tabs, Button, Focusable, SteamSpinner, Router, TextField, useParams } f
 import { routePathGames } from "init";
 import { getTranslateFunc } from "TranslationsF";
 import { Category } from "components/common/Category";
-import { getDataGames, getDataSettings, checkParserStatus, checkStatus, getArtwork } from "common/helpers";
+import { getDataGames, getDataSettings, checkParserStatus, checkStatus } from "common/helpers";
 const SteamyHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, version }) => {
   const styles = `
 
@@ -110,6 +110,7 @@ const SteamyHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, versi
       systemOS: "",
     },
   });
+  const [lastSelectedGameKey, setLastSelectedGameKey] = useState<string | null>(null);
 
   let { games, emuDeckConfig } = state;
   const { systemOS } = emuDeckConfig;
@@ -126,6 +127,14 @@ const SteamyHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, versi
   // Functions
   //
 
+  const handleFocus = (platform: any, gameKey: any) => {
+    console.log("Setting focus on:", gameKey);
+    setLastSelectedGameKey(gameKey);
+    localStorage.setItem("last_selected_category", gameKey);
+  };
+
+  const isFocused = (gameKey: string) => lastSelectedGameKey === gameKey;
+
   //
   // UseEffects
   //
@@ -141,6 +150,26 @@ const SteamyHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, versi
     //     return () => {
     //       clearInterval(intervalid);
     //     };
+  }, []);
+
+  useEffect(() => {
+    const readLastCategory = () => {
+      const categoryLast = localStorage.getItem("last_selected_category");
+      if (categoryLast) {
+        setLastSelectedGameKey(categoryLast);
+        console.log("Read from localStorage:", categoryLast);
+      }
+      console.log({ lastSelectedGameKey });
+    };
+
+    readLastCategory();
+
+    // Agregar el listener para el evento popstate
+    window.addEventListener("popstate", readLastCategory);
+
+    return () => {
+      window.removeEventListener("popstate", readLastCategory);
+    };
   }, []);
 
   useEffect(() => {
@@ -205,12 +234,15 @@ const SteamyHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, versi
               }}>
               {games.map((platform: any, index: number = 0) => {
                 index = index + 1;
+                const gameKey = `${platform.name}_${platform.id}`;
+                console.log("Checking focus:", { gameKey, lastSelectedGameKey });
                 return (
                   <Category
-                    focused={index === 1 ? true : false}
+                    focus={isFocused(gameKey)}
                     key={platform.id}
                     showGrid={true}
                     platform={platform}
+                    handleFocus={() => handleFocus(platform, gameKey)}
                     onClick={() => {
                       Router.Navigate(`${routePathGames}/${platform.id}`);
                     }}

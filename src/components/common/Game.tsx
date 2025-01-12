@@ -40,7 +40,7 @@ const Game = ({ item, game, random, loadGame, fixArtwork, focus }) => {
         focusGame.scrollIntoView({ behavior: "smooth", block: "center" });
       }
     }
-  }, [focus]);
+  }, []);
 
   return (
     <Button
@@ -49,11 +49,9 @@ const Game = ({ item, game, random, loadGame, fixArtwork, focus }) => {
       onGamepadFocus={() => setIsFocus(true)}
       onGamepadBlur={() => setIsFocus(false)}
       onClick={() => loadGame(game.file, game.platform)}
-      //onSecondaryActionDescription={"Fix Artwork"}
+      //onSecondaryActionDescription={"Add to Steam"}
       onOKActionDescription="Launch"
-      onCancelActionDescription="Exit"
-      //onSecondaryButton={() => fixArtwork(game)}
-    >
+      onCancelActionDescription="Exit">
       {isVisible && (
         <span className="game__img-holder">
           <img

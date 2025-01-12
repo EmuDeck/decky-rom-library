@@ -94,7 +94,7 @@ const GameLogo = ({ item, game, random, loadGame, fixArtwork, focus }) => {
             alt={game.name}
           />
           <div className="game__file">
-            <span>{game.file}</span>
+            <span>{game.og_name}</span>
           </div>
         </>
       )}

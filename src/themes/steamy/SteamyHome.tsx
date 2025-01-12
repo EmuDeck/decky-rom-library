@@ -19,6 +19,8 @@ const SteamyHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, versi
     padding-right: 2.8vw;
     scroll-padding-top: 116px;
     scroll-padding-bottom: 80px;
+    scroll-padding-left: 22px;
+    scroll-padding-right: 22px;
     scroll-behavior: smooth
   }
 
@@ -196,7 +198,11 @@ const SteamyHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, versi
                 <small>Parser: {percentage}</small>
               </h1>
             )}
-            <Focusable className={`categories CSSGrid Grid Panel ${version}`}>
+            <Focusable
+              className={`categories CSSGrid Grid Panel ${version}`}
+              style={{
+                width: version === "vertical" ? `${games.length * 28}vw` : "auto",
+              }}>
               {games.map((platform: any, index: number = 0) => {
                 index = index + 1;
                 return (

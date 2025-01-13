@@ -15,7 +15,7 @@ const RetryHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, versio
     left: 0;
     padding-bottom: 40px;
     padding-right: 2.8vw;
-    scroll-padding-top: 116px;
+    scroll-padding-top: 166px;
     scroll-padding-bottom: 80px;
     scroll-padding-right: 75vw;
     scroll-padding-left: 25vw;
@@ -128,7 +128,8 @@ const RetryHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, versio
       transition: opacity 0.5s ease-in-out;
       opacity: 0;
       position:absolute;
-      height:100%;
+      height:calc(100% - 38px);
+      top:38px
   }
 
  .fade-in {

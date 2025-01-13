@@ -35,6 +35,7 @@ const GameGrid: VFC<{ serverAPI: any; platform: any }> = ({ serverAPI, platform 
   .games{
     grid-template-columns: repeat(auto-fill, 133px);
     grid-auto-rows: 199px;
+    grid-auto-rows: 187px;
     gap: 42px 16px;
     font-size: 18.1364px;
     padding-left: 8px;
@@ -53,6 +54,18 @@ const GameGrid: VFC<{ serverAPI: any; platform: any }> = ({ serverAPI, platform 
     grid-auto-rows: 133px;
   }
 
+  .games--ps3{
+    grid-auto-rows: 156px;
+  }
+
+  .games--psp{
+    grid-auto-rows: 227px;
+  }
+
+  .games--saturn{
+    grid-auto-rows: 205px;
+  }
+
   .games--square .game__img,
   .games--rectangle .game__img{
     object-fit:cover;
@@ -60,7 +73,8 @@ const GameGrid: VFC<{ serverAPI: any; platform: any }> = ({ serverAPI, platform 
   }
 
   .games--rectangle{
-    grid-auto-rows: 110px;
+    grid-auto-rows: 107px;
+    grid-template-columns: repeat(auto-fill, 148px);
   }
 
   .games__search{
@@ -333,6 +347,7 @@ const GameGrid: VFC<{ serverAPI: any; platform: any }> = ({ serverAPI, platform 
     "gbc",
     "gba",
     "pcengine",
+    "pcenginecd",
     "tf16",
     "gameandwatch",
     "virtualboy",
@@ -357,7 +372,7 @@ const GameGrid: VFC<{ serverAPI: any; platform: any }> = ({ serverAPI, platform 
       {games && (
         <>
           {/* <img className="galeries-bg" src={`/customimages/retrolibrary/systems/backgrounds/${platform}.jpg`} />*/}
-          <div className="container container--scroll">
+          <div className={`container container--scroll ${platform}`}>
             {games
               .filter((category: any) => category.id === platform) // Filtra por plataforma antes de mapear
               .map((category: any) => {
@@ -377,7 +392,7 @@ const GameGrid: VFC<{ serverAPI: any; platform: any }> = ({ serverAPI, platform 
               />
             </Focusable>
             {}
-            <Focusable className={`games ${extraCSS} CSSGrid Grid Panel`}>
+            <Focusable className={`games games--${platform} ${extraCSS} CSSGrid Grid Panel`}>
               {games
                 .filter((category: any) => category.id === platform) // Filtra por plataforma antes de mapear
                 .map((category: any) => {

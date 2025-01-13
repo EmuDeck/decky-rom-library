@@ -17,7 +17,7 @@ const SteamyHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, versi
     padding-bottom: 40px;
     padding-left: 2.8vw;
     padding-right: 2.8vw;
-    scroll-padding-top: 116px;
+    scroll-padding-top: 166px;
     scroll-padding-bottom: 80px;
     scroll-padding-left: 22px;
     scroll-padding-right: 22px;

@@ -102,7 +102,7 @@ const RetryHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, versio
   .BasicUI ._3IWn-2rn7x98o5fDd0rAxb{
     opacity:0.8;
     transition: .8s;
-    border-radius:6px
+    border-radius:6px;
     outline: 4px solid transparent;
     outline-color: transparent;
 

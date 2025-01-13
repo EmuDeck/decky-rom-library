@@ -41,6 +41,7 @@ const SteamyHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, versi
         font-size: 16.8182px;
         padding-left: 0px;
         padding-right: 0px;
+        padding-bottom: 30px;
   }
 
   /* Full size cats */
@@ -87,7 +88,7 @@ const SteamyHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, versi
   }
 
   ._3IWn-2rn7x98o5fDd0rAxb{
-    overflow: none
+    overflow: visible
   }
 
   ._3IWn-2rn7x98o5fDd0rAxb:after{
@@ -97,6 +98,23 @@ const SteamyHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, versi
     left: -3%;
     background: #fff;
     mix-blend-mode: color-dodge;
+  }
+
+  ._1sTuvqUAeproqHEae5sn9z{
+    position: absolute;
+    pointer-events: none;
+    outline-offset: 2px;
+    outline: 2px solid rgba(255,255,255,.6);
+    animation: _15zi-K8KeANNjTmN-l_gGO .5s ease,_3vSPb8XtrL-SLJHu3FMU0_ .4s ease,xL-jG-fV4Nsl-PqweE0Ry .4s ease,_3mURostQ1qQKI2o_ZECEzW 1.2s ease-in-out .4s 20;
+    width: 100%;
+    height: 100%;
+    top: 0px;
+    left: 0px;
+
+  }
+
+  .BasicUI ._3IWn-2rn7x98o5fDd0rAxb.gpfocus::after{
+    display:none;
   }
 
   `;

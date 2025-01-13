@@ -5,7 +5,7 @@ import { getTranslateFunc } from "TranslationsF";
 import { Game } from "components/common/Game";
 import { getDataGames, getDataSettings } from "common/helpers";
 import { routePathGameDetail } from "init";
-const GameGrid: VFC<{ serverAPI: any; platform: any }> = ({ serverAPI, platform = "" }) => {
+const GameGrid: VFC<{ serverAPI: any; platform: any; retro: boolean }> = ({ serverAPI, platform = "", retro }) => {
   const styles = `
 
   .container{
@@ -372,7 +372,7 @@ const GameGrid: VFC<{ serverAPI: any; platform: any }> = ({ serverAPI, platform 
       {games && (
         <>
           {/* <img className="galeries-bg" src={`/customimages/retrolibrary/systems/backgrounds/${platform}.jpg`} />*/}
-          <div className={`container container--scroll ${platform}`}>
+          <div className={`container container--scroll ${platform} ${retro ? "retro" : ""}`}>
             {games
               .filter((category: any) => category.id === platform) // Filtra por plataforma antes de mapear
               .map((category: any) => {

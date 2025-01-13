@@ -1,7 +1,7 @@
 import { VFC, useState, useEffect, useRef } from "react";
 import { Button } from "decky-frontend-lib";
 
-const Category = ({ platform, showGrid = true, onClick, handleFocus = (e) => {}, focus }) => {
+const Category = ({ platform, showGrid = true, onClick, handleFocus = (e) => {}, focus, version }) => {
   const [isFocus, setIsFocus] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const targetRef = useRef(null);
@@ -100,10 +100,17 @@ const Category = ({ platform, showGrid = true, onClick, handleFocus = (e) => {},
               </div>
             </div>
           )}
-          {!showGrid && (
+          {!showGrid && version !== "vertical" && (
             <img
               className="galery-img"
               src={`/customimages/retrolibrary/assets/alekfull/carousel-icons/${platform.id}.jpg`}
+              alt={platform.title}
+            />
+          )}
+          {!showGrid && version === "vertical" && (
+            <img
+              className="galery-img"
+              src={`/customimages/retrolibrary/assets/default/backgrounds/${platform.id}.jpg`}
               alt={platform.title}
             />
           )}

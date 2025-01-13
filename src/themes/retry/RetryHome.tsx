@@ -7,6 +7,17 @@ import { getDataGames, getDataSettings, checkParserStatus } from "common/helpers
 const RetryHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, version }) => {
   const styles = `
 
+  .grid.categories{
+    grid-template-columns: repeat(auto-fill, 15vw);
+    grid-auto-rows: calc(46vh - 118px);
+    overflow: scroll;
+    padding: 20px 25px
+  }
+
+  .grid.categories .category ._3n796D6GS1fdlXhRnRUfRv{
+    display:none !important
+  }
+
   .container{
     position: absolute;
     top: auto;
@@ -39,18 +50,6 @@ const RetryHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, versio
         font-size: 16.8182px;
         padding-left: 0px;
         padding-right: 0px;
-  }
-
-  /* Full size cats */
-  .vertical.categories{
-    grid-template-columns: repeat(auto-fill, 15vw);
-    grid-auto-rows: calc(46vh - 118px);
-    overflow: scroll;
-    padding: 20px 25px
-  }
-
-  .vertical.categories .category ._3n796D6GS1fdlXhRnRUfRv{
-    display:none !important
   }
 
   .category{
@@ -105,8 +104,8 @@ const RetryHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, versio
     border-radius:6px;
     outline: 4px solid transparent;
     outline-color: transparent;
-
   }
+
   .BasicUI ._3IWn-2rn7x98o5fDd0rAxb:focus{
     opacity: 1;
     transform: scale(1.2);
@@ -156,6 +155,84 @@ const RetryHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, versio
     to {
       opacity: 0;
     }
+  }
+
+
+  /* Full size cats */
+
+
+
+  .vertical.container{
+    top: 40px;
+    scroll-padding-top: 0;
+    scroll-padding-bottom: 0;
+    scroll-padding-right: 40vw;
+    scroll-padding-left: 40vw;
+    scroll-behavior: unset;
+  }
+
+
+
+
+
+  .vertical.categories{
+    grid-template-columns: repeat(auto-fill, 25vw);
+    grid-auto-rows: calc(100vh - 82px);
+    height: 100vh;
+    overflow: scroll;
+    gap:0;
+  }
+
+  .vertical.categories .category ._3n796D6GS1fdlXhRnRUfRv{
+    display:none !important
+  }
+
+  .vertical .galery-img{
+    height: 100%;
+  }
+
+  .BasicUI .vertical ._3IWn-2rn7x98o5fDd0rAxb{
+    border-radius:0px;
+    mix-blend-mode: luminosity;
+  }
+
+  .BasicUI .vertical ._3IWn-2rn7x98o5fDd0rAxb:focus{
+    z-index: 99;
+    outline: none;
+    mix-blend-mode: normal;
+    width: 100vw;
+    margin-left: -150%;
+  }
+
+  .BasicUI .vertical ._3IWn-2rn7x98o5fDd0rAxb > ._2ERAQD94mxjbyV0G5P9ic5{
+      border-radius:0px
+  }
+
+  .categories-logo{
+    position: absolute;
+    height: 35%;
+    width: 100%;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    text-align: center;
+    pointer-events: none;
+    z-index: 9999;
+    background: rgba(255, 255, 255, .2);
+    backdrop-filter: blur(5px);
+  }
+
+  .categories-logo img{
+    position: absolute;
+    height: 200%;
+    width: auto;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
   }
 
 
@@ -272,18 +349,18 @@ const RetryHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, versio
       )}
       {games && (
         <>
-          <img
-            className={`categories-bg fade-in`}
-            src={`/customimages/retrolibrary/assets/alekfull/backgrounds/${platformCurrent}.jpg`}
-          />
-          <div className="container container--scroll">
-            {version == "grid" && (
-              <h1>
-                EmuDeck Retro Library
-                <small>Parsed: {percentage}</small>
-              </h1>
-            )}
-
+          {version !== "vertical" && (
+            <img
+              className={`categories-bg fade-in`}
+              src={`/customimages/retrolibrary/assets/default/backgrounds/${platformCurrent}.jpg`}
+            />
+          )}
+          {version === "vertical" && (
+            <div className="categories-logo fade-in">
+              <img src={`/customimages/retrolibrary/assets/default/logos/${platformCurrent}.png`} />
+            </div>
+          )}
+          <div className={`container container--scroll ${version}`}>
             <Focusable
               className={`categories CSSGrid Grid Panel ${version}`}
               style={{ width: `${games.length * 28}vw` }}>
@@ -293,6 +370,7 @@ const RetryHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, versio
                 return (
                   <Category
                     focus={isFocused(gameKey)}
+                    version={version}
                     key={platform.id}
                     showGrid={false}
                     platform={platform}

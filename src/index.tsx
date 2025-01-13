@@ -26,7 +26,7 @@ export default definePlugin((serverApi: ServerAPI) => {
   serverApi.routerHook.addRoute(routePath, () => {
     const updatedSettings = getSettingsFromStorage(); // Obtener valores actuales
     if (updatedSettings.theme === true) {
-      return <RetryHome version="vertical" serverAPI={serverApi} />;
+      return <RetryHome version={updatedSettings.vertical ? "vertical" : "grid"} serverAPI={serverApi} />;
     } else {
       return <SteamyHome version={updatedSettings.vertical ? "vertical" : "grid"} serverAPI={serverApi} />;
     }
@@ -42,9 +42,9 @@ export default definePlugin((serverApi: ServerAPI) => {
     const { platform } = useParams<{ platform: string }>();
 
     return updatedSettings.logo_grid ? (
-      <GameGridLogo serverAPI={serverApi} platform={platform} />
+      <GameGridLogo retro={updatedSettings.theme} serverAPI={serverApi} platform={platform} />
     ) : (
-      <GameGrid serverAPI={serverApi} platform={platform} />
+      <GameGrid retro={updatedSettings.theme} serverAPI={serverApi} platform={platform} />
     );
   });
 

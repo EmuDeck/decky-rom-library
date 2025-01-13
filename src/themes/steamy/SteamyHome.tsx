@@ -51,6 +51,7 @@ const SteamyHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, versi
     height: 100vh;
     width: 10000px;
     overflow: scroll;
+    padding:4px;
   }
 
   .vertical.categories .category ._3n796D6GS1fdlXhRnRUfRv{
@@ -256,6 +257,7 @@ const SteamyHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, versi
                 console.log("Checking focus:", { gameKey, lastSelectedGameKey });
                 return (
                   <Category
+                    version=""
                     focus={isFocused(gameKey)}
                     key={platform.id}
                     showGrid={true}

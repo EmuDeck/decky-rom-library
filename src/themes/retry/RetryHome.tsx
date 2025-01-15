@@ -204,6 +204,23 @@ const RetryHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, versio
     margin-left: -150%;
   }
 
+  .BasicUI .vertical ._3IWn-2rn7x98o5fDd0rAxb:focus{
+    z-index: 99;
+    outline: none;
+    mix-blend-mode: normal;
+    width: 100vw;
+    margin-left: -150%;
+  }
+
+  .BasicUI .vertical ._3IWn-2rn7x98o5fDd0rAxb:first-child:focus{
+    margin-left: 0%;
+  }
+
+
+  .BasicUI .vertical ._3IWn-2rn7x98o5fDd0rAxb:nth-child(2):focus{
+    margin-left: -100%;
+  }
+
   .BasicUI .vertical ._3IWn-2rn7x98o5fDd0rAxb > ._2ERAQD94mxjbyV0G5P9ic5{
       border-radius:0px
   }
@@ -219,7 +236,7 @@ const RetryHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, versio
     margin: auto;
     text-align: center;
     pointer-events: none;
-    z-index: 9999;
+    z-index: 999;
     background: rgba(255, 255, 255, .2);
     backdrop-filter: blur(5px);
   }

@@ -64,7 +64,9 @@ class Plugin:
         result = subprocess.run(bash_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
         cleaned_stdout = result.stdout.strip()
         user_home = os.path.expanduser("~")
-        emudeck_log_dir = os.path.join(user_home, 'emudeck')
+        emudeck_log_dir = os.path.join(user_home, '.config/EmuDeck/logs')
+        if os.name == 'nt':
+            emudeck_log_dir = os.path.join(os.environ['APPDATA'], 'EmuDeck', 'logs')
         os.makedirs(emudeck_log_dir, exist_ok=True)
         log_file_path = os.path.join(emudeck_log_dir, 'decky.log')
         with open(log_file_path, 'w') as archivo:

@@ -107,6 +107,7 @@ export async function launchApp(sAPI: ServerAPI, app: App, system: string, platf
     app["exec"] = app["exec"].replace(".ps1'", ".ps1");
     app["exec"] = app["exec"].replace('"-ExecutionPolicy', '" -ExecutionPolicy');
     app["exec"] = app["exec"] + '}" && exit " && exit --emudeck';
+    SteamClient.Apps.SetShortcutLaunchOptions(id, "");
     SteamClient.Apps.SetShortcutExe(id, app["exec"]);
   } else {
     SteamClient.Apps.SetShortcutLaunchOptions(id, getLaunchOptions(app));

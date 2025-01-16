@@ -42,6 +42,7 @@ const SteamyHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, versi
         padding-left: 0px;
         padding-right: 0px;
         padding-bottom: 30px;
+        justify-content: space-between;
   }
 
   /* Full size cats */

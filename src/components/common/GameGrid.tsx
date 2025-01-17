@@ -253,6 +253,229 @@ const GameGrid: VFC<{ serverAPI: any; platform: any; retro: boolean }> = ({ serv
     z-index:0;
   }
 
+  #Footer, #header{
+    display:none !important
+  }
+
+  /* Retro only */
+
+  .bezel-left,
+  .bezel-right{
+    position:absolute;
+    top:0;
+    left:0;
+    height:100vh;
+    z-index:10000;
+    width:6%;
+    overflow:hidden;
+    display:none;
+  }
+
+  .retro .bezel-left,
+  .retro .bezel-right{
+    display:block
+  }
+
+  .retro .container{
+    padding: 0 8vw;
+    padding-top: 36px;
+  }
+
+  .bezel-left img,
+  .bezel-right img{
+    position:absolute;
+    top:0;
+    left:-180%;
+    height:100%;
+  }
+
+  .bezel-right,
+  .bezel-right img{
+    left:auto;
+    right:0;
+  }
+
+  .bezel-right img{
+    right: -180%;
+  }
+
+  :root{
+    --grad-1: 83,83,83;
+    --grad-2: 75,75,77;
+    --grad-3: 34,36,39;
+    --grad-4: 38,39,44;
+    --grad-5: 45,46,50;
+  }
+
+  .retro.n64,
+  .retro.n64dd,
+  .retro.psx,
+  .retro.gc,
+  .retro.atarijaguar,
+  .retro.atarijaguarcd,
+  .retro.atari800,
+  .retro.atari2600,
+  .retro.atari5200,
+  .retro.atari7800,
+  .retro.amstradcpc,
+  .retro.channelf,
+  .retro.colecovision,
+  .retro.markIII,
+  .retro.msx,
+  .retro.msx2,
+  .retro.odyssey2,
+  .retro.supergrafx,
+  .retro.thomson,
+  .retro.ti99,
+  .retro.zxspectrum
+  {
+    --grad-1: 25,25,25;
+    --grad-2: 30,30,32;
+    --grad-3: 19,19,20;
+    --grad-4: 14,14,14;
+    --grad-5: 45,46,50;
+  }
+
+  .retro.gx4000{
+    --grad-1: 25,25,25;
+    --grad-2: 30,30,32;
+    --grad-3: 19,19,20;
+    --grad-4: 14,14,14;
+    --grad-5: 45,46,50;
+  }
+
+  .retro.intellivision{
+    --grad-1: 49,40,33;
+    --grad-2: 48,43,37;
+    --grad-3: 31,26,19;
+    --grad-4: 18,18,18);
+    --grad-5: 45,46,50;
+  }
+  .retro.pcengine,
+  .retro.pcenginecd,
+  .retro.pc88,
+  .retro.pc98,
+  .retro.pcfx
+   {
+    --grad-1: 176,176,176;
+    --grad-2: 177,177,177;
+    --grad-3: 85,84,84;
+    --grad-4: 74,74,74;
+    --grad-5: 106,106,106;
+  }
+
+  .retro.nes{
+    --grad-1: 230,230,230;
+    --grad-2: 174,174,177;
+    --grad-3: 18,18,18;
+    --grad-4: 21,22,23;
+    --grad-5: 45,46,50;
+  }
+
+  .retro.segacd,
+  .retro.genesis,
+  .retro.sega32x,
+  .retro.mastersystem,
+  .retro.megadrive,
+  .retro.sg1000
+  {
+    --grad-1: 72,13,13;
+    --grad-2: 78,20,20;
+    --grad-3: 43,4,4;
+    --grad-4: 45,13,13;
+    --grad-5: 45,46,50;
+  }
+
+  .retro.dreamcast,
+  .retro.saturn,
+  .retro.ps2{
+    --grad-1: 52,64,174;
+    --grad-2: 81,87,111;
+    --grad-3: 13,35,41;
+    --grad-4: 25,29,108;
+    --grad-5: 69,70,74;
+  }
+
+  .retro:before{
+    content:'';
+    display:block;
+    width:100%;
+    height: 13px;
+    background: rgb(83,83,83);
+    background: linear-gradient(180deg, rgba(var(--grad-1),1) 0%, rgba(var(--grad-2),1) 42%, rgba(var(--grad-3),1) 43%, rgba(var(--grad-4),1) 79%, rgba(var(--grad-5),1) 100%)
+  }
+
+
+
+  .retro:after{
+    content:'';
+    display:block;
+    width:100%;
+    height: 13px;
+    position:absolute;
+    bottom:0;
+    background: rgb(83,83,83);
+    background: rgb(83,83,83);
+    background: linear-gradient(0deg, rgba(var(--grad-1),1) 0%, rgba(var(--grad-2),1) 42%, rgba(var(--grad-3),1) 43%, rgba(var(--grad-4),1) 79%, rgba(var(--grad-5),1) 100%)
+  }
+
+  .retro h1{
+    display:none !important;
+  }
+
+  .retro.wii:after,
+  .retro.wii:before,
+  .retro.wiiu:after,
+  .retro.wiiu:before,
+  .retro.ps3:after,
+  .retro.ps3:before,
+  .retro.ps4:after,
+  .retro.ps4:before,
+  .retro.psp:after,
+  .retro.psp:before,
+  .retro.psp:after,
+  .retro.psp:before,
+  .retro.xbox360:after,
+  .retro.xbox360:before,
+  .retro.n3ds:after,
+  .retro.n3ds:before,
+  .retro.ds:after,
+  .retro.ds:before,
+  .retro.switch:after,
+  .retro.switch:before
+  {
+    display:none !important;
+  }
+
+  .retro.wii .container,
+  .retro.wiiu .container,
+  .retro.ps3 .container,
+  .retro.ps4 .container,
+  .retro.psp .container,
+  .retro.psp .container,
+  .retro.xbox360 .container,
+  .retro.n3ds .container,
+  .retro.ds .container,
+  .retro.switch .container{
+    padding-left: 2.8vw;
+    padding-right: 2.8vw;
+  }
+
+  .retro.wii .bezel,
+  .retro.wiiu .bezel,
+  .retro.ps3 .bezel,
+  .retro.ps4 .bezel,
+  .retro.psp .bezel,
+  .retro.psp .bezel,
+  .retro.xbox360 .bezel,
+  .retro.n3ds .bezel,
+  .retro.ds .bezel,
+  .retro.switch .bezel
+  {
+    display:none !important;
+  }
+
+
   `;
   //
   // State
@@ -370,9 +593,15 @@ const GameGrid: VFC<{ serverAPI: any; platform: any; retro: boolean }> = ({ serv
       <style>{` ${styles} `}</style>
       {!games && <div>NO GAMES YET, loading</div>}
       {games && (
-        <>
+        <div className={`${platform} ${retro ? "retro" : ""}`}>
           {/* <img className="galeries-bg" src={`/customimages/retrolibrary/systems/backgrounds/${platform}.jpg`} />*/}
-          <div className={`container container--scroll ${platform} ${retro ? "retro" : ""}`}>
+          <div className="bezel bezel-left">
+            <img
+              src={`/customimages/retrolibrary/bezels/${platform}.png`}
+              onError={(e: any) => (e.target.src = `/customimages/retrolibrary/bezels/default.png`)}
+            />
+          </div>
+          <div className="container container--scroll">
             {games
               .filter((category: any) => category.id === platform) // Filtra por plataforma antes de mapear
               .map((category: any) => {
@@ -419,7 +648,13 @@ const GameGrid: VFC<{ serverAPI: any; platform: any; retro: boolean }> = ({ serv
                 })}
             </Focusable>
           </div>
-        </>
+          <div className="bezel bezel-right">
+            <img
+              src={`/customimages/retrolibrary/bezels/${platform}.png`}
+              onError={(e: any) => (e.target.src = `/customimages/retrolibrary/bezels/default.png`)}
+            />
+          </div>
+        </div>
       )}
     </>
   );

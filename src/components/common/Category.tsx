@@ -103,7 +103,7 @@ const Category = ({ platform, showGrid = true, onClick, handleFocus = (e) => {},
           {!showGrid && version !== "vertical" && (
             <img
               className="galery-img"
-              src={`/customimages/retrolibrary/assets/alekfull/carousel-icons/${platform.id}.jpg`}
+              src={`/customimages/retrolibrary/assets/default/carousel-icons/${platform.id}.jpg`}
               alt={platform.title}
             />
           )}

@@ -395,12 +395,16 @@ const GameGrid: VFC<{ serverAPI: any; platform: any; retro: boolean }> = ({ serv
     --grad-4: 25,29,108;
     --grad-5: 69,70,74;
   }
-
+  .retro:before,
+  .retro:after{
+    position:absolute;
+    z-index:9
+  }
   .retro:before{
     content:'';
     display:block;
     width:100%;
-    height: 13px;
+    height: 1.4vw;
     background: rgb(83,83,83);
     background: linear-gradient(180deg, rgba(var(--grad-1),1) 0%, rgba(var(--grad-2),1) 42%, rgba(var(--grad-3),1) 43%, rgba(var(--grad-4),1) 79%, rgba(var(--grad-5),1) 100%)
   }
@@ -411,7 +415,7 @@ const GameGrid: VFC<{ serverAPI: any; platform: any; retro: boolean }> = ({ serv
     content:'';
     display:block;
     width:100%;
-    height: 13px;
+    height: 1.4vw;
     position:absolute;
     bottom:0;
     background: rgb(83,83,83);
@@ -597,8 +601,8 @@ const GameGrid: VFC<{ serverAPI: any; platform: any; retro: boolean }> = ({ serv
           {/* <img className="galeries-bg" src={`/customimages/retrolibrary/systems/backgrounds/${platform}.jpg`} />*/}
           <div className="bezel bezel-left">
             <img
-              src={`/customimages/retrolibrary/bezels/${platform}.png`}
-              onError={(e: any) => (e.target.src = `/customimages/retrolibrary/bezels/default.png`)}
+              src={`/customimages/retrolibrary/assets/bezels/${platform}.png`}
+              onError={(e: any) => (e.target.src = `/customimages/retrolibrary/assets/bezels/default.png`)}
             />
           </div>
           <div className="container container--scroll">
@@ -650,8 +654,8 @@ const GameGrid: VFC<{ serverAPI: any; platform: any; retro: boolean }> = ({ serv
           </div>
           <div className="bezel bezel-right">
             <img
-              src={`/customimages/retrolibrary/bezels/${platform}.png`}
-              onError={(e: any) => (e.target.src = `/customimages/retrolibrary/bezels/default.png`)}
+              src={`/customimages/retrolibrary/assets/bezels/${platform}.png`}
+              onError={(e: any) => (e.target.src = `/customimages/retrolibrary/assets/bezels/default.png`)}
             />
           </div>
         </div>

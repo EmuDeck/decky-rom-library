@@ -316,7 +316,7 @@ const GameGridLogo: VFC<{ serverAPI: any; platform: any; retro: boolean }> = ({ 
       display:none !important
     }
 
-    /* Retro only */
+ /* Retro only */
 
     .bezel-left,
     .bezel-right{
@@ -415,7 +415,7 @@ const GameGridLogo: VFC<{ serverAPI: any; platform: any; retro: boolean }> = ({ 
     .retro.pc88,
     .retro.pc98,
     .retro.pcfx
-      {
+     {
       --grad-1: 176,176,176;
       --grad-2: 177,177,177;
       --grad-3: 85,84,84;
@@ -454,12 +454,16 @@ const GameGridLogo: VFC<{ serverAPI: any; platform: any; retro: boolean }> = ({ 
       --grad-4: 25,29,108;
       --grad-5: 69,70,74;
     }
-
+    .retro:before,
+    .retro:after{
+      position:absolute;
+      z-index:9
+    }
     .retro:before{
       content:'';
       display:block;
       width:100%;
-      height: 13px;
+      height: 1.4vw;
       background: rgb(83,83,83);
       background: linear-gradient(180deg, rgba(var(--grad-1),1) 0%, rgba(var(--grad-2),1) 42%, rgba(var(--grad-3),1) 43%, rgba(var(--grad-4),1) 79%, rgba(var(--grad-5),1) 100%)
     }
@@ -470,7 +474,7 @@ const GameGridLogo: VFC<{ serverAPI: any; platform: any; retro: boolean }> = ({ 
       content:'';
       display:block;
       width:100%;
-      height: 13px;
+      height: 1.4vw;
       position:absolute;
       bottom:0;
       background: rgb(83,83,83);
@@ -639,7 +643,13 @@ const GameGridLogo: VFC<{ serverAPI: any; platform: any; retro: boolean }> = ({ 
       {!games && <div>NO GAMES YET, loading</div>}
       {games && (
         <div className={`${platform} ${retro ? "retro" : ""}`}>
-          {/* <img className="galeries-bg" src={`/customimages/retrolibrary/systems/backgrounds/${platform}.jpg`} /> */}
+          <div className="bezel bezel-left">
+            <img
+              src={`/customimages/retrolibrary/assets/bezels/${platform}.png`}
+              onError={(e: any) => (e.target.src = `/customimages/retrolibrary/assets/bezels/default.png`)}
+            />
+          </div>
+
           <div className="container container--scroll">
             {games
               .filter((category: any) => category.id === platform) // Filtra por plataforma antes de mapear
@@ -686,6 +696,12 @@ const GameGridLogo: VFC<{ serverAPI: any; platform: any; retro: boolean }> = ({ 
                   });
                 })}
             </Focusable>
+          </div>
+          <div className="bezel bezel-right">
+            <img
+              src={`/customimages/retrolibrary/assets/bezels/${platform}.png`}
+              onError={(e: any) => (e.target.src = `/customimages/retrolibrary/assets/bezels/default.png`)}
+            />
           </div>
         </div>
       )}

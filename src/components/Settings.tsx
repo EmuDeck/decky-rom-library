@@ -50,7 +50,17 @@ const Content: VFC<{ serverAPI: ServerAPI }> = () => {
           />
         </PanelSectionRow>
       </PanelSection>
-      <PanelSection title="Theme Settings">
+      <PanelSection title="Theme Selection">
+        <PanelSectionRow>
+          <ToggleField
+            label="Retro theme"
+            checked={theme == true ? true : false}
+            layout="below"
+            onChange={() => setState({ ...state, theme: !theme })}
+          />
+        </PanelSectionRow>
+      </PanelSection>
+      <PanelSection title="Theme Customization">
         <PanelSectionRow>
           <ToggleField
             label="Horizontal Navigation"
@@ -59,16 +69,10 @@ const Content: VFC<{ serverAPI: ServerAPI }> = () => {
             onChange={() => setState({ ...state, vertical: !vertical })}
           />
           <ToggleField
-            label="Logo Grid Games List"
+            label="Games List - Show Logos"
             checked={logo_grid == true ? true : false}
             layout="below"
             onChange={() => setState({ ...state, logo_grid: !logo_grid })}
-          />
-          <ToggleField
-            label="Retro theme"
-            checked={theme == true ? true : false}
-            layout="below"
-            onChange={() => setState({ ...state, theme: !theme })}
           />
         </PanelSectionRow>
       </PanelSection>

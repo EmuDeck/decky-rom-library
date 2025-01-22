@@ -657,8 +657,23 @@ const GameGridLogo: VFC<{ serverAPI: any; platform: any; retro: boolean }> = ({ 
       stroke-width: 8;
     }
 
-    .wii .nav-left,
-    .wii .nav-left img{
+    .retro.gb .container:before {
+        content: '';
+        background: #00ff8d;
+        width: 100%;
+        height: calc(100% - 33px);
+        z-index: 4;
+        position: absolute;
+        left: 0;
+        right: 0;
+        margin: auto;
+        top: 18px;
+        opacity: 0.4;
+        border-radius: 8px;
+    }
+
+    .retro.wii .nav-wii,
+    .retro.wii .nav-wii img{
         position: absolute;
         left: 0;
         bottom: -15px;
@@ -782,9 +797,11 @@ const GameGridLogo: VFC<{ serverAPI: any; platform: any; retro: boolean }> = ({ 
       {!games && <div>NO GAMES YET, loading</div>}
       {games && (
         <div className={`${platform} ${retro ? "retro" : ""}`}>
-          <div className="nav-left">
-            <img src={`/customimages/retrolibrary/assets/wii/wii-bg.png`} />
-          </div>
+          {platform == "wii" && (
+            <div className="nav-wii">
+              <img src={`/customimages/retrolibrary/assets/wii/wii-bg.png`} />
+            </div>
+          )}
           <div className="bezel bezel-left">
             <img
               src={`/customimages/retrolibrary/assets/bezels/${platform}.png`}
@@ -841,7 +858,6 @@ const GameGridLogo: VFC<{ serverAPI: any; platform: any; retro: boolean }> = ({ 
                       return (
                         <GameLogo
                           key={`${game.name}${game.platform}${random}`}
-                          bg={platform === "xbox360" && retro ? false : true}
                           item={category}
                           random={random}
                           game={game}
@@ -856,9 +872,6 @@ const GameGridLogo: VFC<{ serverAPI: any; platform: any; retro: boolean }> = ({ 
             </Focusable>
           </div>
           <div className="date">{formatTime(time)}</div>
-          <div className="nav-right">
-            <img src={`/customimages/retrolibrary/assets/wii/wii-bg.png`} />
-          </div>
           <div className="bezel bezel-right">
             <img
               src={`/customimages/retrolibrary/assets/bezels/${platform}.png`}

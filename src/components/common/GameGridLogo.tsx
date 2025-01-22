@@ -3,11 +3,12 @@ import { Tabs, Button, Focusable, SteamSpinner, Router, TextField } from "decky-
 import { launchApp } from "common/steamshortcuts";
 import { getTranslateFunc } from "TranslationsF";
 import { GameLogo } from "components/common/GameLogo";
+import { GameWii } from "components/common/GameWii";
 import { getDataGames, getDataSettings } from "common/helpers";
 import { routePathGameDetail } from "init";
 const GameGridLogo: VFC<{ serverAPI: any; platform: any; retro: boolean }> = ({ serverAPI, platform = "", retro }) => {
   const styles = `
-#tvshape {
+  #tvshape {
       position: relative;
       width: 200px;
       height: 150px;
@@ -29,7 +30,6 @@ const GameGridLogo: VFC<{ serverAPI: any; platform: any; retro: boolean }> = ({ 
       background: inherit;
       border-radius: 5% / 50%;
   }
-
   .container{
     position: absolute;
     top: 0;
@@ -69,6 +69,15 @@ const GameGridLogo: VFC<{ serverAPI: any; platform: any; retro: boolean }> = ({ 
     padding: 8px 0px;
     grid-auto-flow: row;
     justify-content: space-between;
+  }
+
+  .retro .games{
+    grid-template-columns: repeat(auto-fill, 26vw);
+  }
+
+  /* 3:2 */
+  .games--32{
+    grid-auto-rows: 148px;
   }
 
   /* 4:3 */
@@ -127,7 +136,7 @@ const GameGridLogo: VFC<{ serverAPI: any; platform: any; retro: boolean }> = ({ 
     transition-duration: .05s;
     transition-timing-function: ease-out;
     filter: brightness(0.8) contrast(1.05) saturate(1);
-    transform: scale(1.08)
+    transform: scale(1.08);
   }
 
   .game__img-holder{
@@ -258,7 +267,7 @@ const GameGridLogo: VFC<{ serverAPI: any; platform: any; retro: boolean }> = ({ 
   }
   .game.gpfocus  .game__bg, .game:hover  .game__bg{
     opacity: 0.4;
-    transform: translateY(0%) translateX(-100%) scaleX(1) scaleY(1);
+    transform: translateY(-90%) translateX(-100%) scaleX(1) scaleY(1);
     transition-property: opacity, transform;
   }
 
@@ -538,6 +547,126 @@ const GameGridLogo: VFC<{ serverAPI: any; platform: any; retro: boolean }> = ({ 
       display:none !important;
     }
 
+    .retro.xbox360 .container{
+      background: linear-gradient(0, #ababad, #4f4f51);
+    }
+
+    .retro.xbox360 ._3ZR32BdxJUNwAA6Fu6n00p,
+    .retro.n3ds ._3ZR32BdxJUNwAA6Fu6n00p,
+    .retro.wii ._3ZR32BdxJUNwAA6Fu6n00p{
+      background: #fff
+    }
+
+    .retro.xbox360 .games{
+      justify-content: center;
+      gap:5px;
+    }
+
+    .retro.xbox360 .game.gpfocus, .retro.xbox360 .game:hover{
+      z-index:9
+    }
+
+    .retro.n3ds .container{
+      background: #dfdbd7
+    }
+
+    .retro.n3ds .game{
+      box-shadow: 0px 0px 10px 7px #726f6f;
+      background:#fff;
+      border-radius:10px;
+      outline: 12px solid #fff
+    }
+
+    .retro.n3ds .game__img-holder{
+      border-radius:10px;
+    }
+
+    .retro.wii .container{
+      background: repeating-linear-gradient(
+        0deg,
+        #ccc,
+        #ccc 2px,
+        #fff 2px,
+        #fff 4px
+      );
+      overflow: auto;
+
+    }
+
+    .retro.wii .game.gpfocus, .retro.wii .game:hover{
+      transform: none;
+    }
+    .retro.wii .game{
+      box-shadow:none
+    }
+    .retro.wii .game img.game__ss{
+      height:100%
+    }
+
+    .retro.wii .games{
+      justify-content: center;
+      gap: 8px;
+      grid-template-columns: repeat(auto-fill, 22vw);
+      grid-auto-rows: 110px;
+      height: 65vh;
+      overflow: scroll;
+      scroll-behavior: smooth;
+    }
+
+    @font-face {
+      font-family: Digital;
+      src:
+        url("https://steamloopback.host/customimages/retrolibrary/assets/wii/digital-7.ttf");
+    }
+
+    .retro.wii .date{
+      font-family: Digital;
+      position: absolute;
+      color: #9b9b9b;
+      margin: auto;
+      left: 0;
+      right: 0;
+      bottom: 11vh;
+      z-index: 1;
+      text-align: center;
+      font-family: Digital;
+      font-size: 34px;
+      width: 200px;
+    }
+    .retro.wii .date:after{
+      content: '';
+      display: block;
+      background: #f5f5f5;
+      height: 61px;
+      width: 300px;
+      filter: blur(10px);
+      border-radius: 100%;
+      position: absolute;
+      left: -50px;
+      top: -12px;
+      z-index: -1;
+    }
+
+    .frame-border {
+        stroke: #b4b4b4;
+        stroke-width: 8;
+    }
+
+    .retro.wii .game.gpfocus .frame-border , .retro.wii .game:hover .frame-border {
+      stroke: #42c3de;
+      stroke-width: 8;
+    }
+
+    .wii .nav-left,
+    .wii .nav-left img{
+        position: absolute;
+        left: 0;
+        bottom: -15px;
+        height: 128px;
+        width: 100%;
+        z-index: 1;
+        pointer-events: none;
+    }
 
   `;
   //
@@ -600,10 +729,18 @@ const GameGridLogo: VFC<{ serverAPI: any; platform: any; retro: boolean }> = ({ 
     localStorage.setItem("last_selected_game_key", gameKey);
     Router.Navigate("/emudeck-rom-artwork");
   };
+  const time = new Date();
+  const formatTime = (date) => {
+    const hours = date.getHours().toString().padStart(2, "0");
+    const minutes = date.getMinutes().toString().padStart(2, "0");
+    const seconds = date.getSeconds().toString().padStart(2, "0");
+    return `${hours}:${minutes}`;
+  };
 
   //
   // UseEffects
   //
+
   useEffect(() => {
     const gamesLS = sessionStorage.getItem("rom_library_games");
     if (gamesLS) {
@@ -623,12 +760,14 @@ const GameGridLogo: VFC<{ serverAPI: any; platform: any; retro: boolean }> = ({ 
     }
   }, [games]);
 
-  const arrayHDTV = ["wii", "wiiU"];
+  const arrayHDTV = ["wii", "wiiu", "switch", "xbox360", "psp", "ps4", "ps3", "n3ds"];
   let extraCSS;
   if (arrayHDTV.includes(platform)) {
     extraCSS = "games--hdtv";
   } else if (platform == "gb" || platform == "gbc") {
     extraCSS = "games--square";
+  } else if (platform == "gba") {
+    extraCSS = "games--32";
   } else {
     extraCSS = "games--crt";
   }
@@ -643,6 +782,9 @@ const GameGridLogo: VFC<{ serverAPI: any; platform: any; retro: boolean }> = ({ 
       {!games && <div>NO GAMES YET, loading</div>}
       {games && (
         <div className={`${platform} ${retro ? "retro" : ""}`}>
+          <div className="nav-left">
+            <img src={`/customimages/retrolibrary/assets/wii/wii-bg.png`} />
+          </div>
           <div className="bezel bezel-left">
             <img
               src={`/customimages/retrolibrary/assets/bezels/${platform}.png`}
@@ -669,6 +811,7 @@ const GameGridLogo: VFC<{ serverAPI: any; platform: any; retro: boolean }> = ({ 
                 style={{ padding: "8px", width: "100%", fontSize: "1rem" }}
               />
             </Focusable>
+
             {}
             <Focusable className={`games ${extraCSS} ${platform} CSSGrid Grid Panel`}>
               {games
@@ -682,20 +825,39 @@ const GameGridLogo: VFC<{ serverAPI: any; platform: any; retro: boolean }> = ({ 
                     index = index + 1;
                     const random = Math.floor(Math.random() * 10000);
                     const gameKey = `${game.name}_${game.platform}`;
-                    return (
-                      <GameLogo
-                        key={`${game.name}${game.platform}${random}`}
-                        item={category}
-                        random={random}
-                        game={game}
-                        loadGame={loadGame}
-                        fixArtwork={fixArtwork}
-                        focus={lastSelectedGameKey === gameKey || (index === 1 ? true : false)}
-                      />
-                    );
+                    if (platform === "wii") {
+                      return (
+                        <GameWii
+                          key={`${game.name}${game.platform}${random}`}
+                          item={category}
+                          random={random}
+                          game={game}
+                          loadGame={loadGame}
+                          fixArtwork={fixArtwork}
+                          focus={lastSelectedGameKey === gameKey || index === 1}
+                        />
+                      );
+                    } else {
+                      return (
+                        <GameLogo
+                          key={`${game.name}${game.platform}${random}`}
+                          bg={platform === "xbox360" && retro ? false : true}
+                          item={category}
+                          random={random}
+                          game={game}
+                          loadGame={loadGame}
+                          fixArtwork={fixArtwork}
+                          focus={lastSelectedGameKey === gameKey || index === 1}
+                        />
+                      );
+                    }
                   });
                 })}
             </Focusable>
+          </div>
+          <div className="date">{formatTime(time)}</div>
+          <div className="nav-right">
+            <img src={`/customimages/retrolibrary/assets/wii/wii-bg.png`} />
           </div>
           <div className="bezel bezel-right">
             <img

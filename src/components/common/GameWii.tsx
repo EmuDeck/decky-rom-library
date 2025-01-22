@@ -1,7 +1,7 @@
 import { VFC, useState, useEffect, useRef } from "react";
 import { Button } from "decky-frontend-lib";
 
-const GameLogo = ({ item, game, random, loadGame, fixArtwork, focus, bg = true }) => {
+const GameWii = ({ item, game, random, loadGame, fixArtwork, focus }) => {
   const [isFocus, setIsFocus] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const targetRef = useRef(null);
@@ -63,45 +63,31 @@ const GameLogo = ({ item, game, random, loadGame, fixArtwork, focus, bg = true }
             onError={(e: any) => (e.target.style.display = "none")}
             alt={game.name.replace(/_/g, " ")}
           />
-          <div className="game__tint"></div>
-          {bg && (
-            <img
-              onError={(e: any) =>
-                (e.target.src = `/customimages/retrolibrary/assets/default/carousel-icons/${game.platform}.jpg`)
-              }
-              loading="lazy"
-              className="game__ss"
-              src={`${game.img}/screenshot/${game.name}.jpg?id=${random}`}
-              alt={game.name.replace(/_/g, " ")}
-            />
-          )}
+          <svg className="game__ss" viewBox="0 0 390.35 215.33" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <mask id="mask">
+                <rect fill="#000000" x="0" y="0" width="390.35" height="215.33"></rect>
+                <path
+                  fill="#ffffff"
+                  d="M2.83 106.74c0-45.23 4.42-77.65 4.42-77.65s.5-21.95 21.23-23c22.18-1.13 73.16-3.1 138.34-3.1h19.62l7.65-.15h29.56c65.18 0 116.16 1.98 138.34 3.1 20.73 1.05 21.23 23 21.23 23s4.31 32.46 4.31 77.69v2c0 45.23-3.49 77.76-3.49 77.76s-.5 21.95-21.23 23c-22.18 1.13-73.16 3.1-138.34 3.1H193.1l-27.09-.15c-65.18 0-116.16-1.98-138.34-3.1-20.73-1.05-21.23-23-21.23-23s-3.6-32.27-3.6-77.5v-2Z"
+                />
+              </mask>
+            </defs>
+            <image
+              mask="url(#mask)"
+              xmlnsXlink="http://www.w3.org/1999/xlink"
+              xlinkHref={`${game.img}/screenshot/${game.name}.jpg?id=${random}`}
+              x="0"
+              y="0"
+              width="100%"></image>
+            <g className="frame-border" fill="none">
+              <path d="M2.83 106.74c0-45.23 4.42-77.65 4.42-77.65s.5-21.95 21.23-23c22.18-1.13 73.16-3.1 138.34-3.1h19.62l7.65-.15h29.56c65.18 0 116.16 1.98 138.34 3.1 20.73 1.05 21.23 23 21.23 23s4.31 32.46 4.31 77.69v2c0 45.23-3.49 77.76-3.49 77.76s-.5 21.95-21.23 23c-22.18 1.13-73.16 3.1-138.34 3.1H193.1l-27.09-.15c-65.18 0-116.16-1.98-138.34-3.1-20.73-1.05-21.23-23-21.23-23s-3.6-32.27-3.6-77.5v-2Z" />
+            </g>
+          </svg>
         </div>
-      )}
-      {isFocus && (
-        <>
-          <div
-            className="_1sTuvqUAeproqHEae5sn9z"
-            style={{
-              position: "absolute",
-              width: "100%",
-              height: "100%",
-              top: "0px",
-              left: "0px",
-            }}></div>
-          <img
-            onError={(e: any) => (e.target.style.display = "none")}
-            loading="lazy"
-            className="game__bg"
-            src={`${game.img}/screenshot/${game.name}.jpg?id=${random}`}
-            alt={game.name}
-          />
-          <div className="game__file">
-            <span>{game.og_name}</span>
-          </div>
-        </>
       )}
     </Button>
   );
 };
 
-export { GameLogo };
+export { GameWii };

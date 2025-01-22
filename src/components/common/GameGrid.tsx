@@ -479,6 +479,20 @@ const GameGrid: VFC<{ serverAPI: any; platform: any; retro: boolean }> = ({ serv
     display:none !important;
   }
 
+  .retro.xbox360 .container{
+    background: linear-gradient(0, #ababad, #4f4f51);
+  }
+
+  .retro.xbox360 ._3ZR32BdxJUNwAA6Fu6n00p,
+  .retro.n3ds ._3ZR32BdxJUNwAA6Fu6n00p,
+  .retro.wii ._3ZR32BdxJUNwAA6Fu6n00p{
+    background: #fff
+  }
+
+  .retro.n3ds .container{
+    background: #dfdbd7
+  }
+
 
   `;
   //
@@ -580,6 +594,7 @@ const GameGrid: VFC<{ serverAPI: any; platform: any; retro: boolean }> = ({ serv
     "virtualboy",
     "dreamcast",
     "ngpc",
+    "n64dd",
   ];
   let extraCSS;
   if (arraySquared.includes(platform)) {

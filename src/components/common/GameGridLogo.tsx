@@ -819,6 +819,26 @@ const GameGridLogo: VFC<{ serverAPI: any; platform: any; retro: boolean }> = ({ 
       border-radius: 100%;
     }
 
+    .retro.ps4 .container{
+      background: linear-gradient(0, #223788, #6a88ca);
+    }
+
+    .container__bg{
+      display:none
+    }
+
+    .retro.ps4 .container__bg,
+    .retro.ps4 .container__bg video{
+      display:block;
+      position:absolute;
+      top:0;
+      left:0;
+      width:100vw;
+      height:100vh;
+      z-index:999999999
+    }
+
+
 
   `;
   //
@@ -912,11 +932,11 @@ const GameGridLogo: VFC<{ serverAPI: any; platform: any; retro: boolean }> = ({ 
     }
   }, [games]);
 
-  const arrayHDTV = ["wii", "wiiu", "xbox360", "psp", "ps4", "ps3", "n3ds"];
+  const arrayHDTV = ["wii", "wiiu", "xbox360", "psp", "ps3", "n3ds"];
   let extraCSS;
   if (arrayHDTV.includes(platform)) {
     extraCSS = "games--hdtv";
-  } else if (platform == "gb" || platform == "gbc" || platform == "switch") {
+  } else if (platform == "gb" || platform == "gbc" || platform == "switch" || platform == "ps4") {
     extraCSS = "games--square";
   } else if (platform == "gba") {
     extraCSS = "games--32";
@@ -947,6 +967,10 @@ const GameGridLogo: VFC<{ serverAPI: any; platform: any; retro: boolean }> = ({ 
           </div>
 
           <div className="container container--scroll">
+            <div className="container__bg">
+              <video src="/customimages/retrolibrary/assets/ps4/ps4.mp4"></video>
+            </div>
+
             {games
               .filter((category: any) => category.id === platform) // Filtra por plataforma antes de mapear
               .map((category: any) => {

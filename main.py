@@ -28,7 +28,7 @@ class Plugin:
         if os.name == 'nt':
             config_file_path = os.path.join(user_home, 'AppData', 'Roaming', 'EmuDeck', 'settings.ps1')
         else:
-            config_file_path = os.path.join(user_home, 'emudeck', 'settings.sh')
+            config_file_path = os.path.join(user_home, '.config/EmuDeck', 'settings.sh')
 
         configuration = {}
 

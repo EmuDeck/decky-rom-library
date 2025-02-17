@@ -374,10 +374,7 @@ const RetryHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, versio
           )}
           {version === "vertical" && (
             <div className="categories-logo fade-in">
-              <img
-                onError={(e: any) => (e.target.style.display = "none")}
-                src={`/customimages/retrolibrary/assets/default/logos/${platformCurrent}.png`}
-              />
+              <img src={`/customimages/retrolibrary/assets/default/logos/${platformCurrent}.png`} />
             </div>
           )}
           <div className={`container container--scroll ${version}`}>

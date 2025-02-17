@@ -287,10 +287,10 @@ const GameDetailStore: VFC<{ serverAPI: any; game_name_platform: any }> = ({ ser
         gamesJson[index].games.push({
           name: nameGame,
           og_name: name,
-          filename: `"/run/media/deck/EmuDeck/Emulation/roms/${platform}/${nameGame}.zip"`,
+          filename: `/run/media/deck/EmuDeck/Emulation/roms/${platform}/${nameGame}.zip`,
           file: nameGame,
           img: `/customimages/retrolibrary/artwork/${platform}/media`,
-          platform: "gb",
+          platform: platform,
         });
 
         gamesJson.sort((a: any, b: any) => a.title.localeCompare(b.title));

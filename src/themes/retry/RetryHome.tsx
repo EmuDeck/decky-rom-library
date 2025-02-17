@@ -1,6 +1,6 @@
 import { VFC, useState, useEffect } from "react";
 import { Tabs, Button, Focusable, SteamSpinner, Router, TextField, useParams } from "decky-frontend-lib";
-import { routePathGames } from "init";
+import { routePathGames, routeStore } from "init";
 import { getTranslateFunc } from "TranslationsF";
 import { Category } from "components/common/Category";
 import { getDataGames, getDataSettings, checkParserStatus } from "common/helpers";
@@ -374,13 +374,28 @@ const RetryHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, versio
           )}
           {version === "vertical" && (
             <div className="categories-logo fade-in">
-              <img src={`/customimages/retrolibrary/assets/default/logos/${platformCurrent}.png`} />
+              <img
+                onError={(e: any) => (e.target.style.display = "none")}
+                src={`/customimages/retrolibrary/assets/default/logos/${platformCurrent}.png`}
+              />
             </div>
           )}
           <div className={`container container--scroll ${version}`}>
             <Focusable
               className={`categories CSSGrid Grid Panel ${version}`}
               style={{ width: `${games.length * 28}vw` }}>
+              <Category
+                version=""
+                focus={isFocused("emulators")}
+                handleFocus={() => handleFocus({ title: "EmuDeck Store", id: "store", games: [] }, "store")}
+                key="emulators"
+                showGrid={false}
+                platform={{ title: "EmuDeck Store", id: "store", games: [] }}
+                onClick={() => {
+                  Router.Navigate(`${routeStore}`);
+                }}
+              />
+
               {games.map((platform: any, index: number = 0) => {
                 index = index + 1;
                 const gameKey = `${platform.name}_${platform.id}`;

@@ -302,7 +302,7 @@ const GameGridLogoStore: VFC<{ serverAPI: any; platform: any; retro: boolean }> 
       margin: auto;
       bottom: 0;
       width: 100%;
-      filter: brightness(40%);
+
       object-fit: cover;
       height: 100%;
   }

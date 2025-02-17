@@ -9,7 +9,7 @@ import {
   routeStoreDetail,
 } from "./init";
 import { PluginIcon } from "./native-components/PluginIcon";
-import { patchMenu } from "./menuPatch";
+import { patchMenu, patchMenu2 } from "./menuPatch";
 import Settings from "components/Settings";
 import { Artwork } from "components/common/Artwork";
 import { GameGrid } from "components/common/GameGrid";
@@ -80,7 +80,8 @@ export default definePlugin((serverApi: ServerAPI) => {
     return <GameDetailStore serverAPI={serverApi} game_name_platform={game_name_platform} />;
   });
 
-  const unpatchMenu = patchMenu();
+  const unpatchMenu = patchMenu(3);
+  const unpatchMenu2 = patchMenu2(5);
 
   return {
     title: <div>EmuDeck</div>,

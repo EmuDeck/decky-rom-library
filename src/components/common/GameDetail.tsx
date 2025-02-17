@@ -404,7 +404,7 @@ const GameDetail: VFC<{ serverAPI: any; game_name_platform: any }> = ({ serverAP
                       Play
                     </Button>
                   </div>
-{/*
+                  {/*
                   <div className="game-detail__info-last-played">
                     <span>Last Played</span>
                     -NYI-
@@ -429,7 +429,7 @@ const GameDetail: VFC<{ serverAPI: any; game_name_platform: any }> = ({ serverAP
                     </>
                   )}
                 </div>
-{/*
+                {/*
                 <div className="game-detail__cloud">
                   <span>CloudSync: Up to date</span>
                 </div>

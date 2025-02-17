@@ -119,9 +119,11 @@ const Category = ({ platform, showGrid = true, onClick, handleFocus = (e) => {},
       {showGrid && isVisible && (
         <div className="_1J1LQ0vGtpM3n0xw7XwQM6" unminified-class="CollectionLabel">
           <div>{platform.title}</div>
-          <div className="_36QQLBgXFUVTOhU9jMkCWD" unminified-class="CollectionLabelCount">
-            ( {platform.games.length} )
-          </div>
+          {platform.id !== "store" && (
+            <div className="_36QQLBgXFUVTOhU9jMkCWD" unminified-class="CollectionLabelCount">
+              ( {platform.games.length} )
+            </div>
+          )}
         </div>
       )}
       {isVisible && focus && (

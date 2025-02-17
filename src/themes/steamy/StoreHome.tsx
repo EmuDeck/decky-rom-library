@@ -1,10 +1,11 @@
 import { VFC, useState, useEffect } from "react";
 import { Tabs, Button, Focusable, SteamSpinner, Router, TextField, useParams } from "decky-frontend-lib";
-import { routePathGames, routeStore } from "init";
+import { routeStoreGames } from "init";
 import { getTranslateFunc } from "TranslationsF";
 import { Category } from "components/common/Category";
 import { getDataGames, getDataSettings, checkParserStatus, checkStatus } from "common/helpers";
-const SteamyHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, version }) => {
+import { useFetchCond } from "hooks/useFetchCond";
+const StoreHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, version }) => {
   const styles = `
 
   .container{
@@ -121,6 +122,8 @@ const SteamyHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, versi
 
   `;
 
+  const dataWS = useFetchCond(`https://artwork.emudeck.com/store.php`);
+
   //
   // State
   //
@@ -214,14 +217,11 @@ const SteamyHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, versi
   useEffect(() => {
     if (emuDeckConfig.systemOS !== "") {
       //console.log("getDataGames launched");
-      const gamesLS = sessionStorage.getItem("rom_library_games");
-      if (gamesLS) {
-        const gamesJson: any = JSON.parse(gamesLS);
-        setState({ ...state, games: gamesJson });
-        //getArtwork(serverAPI);
-      } else {
-        getDataGames(serverAPI, setState, state);
-      }
+      dataWS.post({}).then((data) => {
+        const gamesString = JSON.stringify(data);
+        sessionStorage.setItem("rom_store_games", gamesString);
+        setState({ ...state, games: data });
+      });
     }
   }, [emuDeckConfig]);
   //
@@ -241,28 +241,12 @@ const SteamyHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, versi
       {games && (
         <>
           <div className="container container--scroll">
-            {version == "grid" && (
-              <h1>
-                EmuDeck Retro Library
-                <small>Parser: {percentage}</small>
-              </h1>
-            )}
+            {version == "grid" && <h1>EmuDeck Store</h1>}
             <Focusable
               className={`categories CSSGrid Grid Panel ${version}`}
               style={{
                 width: version === "vertical" ? `${games.length * 28}vw` : "auto",
               }}>
-              <Category
-                version=""
-                focus={isFocused("store")}
-                handleFocus={() => handleFocus({ title: "EmuDeck Store", id: "store", games: [] }, "store")}
-                key="store"
-                showGrid={true}
-                platform={{ title: "EmuDeck Store", id: "store", games: [] }}
-                onClick={() => {
-                  Router.Navigate(`${routeStore}`);
-                }}
-              />
               {games.map((platform: any, index: number = 0) => {
                 index = index + 1;
                 const gameKey = `${platform.name}_${platform.id}`;
@@ -276,7 +260,7 @@ const SteamyHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, versi
                     platform={platform}
                     handleFocus={() => handleFocus(platform, gameKey)}
                     onClick={() => {
-                      Router.Navigate(`${routePathGames}/${platform.id}`);
+                      Router.Navigate(`${routeStoreGames}/${platform.id}`);
                     }}
                   />
                 );
@@ -289,4 +273,4 @@ const SteamyHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, versi
   );
 };
 
-export { SteamyHome };
+export { StoreHome };

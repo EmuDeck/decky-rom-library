@@ -293,15 +293,6 @@ const GameDetailStore: VFC<{ serverAPI: any; game_name_platform: any }> = ({ ser
           platform: platform,
         });
 
-        console.log({
-          name: nameGame,
-          og_name: name,
-          filename: `/run/media/deck/EmuDeck/Emulation/roms/${platform}/${nameGame}.zip`,
-          file: nameGame,
-          img: `/customimages/retrolibrary/artwork/${platform}/media`,
-          platform: platform,
-        });
-
         gamesJson.sort((a: any, b: any) => a.title.localeCompare(b.title));
         const gamesString = JSON.stringify(gamesJson);
         sessionStorage.setItem("rom_library_games", gamesString);
@@ -335,7 +326,7 @@ const GameDetailStore: VFC<{ serverAPI: any; game_name_platform: any }> = ({ ser
         const gameIndex = platformToChange.games.findIndex((item) => item.file === nameGame);
 
         console.log({ gameIndex });
-        gamesJson[index].splice(gameIndex, 1);
+        gamesJson[index].games.splice(gameIndex, 1);
         gamesJson.sort((a: any, b: any) => a.title.localeCompare(b.title));
         const gamesString = JSON.stringify(gamesJson);
         sessionStorage.setItem("rom_library_games", gamesString);

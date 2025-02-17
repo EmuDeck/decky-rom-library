@@ -57,7 +57,7 @@ const GameDetailStore: VFC<{ serverAPI: any; game_name_platform: any }> = ({ ser
     position: relative;
     margin-top: 50px;
     display: flex;
-    padding: 10px 20px;
+    padding: 10px 30px;
   }
 
   .game-detail__img{
@@ -254,6 +254,9 @@ const GameDetailStore: VFC<{ serverAPI: any; game_name_platform: any }> = ({ ser
   });
 
   const [installed, setInstalled] = useState<any>(false);
+  const [login, setLogin] = useState<any>(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   let { game, installing, emuDeckConfig } = state;
   //
@@ -354,9 +357,64 @@ const GameDetailStore: VFC<{ serverAPI: any; game_name_platform: any }> = ({ ser
       });
   };
 
+  const handleSubmit = async () => {
+    const loginData = { email: email, password: password };
+
+    try {
+      const response = await fetch("https://artwork.emudeck.com/paypal/login.php", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(loginData),
+      });
+
+      const data = await response.json();
+
+      if (data.status === "success") {
+        console.log("✅ Inicio de sesión exitoso.");
+        localStorage.setItem("emudeck-store-token", data.token);
+      } else {
+        console.log("❌ Error: " + (data.message || "Credenciales incorrectas"));
+      }
+    } catch (error) {
+      console.log("❌ Error al conectar con el servidor.");
+    }
+  };
+
   //
   // UseEffects
   //
+
+  //Login
+  useEffect(() => {
+    if (game && game.price && game.price > 0) {
+      const token = localStorage.getItem("emudeck-store-token");
+      console.log({ token });
+      if (token) {
+        fetch("https://artwork.emudeck.com/paypal/login.php", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ token: token }),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            console.log({ data });
+            if (data.status == "success") {
+              setLogin(true);
+            } else {
+              setLogin(false);
+            }
+          });
+      } else {
+        setLogin(false);
+      }
+    } else {
+      setLogin(true);
+    }
+  }, [game]);
 
   useEffect(() => {
     getDataSettings(serverAPI, setState, state);
@@ -409,6 +467,10 @@ const GameDetailStore: VFC<{ serverAPI: any; game_name_platform: any }> = ({ ser
   // Render
   //
 
+  const handlePay = (amount) => {
+    window.open(`https://artwork.emudeck.com/paypal?amount=${amount}&token=35ddcd33abac842d9b8425a3e794cf66`, "_blank");
+  };
+
   return (
     <>
       <style>{` ${styles} `}</style>
@@ -431,6 +493,7 @@ const GameDetailStore: VFC<{ serverAPI: any; game_name_platform: any }> = ({ ser
                       <div tabIndex={0} className="game-detail__more_info">
                         <div className="game-detail__more_info-data">
                           <div className="game-detail__more_info-data__top">{game.description}</div>
+                          <h3>Price: {game.price == 0 ? "Free" : `$${game.price}`}</h3>
                         </div>
                       </div>{" "}
                     </>
@@ -440,7 +503,54 @@ const GameDetailStore: VFC<{ serverAPI: any; game_name_platform: any }> = ({ ser
               <div className="game-detail-data">
                 <div className="game-detail__info">
                   <div className="game-detail__info-btn _3cI5TXsFX3bvpR-7EBOtxq">
-                    {installing === undefined && !installed && (
+                    {installing === undefined && !installed && game.price > 0 && login && (
+                      <Button
+                        onClick={() => handlePay(game.price)}
+                        className="game-detail__play-btn _3ydigb6zZAjJ0JCDgHwSYA _2AzIX5kl9k6JnxLfR5H4kX">
+                        Buy ( ${game.price} )
+                      </Button>
+                    )}
+
+                    {login === false && game.price > 0 && (
+                      <form>
+                        <h3>Please login / create an account* </h3>
+                        <p>
+                          * We'll never use your email address for commercial purposes, your login will be used to allow
+                          you to download the game again if needed.
+                        </p>
+
+                        <Focusable>
+                          <p>
+                            <TextField
+                              value={email}
+                              placeholder="Email address..."
+                              label="Email address"
+                              onChange={(e) => setEmail(e.target.value)}
+                              style={{ padding: "8px", width: "100%", fontSize: "1rem" }}
+                            />
+                          </p>
+                        </Focusable>
+                        <Focusable>
+                          <p>
+                            <TextField
+                              value={password}
+                              placeholder="Password..."
+                              bIsPassword={true}
+                              label="Password"
+                              onChange={(e) => setPassword(e.target.value)}
+                              style={{ padding: "8px", width: "100%", fontSize: "1rem" }}
+                            />
+                          </p>
+                        </Focusable>
+                        <Button
+                          onClick={() => handleSubmit()}
+                          className="game-detail__play-btn _3ydigb6zZAjJ0JCDgHwSYA _2AzIX5kl9k6JnxLfR5H4kX">
+                          Login / Create account
+                        </Button>
+                      </form>
+                    )}
+
+                    {installing === undefined && !installed && game.price < 1 && (
                       <Button
                         ref={buttonRef}
                         focusable={true}
@@ -448,7 +558,7 @@ const GameDetailStore: VFC<{ serverAPI: any; game_name_platform: any }> = ({ ser
                         disabled={installing}
                         className="game-detail__play-btn _3ydigb6zZAjJ0JCDgHwSYA _2AzIX5kl9k6JnxLfR5H4kX"
                         onClick={() => installGame(serverAPI, game.platform, game.name, game.file)}>
-                        Install
+                        Install free game
                       </Button>
                     )}
                     {installing && (

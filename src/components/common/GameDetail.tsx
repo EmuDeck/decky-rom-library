@@ -383,6 +383,9 @@ const GameDetail: VFC<{ serverAPI: any; game_name_platform: any }> = ({ serverAP
                 <img
                   className="game-detail__logo"
                   src={`/customimages/retrolibrary/artwork/${game.platform}/media/wheel/${game.name}.png`}
+                  onError={(e: any) =>
+                    (e.target.src = `/customimages/retrolibrary/artwork/${game.platform}/media/box2dfront/${game.name}.jpg`)
+                  }
                   alt={game.name}
                 />
               </div>

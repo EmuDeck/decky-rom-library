@@ -293,6 +293,15 @@ const GameDetailStore: VFC<{ serverAPI: any; game_name_platform: any }> = ({ ser
           platform: platform,
         });
 
+        console.log({
+          name: nameGame,
+          og_name: name,
+          filename: `/run/media/deck/EmuDeck/Emulation/roms/${platform}/${nameGame}.zip`,
+          file: nameGame,
+          img: `/customimages/retrolibrary/artwork/${platform}/media`,
+          platform: platform,
+        });
+
         gamesJson.sort((a: any, b: any) => a.title.localeCompare(b.title));
         const gamesString = JSON.stringify(gamesJson);
         sessionStorage.setItem("rom_library_games", gamesString);
@@ -440,7 +449,7 @@ const GameDetailStore: VFC<{ serverAPI: any; game_name_platform: any }> = ({ ser
               <div className="game-detail-data">
                 <div className="game-detail__info">
                   <div className="game-detail__info-btn _3cI5TXsFX3bvpR-7EBOtxq">
-                    {installed || (
+                    {installing === undefined && !installed && (
                       <Button
                         ref={buttonRef}
                         focusable={true}
@@ -449,6 +458,17 @@ const GameDetailStore: VFC<{ serverAPI: any; game_name_platform: any }> = ({ ser
                         className="game-detail__play-btn _3ydigb6zZAjJ0JCDgHwSYA _2AzIX5kl9k6JnxLfR5H4kX"
                         onClick={() => installGame(serverAPI, game.platform, game.name, game.file)}>
                         Install
+                      </Button>
+                    )}
+                    {installing && (
+                      <Button
+                        ref={buttonRef}
+                        focusable={true}
+                        noFocusRing={false}
+                        disabled={true}
+                        className="game-detail__play-btn _3ydigb6zZAjJ0JCDgHwSYA _2AzIX5kl9k6JnxLfR5H4kX"
+                        onClick={() => console.log("nope")}>
+                        Installing...
                       </Button>
                     )}
                     {installed && (

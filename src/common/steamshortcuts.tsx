@@ -95,9 +95,24 @@ export async function launchApp(sAPI: ServerAPI, app: App, system: string, platf
   let appNameBeauty = app.name;
   appNameBeauty = appNameBeauty.replace(/_/g, " ");
   SteamClient.Apps.SetShortcutName(id, `${appNameBeauty} - Retro Library`);
-  SteamClient.Apps.SetShortcutLaunchOptions(id, getLaunchOptions(app));
-  SteamClient.Apps.SetShortcutExe(id, `"${getTarget(app)}"`);
   SteamClient.Apps.SpecifyCompatTool(id, app.compatTool === undefined ? "" : app.compatTool);
+
+  if (system == "win32") {
+    app["exec"] = app["exec"].replace(
+      "powershell ",
+      '"C:\\Windows\\System32\\cmd.exe" /k start /min "Loading PowerShell Launcher" "C:\\Windows\\System32\\WindowsPowershell\\v1.0\\powershell.exe"'
+    );
+    app["exec"] = app["exec"].replace("-File  ", '-Command "& {');
+    app["exec"] = app["exec"].replace("& {'", "& {");
+    app["exec"] = app["exec"].replace(".ps1'", ".ps1");
+    app["exec"] = app["exec"].replace('"-ExecutionPolicy', '" -ExecutionPolicy');
+    app["exec"] = app["exec"] + '}" && exit " && exit --emudeck';
+    SteamClient.Apps.SetShortcutLaunchOptions(id, "");
+    SteamClient.Apps.SetShortcutExe(id, app["exec"]);
+  } else {
+    SteamClient.Apps.SetShortcutLaunchOptions(id, getLaunchOptions(app));
+    SteamClient.Apps.SetShortcutExe(id, `"${getTarget(app)}"`);
+  }
 
   await setTimeout(() => null, 500);
   let gid = lengthenAppId(id.toString());

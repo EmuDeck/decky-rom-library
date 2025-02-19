@@ -326,6 +326,7 @@ const GameDetail: VFC<{ serverAPI: any; game_name_platform: any }> = ({ serverAP
         }
 
         const filteredGame = gamesArray.filter((game: any) => game.name?.toLowerCase().includes(name.toLowerCase()));
+
         setState({ ...state, game: filteredGame[0], launcher: filteredPlatform[0].launcher, platform: platform });
         //getDataAchievements(serverAPI, setStateAchievements, stateAchievements, platform, filteredGame[0].hash);
       } catch (error) {
@@ -382,6 +383,9 @@ const GameDetail: VFC<{ serverAPI: any; game_name_platform: any }> = ({ serverAP
                 <img
                   className="game-detail__logo"
                   src={`/customimages/retrolibrary/artwork/${game.platform}/media/wheel/${game.name}.png`}
+                  onError={(e: any) =>
+                    (e.target.src = `/customimages/retrolibrary/artwork/${game.platform}/media/box2dfront/${game.name}.jpg`)
+                  }
                   alt={game.name}
                 />
               </div>
@@ -394,7 +398,7 @@ const GameDetail: VFC<{ serverAPI: any; game_name_platform: any }> = ({ serverAP
                       noFocusRing={false}
                       className="game-detail__play-btn _3ydigb6zZAjJ0JCDgHwSYA _2AzIX5kl9k6JnxLfR5H4kX"
                       onClick={() =>
-                        launchGame(serverAPI, launcher, game.filename, game.name, game.platform, emuDeckConfig)
+                        launchGame(serverAPI, launcher, game.filename, game.og_name, game.platform, emuDeckConfig)
                       }>
                       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36" fill="none">
                         <path
@@ -404,7 +408,7 @@ const GameDetail: VFC<{ serverAPI: any; game_name_platform: any }> = ({ serverAP
                       Play
                     </Button>
                   </div>
-{/*
+                  {/*
                   <div className="game-detail__info-last-played">
                     <span>Last Played</span>
                     -NYI-
@@ -429,7 +433,7 @@ const GameDetail: VFC<{ serverAPI: any; game_name_platform: any }> = ({ serverAP
                     </>
                   )}
                 </div>
-{/*
+                {/*
                 <div className="game-detail__cloud">
                   <span>CloudSync: Up to date</span>
                 </div>

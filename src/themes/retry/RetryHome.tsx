@@ -1,11 +1,22 @@
 import { VFC, useState, useEffect } from "react";
 import { Tabs, Button, Focusable, SteamSpinner, Router, TextField, useParams } from "decky-frontend-lib";
-import { routePathGames } from "init";
+import { routePathGames, routeStore } from "init";
 import { getTranslateFunc } from "TranslationsF";
 import { Category } from "components/common/Category";
-import { getDataGames, getDataSettings, checkParserStatus, getArtwork } from "common/helpers";
+import { getDataGames, getDataSettings, checkParserStatus } from "common/helpers";
 const RetryHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, version }) => {
   const styles = `
+
+  .grid.categories{
+    grid-template-columns: repeat(auto-fill, 15vw);
+    grid-auto-rows: calc(46vh - 118px);
+    overflow: scroll;
+    padding: 20px 25px
+  }
+
+  .grid.categories .category ._3n796D6GS1fdlXhRnRUfRv{
+    display:none !important
+  }
 
   .container{
     position: absolute;
@@ -15,8 +26,11 @@ const RetryHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, versio
     left: 0;
     padding-bottom: 40px;
     padding-right: 2.8vw;
-    scroll-padding-top: 116px;
+    scroll-padding-top: 166px;
     scroll-padding-bottom: 80px;
+    scroll-padding-right: 75vw;
+    scroll-padding-left: 25vw;
+    scroll-behavior: smooth
   }
 
   .container--scroll{
@@ -36,18 +50,6 @@ const RetryHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, versio
         font-size: 16.8182px;
         padding-left: 0px;
         padding-right: 0px;
-  }
-
-  /* Full size cats */
-  .vertical.categories{
-    grid-template-columns: repeat(auto-fill, 15vw);
-    grid-auto-rows: calc(46vh - 118px);
-    overflow: scroll;
-    padding: 20px 25px
-  }
-
-  .vertical.categories .category ._3n796D6GS1fdlXhRnRUfRv{
-    display:none !important
   }
 
   .category{
@@ -97,20 +99,159 @@ const RetryHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, versio
   }
 
   .BasicUI ._3IWn-2rn7x98o5fDd0rAxb{
-    opacity:0.6;
-    transition: .5s;
-    border: 4px solid transparent;
+    opacity:0.8;
+    transition: .8s;
+    border-radius:6px;
+    outline: 4px solid transparent;
+    outline-color: transparent;
   }
+
   .BasicUI ._3IWn-2rn7x98o5fDd0rAxb:focus{
     opacity: 1;
     transform: scale(1.2);
-    border: 4px solid #8acaf1;
-    transition: .5s
+    outline: 4px solid #8acaf1;
+    outline-color:  #8acaf1;
+    transition: .8s;
+    border-radius:0
   }
 
   .BasicUI ._3IWn-2rn7x98o5fDd0rAxb:nth-child(n+6).transform:focus{
     transform-origin: 150%
   }
+
+  .BasicUI ._3IWn-2rn7x98o5fDd0rAxb > ._2ERAQD94mxjbyV0G5P9ic5{
+      border-radius:6px
+  }
+
+  .categories-bg{
+      transition: opacity 0.5s ease-in-out;
+      opacity: 0;
+      position:absolute;
+      height:calc(100% - 38px);
+      top:38px
+  }
+
+ .fade-in {
+   animation: fadeIn 1s ease-in-out forwards; /* Aplica la animación */
+ }
+
+ @keyframes fadeIn {
+   from {
+     opacity: 0;
+   }
+   to {
+     opacity: 1;
+   }
+ }
+
+ .fade-out {
+    animation: fadeOut 0.5s ease-in-out forwards; /* Aplica la animación */
+  }
+
+  @keyframes fadeOut {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
+  }
+
+
+  /* Full size cats */
+
+
+
+  .vertical.container{
+    top: 40px;
+    scroll-padding-top: 0;
+    scroll-padding-bottom: 0;
+    scroll-padding-right: 40vw;
+    scroll-padding-left: 40vw;
+    scroll-behavior: unset;
+  }
+
+
+
+
+
+  .vertical.categories{
+    grid-template-columns: repeat(auto-fill, 25vw);
+    grid-auto-rows: calc(100vh - 82px);
+    height: 100vh;
+    overflow: scroll;
+    gap:0;
+  }
+
+  .vertical.categories .category ._3n796D6GS1fdlXhRnRUfRv{
+    display:none !important
+  }
+
+  .vertical .galery-img{
+    height: 100%;
+  }
+
+  .BasicUI .vertical ._3IWn-2rn7x98o5fDd0rAxb{
+    border-radius:0px;
+    mix-blend-mode: luminosity;
+  }
+
+  .BasicUI .vertical ._3IWn-2rn7x98o5fDd0rAxb:focus{
+    z-index: 99;
+    outline: none;
+    mix-blend-mode: normal;
+    width: 100vw;
+    margin-left: -150%;
+  }
+
+  .BasicUI .vertical ._3IWn-2rn7x98o5fDd0rAxb:focus{
+    z-index: 99;
+    outline: none;
+    mix-blend-mode: normal;
+    width: 100vw;
+    margin-left: -150%;
+  }
+
+  .BasicUI .vertical ._3IWn-2rn7x98o5fDd0rAxb:first-child:focus{
+    margin-left: 0%;
+  }
+
+
+  .BasicUI .vertical ._3IWn-2rn7x98o5fDd0rAxb:nth-child(2):focus{
+    margin-left: -100%;
+  }
+
+  .BasicUI .vertical ._3IWn-2rn7x98o5fDd0rAxb > ._2ERAQD94mxjbyV0G5P9ic5{
+      border-radius:0px
+  }
+
+  .categories-logo{
+    position: absolute;
+    height: 35%;
+    width: 100%;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    text-align: center;
+    pointer-events: none;
+    z-index: 999;
+    background: rgba(255, 255, 255, .2);
+    backdrop-filter: blur(5px);
+  }
+
+  .categories-logo img{
+    position: absolute;
+    height: 200%;
+    width: auto;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+  }
+
 
   `;
 
@@ -123,9 +264,13 @@ const RetryHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, versio
       systemOS: "",
     },
     platformCurrent: undefined,
+    platformPrev: undefined,
   });
+  const [lastSelectedGameKey, setLastSelectedGameKey] = useState<any | null>(null);
 
-  let { games, emuDeckConfig, platformCurrent } = state;
+  const [visible, setVisible] = useState(false);
+
+  let { games, emuDeckConfig, platformCurrent, platformPrev } = state;
   const { systemOS } = emuDeckConfig;
 
   const [percentage, setPercentage] = useState("...");
@@ -138,6 +283,15 @@ const RetryHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, versio
   //
   // Functions
   //
+
+  const handleFocus = (platform: any, gameKey: any) => {
+    const platformPrevious = platformCurrent;
+    setState({ ...state, platformCurrent: platform.id, platformPrev: platformPrevious });
+    setLastSelectedGameKey(gameKey);
+    localStorage.setItem("last_selected_category", gameKey);
+  };
+
+  const isFocused = (gameKey: string) => lastSelectedGameKey === gameKey;
 
   //
   // UseEffects
@@ -157,6 +311,25 @@ const RetryHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, versio
   }, []);
 
   useEffect(() => {
+    const readLastCategory = () => {
+      const categoryLast = localStorage.getItem("last_selected_category");
+      if (categoryLast) {
+        setLastSelectedGameKey(categoryLast);
+      }
+      console.log({ lastSelectedGameKey });
+    };
+
+    readLastCategory();
+
+    // Agregar el listener para el evento popstate
+    window.addEventListener("popstate", readLastCategory);
+
+    return () => {
+      window.removeEventListener("popstate", readLastCategory);
+    };
+  }, []);
+
+  useEffect(() => {
     if (emuDeckConfig.systemOS !== "") {
       //console.log("getDataGames launched");
       const gamesLS = sessionStorage.getItem("rom_library_games");
@@ -169,14 +342,17 @@ const RetryHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, versio
       }
     }
   }, [emuDeckConfig]);
+
+  useEffect(() => {
+    if (games) {
+      const firstID = games[0].id;
+      setState({ ...state, platformCurrent: firstID, platformPrev: firstID });
+    }
+  }, [games]);
+
   //
   // Render
   //
-
-  const handleFocus = (platform: any) => {
-    console.log({ platform });
-    setState({ ...state, platformCurrent: platform.id });
-  };
 
   return (
     <>
@@ -190,27 +366,44 @@ const RetryHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, versio
       )}
       {games && (
         <>
-          <img
-            className="galeries-bg"
-            src={`/customimages/retrolibrary/assets/alekfull/backgrounds/${platformCurrent}.jpg`}
-          />
-          <div className="container container--scroll">
-            {version == "grid" && (
-              <h1>
-                EmuDeck Retro Library
-                <small>Parsed: {percentage}</small>
-              </h1>
-            )}
-
+          {version !== "vertical" && (
+            <img
+              className={`categories-bg fade-in`}
+              src={`/customimages/retrolibrary/assets/default/backgrounds/${platformCurrent}.jpg`}
+            />
+          )}
+          {version === "vertical" && (
+            <div className="categories-logo fade-in">
+              <img src={`/customimages/retrolibrary/assets/default/logos/${platformCurrent}.png`} />
+            </div>
+          )}
+          <div className={`container container--scroll ${version}`}>
             <Focusable
               className={`categories CSSGrid Grid Panel ${version}`}
               style={{ width: `${games.length * 28}vw` }}>
-              {games.map((platform: any) => {
+              <Category
+                version=""
+                focus={isFocused("emulators")}
+                handleFocus={() => handleFocus({ title: "EmuDeck Store", id: "store", games: [] }, "store")}
+                key="emulators"
+                showGrid={false}
+                platform={{ title: "EmuDeck Store", id: "store", games: [] }}
+                onClick={() => {
+                  Router.Navigate(`${routeStore}`);
+                }}
+              />
+
+              {games.map((platform: any, index: number = 0) => {
+                index = index + 1;
+                const gameKey = `${platform.name}_${platform.id}`;
                 return (
                   <Category
+                    focus={isFocused(gameKey)}
+                    version={version}
+                    key={platform.id}
                     showGrid={false}
                     platform={platform}
-                    handleFocus={() => handleFocus(platform)}
+                    handleFocus={() => handleFocus(platform, gameKey)}
                     onClick={() => {
                       Router.Navigate(`${routePathGames}/${platform.id}`);
                     }}

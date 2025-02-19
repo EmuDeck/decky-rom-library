@@ -1,7 +1,7 @@
 import { VFC, useState, useEffect, useRef } from "react";
 import { Button } from "decky-frontend-lib";
 
-const Game = ({ item, game, random, loadGame, fixArtwork, focus }) => {
+const GameStore = ({ item, game, random, loadGame, fixArtwork, focus, bg = true }) => {
   const [isFocus, setIsFocus] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const targetRef = useRef(null);
@@ -40,7 +40,7 @@ const Game = ({ item, game, random, loadGame, fixArtwork, focus }) => {
         focusGame.scrollIntoView({ behavior: "smooth", block: "center" });
       }
     }
-  }, []);
+  }, [focus]);
 
   return (
     <Button
@@ -48,19 +48,26 @@ const Game = ({ item, game, random, loadGame, fixArtwork, focus }) => {
       className="game"
       onGamepadFocus={() => setIsFocus(true)}
       onGamepadBlur={() => setIsFocus(false)}
-      onClick={() => loadGame(game.file, game.platform)}
-      //onSecondaryActionDescription={"Add to Steam"}
+      onClick={() => loadGame(game.name, game.platform)}
+      //onSecondaryActionDescription={"Fix Artwork"}
       onOKActionDescription="Launch"
-      onCancelActionDescription="Exit">
+      onCancelActionDescription="Exit"
+      //onSecondaryButton={() => fixArtwork(game)}
+    >
       {isVisible && (
-        <span className="game__img-holder">
-          <img
-            loading="lazy"
-            className="game__img"
-            src={`${game.img}/box2dfront/${game.name}.jpg?id=${random}`}
-            alt={game.name.replace(/_/g, " ")}
-          />
-        </span>
+        <div className="game__img-holder">
+          {bg && (
+            <img
+              onError={(e: any) =>
+                (e.target.src = `/customimages/retrolibrary/assets/default/carousel-icons/${game.platform}.jpg`)
+              }
+              loading="lazy"
+              className="game__ss"
+              src={`${game.pictures.screenshots[0]}`}
+              alt={game.name.replace(/_/g, " ")}
+            />
+          )}
+        </div>
       )}
       {isFocus && (
         <>
@@ -74,9 +81,10 @@ const Game = ({ item, game, random, loadGame, fixArtwork, focus }) => {
               left: "0px",
             }}></div>
           <img
+            onError={(e: any) => (e.target.style.display = "none")}
             loading="lazy"
             className="game__bg"
-            src={`${game.img}/box2dfront/${game.name}.jpg?id=${random}`}
+            src={`${game.pictures.screenshots[0]}`}
             alt={game.name}
           />
           <div className="game__file">
@@ -88,4 +96,4 @@ const Game = ({ item, game, random, loadGame, fixArtwork, focus }) => {
   );
 };
 
-export { Game };
+export { GameStore };

@@ -2,11 +2,15 @@ import { VFC, useState, useEffect } from "react";
 import { Tabs, Button, Focusable, SteamSpinner, Router, TextField } from "decky-frontend-lib";
 import { launchApp } from "common/steamshortcuts";
 import { getTranslateFunc } from "TranslationsF";
-import { GameLogo } from "components/common/GameLogo";
+import { GameStore } from "components/common/GameStore";
 import { GameWii } from "components/common/GameWii";
 import { getDataGames, getDataSettings } from "common/helpers";
-import { routePathGameDetail } from "init";
-const GameGridLogo: VFC<{ serverAPI: any; platform: any; retro: boolean }> = ({ serverAPI, platform = "", retro }) => {
+import { routeStoreDetail } from "init";
+const GameGridLogoStore: VFC<{ serverAPI: any; platform: any; retro: boolean }> = ({
+  serverAPI,
+  platform = "",
+  retro,
+}) => {
   const styles = `
   #tvshape {
       position: relative;
@@ -298,7 +302,7 @@ const GameGridLogo: VFC<{ serverAPI: any; platform: any; retro: boolean }> = ({ 
       margin: auto;
       bottom: 0;
       width: 100%;
-      filter: brightness(40%);
+
       object-fit: cover;
       height: 100%;
   }
@@ -865,33 +869,10 @@ const GameGridLogo: VFC<{ serverAPI: any; platform: any; retro: boolean }> = ({ 
   //
   // Functions
   //
-  const launchGame = (launcher: string, game: string, name: string, platform: string) => {
-    //console.log({ launcher, game, name, platform });
-    const gameKey = `${name}_${platform}`;
-    localStorage.setItem("last_selected_game_key", gameKey);
-
-    let launcherComplete = launcher.replace(/{file.path}/g, `'${game}'`);
-    if (emuDeckConfig.systemOS == "nt") {
-      launcherComplete = launcherComplete
-        .replace(
-          "powershell -ExecutionPolicy Bypass -NoProfile -File  '",
-          `C:\\Windows\\System32\\cmd.exe /k start /min "Loading PowerShell Launcher" "C:\\Windows\\System32\\WindowsPowershell\\v1.0\\powershell.exe" -NoProfile -ExecutionPolicy Bypass -Command "& {`
-        )
-        .replace("'", "");
-      launcherComplete = launcherComplete.slice(0, -1) + `'}" && exit " && exit --emudeck`;
-    } else {
-      launcherComplete = launcherComplete
-        .replace(/\\"\'/g, "")
-        .replace(/'\\\"/g, "")
-        .replace(/\\\\/g, "\\")
-        .replace(/\\:"/g, '"Z:');
-    }
-    launchApp(serverAPI, { name, exec: launcherComplete }, systemOS, platform);
-  };
 
   const loadGame = (name, platform) => {
-    //console.log(`${routePathGameDetail}/${name}`);
-    Router.Navigate(`${routePathGameDetail}/${name}|||${platform}`);
+    console.log(`${routeStoreDetail}/${name}|||${platform}`);
+    Router.Navigate(`${routeStoreDetail}/${name}|||${platform}`);
   };
 
   const fixArtwork = (game: any) => {
@@ -914,7 +895,7 @@ const GameGridLogo: VFC<{ serverAPI: any; platform: any; retro: boolean }> = ({ 
   //
 
   useEffect(() => {
-    const gamesLS = sessionStorage.getItem("rom_library_games");
+    const gamesLS = sessionStorage.getItem("rom_store_games");
     if (gamesLS) {
       try {
         const gamesJson: any = JSON.parse(gamesLS);
@@ -1030,7 +1011,7 @@ const GameGridLogo: VFC<{ serverAPI: any; platform: any; retro: boolean }> = ({ 
                       );
                     } else {
                       return (
-                        <GameLogo
+                        <GameStore
                           key={`${game.name}${game.platform}${random}`}
                           item={category}
                           random={random}
@@ -1090,4 +1071,4 @@ const GameGridLogo: VFC<{ serverAPI: any; platform: any; retro: boolean }> = ({ 
   );
 };
 
-export { GameGridLogo };
+export { GameGridLogoStore };

@@ -267,6 +267,27 @@ const GameDetailStore: VFC<{ serverAPI: any; game_name_platform: any }> = ({ ser
   //
   // Functions
   //
+
+  function cleanName(name) {
+    // Eliminar contenido entre paréntesis y corchetes
+    let nameCleaned = name.replace(/\(.*?\)/g, "").replace(/\[.*?\]/g, "");
+
+    // Reemplazar espacios y guiones por guion bajo
+    nameCleaned = nameCleaned.trim().replace(/[\s-]+/g, "_");
+
+    // Eliminar caracteres especiales específicos
+    nameCleaned = nameCleaned
+      .replace(/[+&!'’.]/g, "")
+      .replace(/_decrypted/g, "")
+      .replace(/decrypted/g, "")
+      .replace(/\.ps3/g, "");
+
+    // Convertir a minúsculas
+    nameCleaned = nameCleaned.toLowerCase();
+
+    return nameCleaned;
+  }
+
   const installGame = (serverAPI: any, platform: string, name: string, url: string) => {
     setState({ ...state, installing: true });
 
@@ -288,10 +309,10 @@ const GameDetailStore: VFC<{ serverAPI: any; game_name_platform: any }> = ({ ser
         const index = gamesJson.findIndex((item) => item.id === platform);
 
         gamesJson[index].games.push({
-          name: nameGame,
-          og_name: name,
+          name: cleanName(nameGame),
+          og_name: nameGame,
           filename: `/run/media/deck/EmuDeck/Emulation/roms/${platform}/${nameGame}.zip`,
-          file: nameGame,
+          file: cleanName(nameGame),
           img: `/customimages/retrolibrary/artwork/${platform}/media`,
           platform: platform,
         });

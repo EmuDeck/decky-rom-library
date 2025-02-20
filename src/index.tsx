@@ -81,7 +81,7 @@ export default definePlugin((serverApi: ServerAPI) => {
   });
 
   const unpatchMenu = patchMenu(3);
-  const unpatchMenu2 = patchMenu2(5);
+  // const unpatchMenu2 = patchMenu2(5);
 
   return {
     title: <div>EmuDeck</div>,

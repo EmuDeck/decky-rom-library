@@ -308,11 +308,15 @@ const GameDetailStore: VFC<{ serverAPI: any; game_name_platform: any }> = ({ ser
 
         const index = gamesJson.findIndex((item) => item.id === platform);
 
+        const settings: any = sessionStorage.getItem("rom_library_settings");
+        const settingsJson: any = JSON.parse(settings);
+        const { romsPath } = settingsJson;
+
         gamesJson[index].games.push({
-          name: cleanName(nameGame),
-          og_name: nameGame,
-          filename: `/run/media/deck/EmuDeck/Emulation/roms/${platform}/${nameGame}.zip`,
-          file: cleanName(nameGame),
+          name: cleanName(name),
+          og_name: name,
+          filename: `${romsPath}/${platform}/${name}.zip`,
+          file: cleanName(name),
           img: `/customimages/retrolibrary/artwork/${platform}/media`,
           platform: platform,
         });
@@ -363,8 +367,10 @@ const GameDetailStore: VFC<{ serverAPI: any; game_name_platform: any }> = ({ ser
   };
 
   const checkGame = (serverAPI: any, platform: string, name: string, url: string) => {
+    console.log(`Store_isGameInstalled "${platform}" "${name}" "${url}"`);
+
     serverAPI
-      .callPluginMethod("emudeck", { command: `Store_isGameInstalled ${platform} ${name} ${url}` })
+      .callPluginMethod("emudeck", { command: `Store_isGameInstalled "${platform}" "${name}" "${url}"` })
       .then((response: any) => {
         const result = response.result;
         if (result.includes("true")) {
@@ -382,7 +388,7 @@ const GameDetailStore: VFC<{ serverAPI: any; game_name_platform: any }> = ({ ser
     const loginData = { email: email, password: password };
 
     try {
-      const response = await fetch("https://artwork.emudeck.com/paypal/login.php", {
+      const response = await fetch("https://store.emudeck.com/login.php", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -413,7 +419,7 @@ const GameDetailStore: VFC<{ serverAPI: any; game_name_platform: any }> = ({ ser
       const token = localStorage.getItem("emudeck-store-token");
       console.log({ token });
       if (token) {
-        fetch("https://artwork.emudeck.com/paypal/login.php", {
+        fetch("https://store.emudeck.com/paypal/login.php", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -504,9 +510,16 @@ const GameDetailStore: VFC<{ serverAPI: any; game_name_platform: any }> = ({ ser
         <>
           <div className="container--scroll">
             <div className="game-detail">
-              <img src={`${game.pictures.screenshots[0]}`} className="game-detail__blur" />
+              <img
+                src={`/customimages/retrolibrary/artwork/${game.platform}/media/box2dfront/${game.name}.jpg`}
+                className="game-detail__blur"
+              />
               <div className="game-detail__hero">
-                <img className="game-detail__logo" src={`${game.pictures.titlescreens[0]}`} alt={game.name} />
+                <img
+                  className="game-detail__logo"
+                  src={`https://f005.backblazeb2.com/file/emudeck-store/${game.platform}/media/screenshot/${game.name}.png`}
+                  alt={game.name}
+                />
                 <div className="game-detail__tabs">
                   {game && game.description && (
                     <>

@@ -865,30 +865,6 @@ const GameGridLogo: VFC<{ serverAPI: any; platform: any; retro: boolean }> = ({ 
   //
   // Functions
   //
-  const launchGame = (launcher: string, game: string, name: string, platform: string) => {
-    //console.log({ launcher, game, name, platform });
-    const gameKey = `${name}_${platform}`;
-    localStorage.setItem("last_selected_game_key", gameKey);
-
-    let launcherComplete = launcher.replace(/{file.path}/g, `'${game}'`);
-    if (emuDeckConfig.systemOS == "nt") {
-      launcherComplete = launcherComplete
-        .replace(
-          "powershell -ExecutionPolicy Bypass -NoProfile -File  '",
-          `C:\\Windows\\System32\\cmd.exe /k start /min "Loading PowerShell Launcher" "C:\\Windows\\System32\\WindowsPowershell\\v1.0\\powershell.exe" -NoProfile -ExecutionPolicy Bypass -Command "& {`
-        )
-        .replace("'", "");
-      launcherComplete = launcherComplete.slice(0, -1) + `'}" && exit " && exit --emudeck`;
-    } else {
-      launcherComplete = launcherComplete
-        .replace(/\\"\'/g, "")
-        .replace(/'\\\"/g, "")
-        .replace(/\\\\/g, "\\")
-        .replace(/\\:"/g, '"Z:');
-    }
-    launchApp(serverAPI, { name, exec: launcherComplete }, systemOS, platform);
-  };
-
   const loadGame = (name, platform) => {
     //console.log(`${routePathGameDetail}/${name}`);
     Router.Navigate(`${routePathGameDetail}/${name}|||${platform}`);

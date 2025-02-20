@@ -58,12 +58,12 @@ const GameStore = ({ item, game, random, loadGame, fixArtwork, focus, bg = true 
         <div className="game__img-holder">
           {bg && (
             <img
-              onError={(e: any) =>
-                (e.target.src = `/customimages/retrolibrary/assets/default/carousel-icons/${game.platform}.jpg`)
-              }
+              // onError={(e: any) =>
+              //   (e.target.src = `/customimages/retrolibrary/assets/default/carousel-icons/${game.platform}.jpg`)
+              // }
               loading="lazy"
               className="game__ss"
-              src={`${game.pictures.screenshots[0]}`}
+              src={`https://f005.backblazeb2.com/file/emudeck-store/${game.platform}/media/box2dfront/${game.name}.png`}
               alt={game.name.replace(/_/g, " ")}
             />
           )}
@@ -84,11 +84,11 @@ const GameStore = ({ item, game, random, loadGame, fixArtwork, focus, bg = true 
             onError={(e: any) => (e.target.style.display = "none")}
             loading="lazy"
             className="game__bg"
-            src={`${game.pictures.screenshots[0]}`}
+            src={`https://f005.backblazeb2.com/file/emudeck-store/${game.platform}/media/box2dfront/${game.name}.png`}
             alt={game.name}
           />
           <div className="game__file">
-            <span>{game.og_name}</span>
+            <span>{game.name}</span>
           </div>
         </>
       )}

@@ -122,7 +122,7 @@ const StoreHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, versio
 
   `;
 
-  const dataWS = useFetchCond(`https://artwork.emudeck.com/store.php`);
+  const dataWS = useFetchCond(`https://store.emudeck.com/store.php`);
 
   //
   // State

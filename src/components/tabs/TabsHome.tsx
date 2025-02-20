@@ -283,7 +283,7 @@ const TabsHome: VFC<{ serverAPI: any }> = ({ serverAPI }) => {
         .replace(/\\\\/g, "\\")
         .replace(/\\:"/g, '"Z:');
     }
-    launchApp(serverAPI, { name, exec: launcherComplete }, systemOS, platform);
+    launchApp(serverAPI, { name, picture: "", exec: launcherComplete }, systemOS, platform);
   };
 
   const fixArtwork = (game: any) => {

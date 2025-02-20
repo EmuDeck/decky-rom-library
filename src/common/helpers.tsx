@@ -106,6 +106,7 @@ export const launchGame = (
   game: string,
   name: string,
   platform: string,
+  picture: string,
   emuDeckConfig
 ) => {
   const gameKey = `${name}_${platform}`;
@@ -127,7 +128,7 @@ export const launchGame = (
       .replace(/\\\\/g, "\\")
       .replace(/\\:"/g, '"Z:');
   }
-  launchApp(serverAPI, { name, exec: launcherComplete }, emuDeckConfig.systemOS, platform);
+  launchApp(serverAPI, { name, picture, exec: launcherComplete }, emuDeckConfig.systemOS, platform);
 };
 
 export const getDataAchievements = async (serverAPI, setState, state, platform, hash) => {

@@ -5,6 +5,7 @@ import { ServerAPI, LifetimeNotification } from "decky-frontend-lib";
 
 interface App {
   name: string;
+  picture: string;
   exec: string;
   compatTool?: string;
 }
@@ -117,10 +118,10 @@ export async function launchApp(sAPI: ServerAPI, app: App, system: string, platf
   await setTimeout(() => null, 500);
   let gid = lengthenAppId(id.toString());
   console.warn(`${app.name}`);
-  console.log(`addGameListsArtwork ${app.name} ${id} ${platform}`);
+  console.log(`addGameListsArtwork ${app.picture} ${id} ${platform}`);
   await sAPI
     .callPluginMethod("emudeck", {
-      command: `addGameListsArtwork ${app.name} ${id} ${platform}`,
+      command: `addGameListsArtwork ${app.picture} ${id} ${platform}`,
     })
     .then((response: any) => {
       //Refresh picture

@@ -398,7 +398,15 @@ const GameDetail: VFC<{ serverAPI: any; game_name_platform: any }> = ({ serverAP
                       noFocusRing={false}
                       className="game-detail__play-btn _3ydigb6zZAjJ0JCDgHwSYA _2AzIX5kl9k6JnxLfR5H4kX"
                       onClick={() =>
-                        launchGame(serverAPI, launcher, game.filename, game.og_name, game.platform, emuDeckConfig)
+                        launchGame(
+                          serverAPI,
+                          launcher,
+                          game.filename,
+                          game.og_name,
+                          game.platform,
+                          game.file,
+                          emuDeckConfig
+                        )
                       }>
                       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36" fill="none">
                         <path

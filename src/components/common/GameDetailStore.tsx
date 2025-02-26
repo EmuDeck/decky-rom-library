@@ -290,55 +290,14 @@ const GameDetailStore: VFC<{ serverAPI: any; game_name_platform: any }> = ({ ser
     return nameCleaned;
   }
 
-  const installGame = (serverAPI: any, platform: string, name: string, url: string) => {
+  const installGame = (serverAPI: any, platform: string, name: string, url: string, game_id: string) => {
+    const token = localStorage.getItem("emudeck-store-token");
     setState({ ...state, installing: true });
-
-    const link = `https://f005.backblazeb2.com/file/emudeck-store/${platform}/${name}.zip`;
-    console.log(`Store_installGame ${platform} ${name} ${link}`);
+    console.log(`Store_installGame ${platform} ${name} ${url} ${token} ${game_id}`);
     serverAPI
-      .callPluginMethod("emudeck", { command: `Store_installGame "${platform}" "${name}" "${link}"` })
-      .then((response: any) => {
-        const result = response.result;
-        setInstalled(true);
-        setState({ ...state, installing: undefined });
-
-        //We add it to the game collection
-        const gamesStore: any = sessionStorage.getItem("rom_library_games");
-        const gamesJson: any = JSON.parse(gamesStore);
-        const filename: any = url.split("/").pop();
-        const nameGame = filename.replace(/\.[^/.]+$/, "");
-
-        const index = gamesJson.findIndex((item) => item.id === platform);
-
-        const settings: any = sessionStorage.getItem("rom_library_settings");
-        const settingsJson: any = JSON.parse(settings);
-        const { romsPath } = settingsJson;
-
-        gamesJson[index].games.push({
-          name: cleanName(name),
-          og_name: name,
-          filename: `${romsPath}/${platform}/${name}.zip`,
-          file: cleanName(name),
-          img: `/customimages/retrolibrary/artwork/${platform}/media`,
-          platform: platform,
-        });
-
-        gamesJson.sort((a: any, b: any) => a.title.localeCompare(b.title));
-        const gamesString = JSON.stringify(gamesJson);
-        sessionStorage.setItem("rom_library_games", gamesString);
-
-        return result;
+      .callPluginMethod("emudeck", {
+        command: `Store_installGame "${platform}" "${name}" "${url}" "${token}" "${game_id}"`,
       })
-      .catch((error: any) => {
-        //console.log({ error });
-      });
-  };
-
-  const installPaidGame = (serverAPI: any, platform: string, name: string, url: string) => {
-    setState({ ...state, installing: true });
-    console.log(`Store_installGame ${platform} ${name} ${url}`);
-    serverAPI
-      .callPluginMethod("emudeck", { command: `Store_installGame "${platform}" "${name}" "${url}"` })
       .then((response: any) => {
         const result = response.result;
         setInstalled(true);
@@ -469,7 +428,7 @@ const GameDetailStore: VFC<{ serverAPI: any; game_name_platform: any }> = ({ ser
       })
         .then((response) => response.json())
         .then((data) => {
-          console.log({ data });
+          console.log("login:" + { data });
           if (data.status == "success") {
             setLogin(true);
           } else {
@@ -489,8 +448,7 @@ const GameDetailStore: VFC<{ serverAPI: any; game_name_platform: any }> = ({ ser
   useEffect(() => {
     const token = localStorage.getItem("emudeck-store-token");
     //Game purchased?
-    console.log({ purchased });
-    if (game && game.price && game.price > 0 && purchased === false) {
+    if (game && game.price && game.price > 0 && gameUrl === undefined) {
       fetch("https://store.emudeck.com/rest/check-order.php", {
         method: "POST",
         headers: {
@@ -506,19 +464,35 @@ const GameDetailStore: VFC<{ serverAPI: any; game_name_platform: any }> = ({ ser
               headers: {
                 "Content-Type": "application/json",
               },
-              body: JSON.stringify({ token: token, game_id: game.id }),
+              body: JSON.stringify({ token: token, game_id: game.id, type: "file" }),
             })
               .then((response) => response.json())
               .then((data) => {
-                console.log({ data });
+                console.log("generate paid:" + { data });
                 if (data.status == "success") {
                   setState({ ...state, purchased: true, gameUrl: data.url });
                 }
               });
           }
         });
+    } else if (game && gameUrl === undefined) {
+      fetch("https://store.emudeck.com/rest/generate-link.php", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ token: token, game_id: game.id, type: "file" }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          const url = data.url;
+          console.log({ data });
+          if (data.status == "success") {
+            setState({ ...state, gameUrl: data.url });
+          }
+        });
     }
-    if (game && game.price && game.price > 0) {
+    if (game && game.price && game.price > 0 && gameUrl === undefined) {
       console.log({ token });
       if (token) {
         fetch("https://store.emudeck.com/rest/login.php", {
@@ -544,6 +518,10 @@ const GameDetailStore: VFC<{ serverAPI: any; game_name_platform: any }> = ({ ser
       setLogin(true);
     }
   }, [game]);
+
+  useEffect(() => {
+    console.log({ gameUrl });
+  }, [gameUrl]);
 
   useEffect(() => {
     getDataSettings(serverAPI, setState, state);
@@ -636,21 +614,31 @@ const GameDetailStore: VFC<{ serverAPI: any; game_name_platform: any }> = ({ ser
                 <div className="game-detail__info">
                   <div className="game-detail__info-btn _3cI5TXsFX3bvpR-7EBOtxq">
                     {/* Buy button */}
-                    {installing === undefined && !installed && game.price > 0 && login && purchased == false && (
-                      <Button
-                        onClick={() => handlePay(game.price)}
-                        className="game-detail__play-btn _3ydigb6zZAjJ0JCDgHwSYA _2AzIX5kl9k6JnxLfR5H4kX">
-                        Buy ( ${game.price} )
-                      </Button>
-                    )}
+                    {installing === undefined &&
+                      !installed &&
+                      game.price > 0 &&
+                      login &&
+                      purchased == false &&
+                      gameUrl !== undefined && (
+                        <Button
+                          onClick={() => handlePay(game.price)}
+                          className="game-detail__play-btn _3ydigb6zZAjJ0JCDgHwSYA _2AzIX5kl9k6JnxLfR5H4kX">
+                          Buy ( ${game.price} )
+                        </Button>
+                      )}
 
-                    {installing === undefined && !installed && game.price > 0 && login && purchased == true && (
-                      <Button
-                        onClick={() => installPaidGame(serverAPI, game.platform, game.name, gameUrl)}
-                        className="game-detail__play-btn _3ydigb6zZAjJ0JCDgHwSYA _2AzIX5kl9k6JnxLfR5H4kX">
-                        Download already purchased
-                      </Button>
-                    )}
+                    {installing === undefined &&
+                      !installed &&
+                      game.price > 0 &&
+                      login &&
+                      purchased == true &&
+                      gameUrl !== undefined && (
+                        <Button
+                          onClick={() => installGame(serverAPI, game.platform, game.name, gameUrl, game.id)}
+                          className="game-detail__play-btn _3ydigb6zZAjJ0JCDgHwSYA _2AzIX5kl9k6JnxLfR5H4kX">
+                          Download
+                        </Button>
+                      )}
 
                     {login === false && game.price > 0 && (
                       <form>
@@ -691,14 +679,14 @@ const GameDetailStore: VFC<{ serverAPI: any; game_name_platform: any }> = ({ ser
                       </form>
                     )}
 
-                    {installing === undefined && !installed && game.price < 1 && (
+                    {installing === undefined && !installed && game.price < 1 && gameUrl !== undefined && (
                       <Button
                         ref={buttonRef}
                         focusable={true}
                         noFocusRing={false}
                         disabled={installing}
                         className="game-detail__play-btn _3ydigb6zZAjJ0JCDgHwSYA _2AzIX5kl9k6JnxLfR5H4kX"
-                        onClick={() => installGame(serverAPI, game.platform, game.name, game.file)}>
+                        onClick={() => installGame(serverAPI, game.platform, game.name, gameUrl, game.id)}>
                         Install free game
                       </Button>
                     )}

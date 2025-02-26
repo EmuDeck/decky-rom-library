@@ -593,7 +593,7 @@ const GameDetailStore: VFC<{ serverAPI: any; game_name_platform: any }> = ({ ser
               <div className="game-detail__hero">
                 <img
                   className="game-detail__logo"
-                  src={`https://f005.backblazeb2.com/file/emudeck-store/${game.platform}/media/screenshot/${game.name}.png`}
+                  src={`https://f005.backblazeb2.com/file/emudeck-artwork/${game.platform}/media/screenshot/${game.name}.png`}
                   alt={game.name}
                 />
                 <div className="game-detail__tabs">

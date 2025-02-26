@@ -63,7 +63,7 @@ const GameStore = ({ item, game, random, loadGame, fixArtwork, focus, bg = true 
               // }
               loading="lazy"
               className="game__ss"
-              src={`https://f005.backblazeb2.com/file/emudeck-store/${game.platform}/media/box2dfront/${game.name}.png`}
+              src={`https://f005.backblazeb2.com/file/emudeck-artwork/${game.platform}/media/box2dfront/${game.name}.png`}
               alt={game.name.replace(/_/g, " ")}
             />
           )}
@@ -84,7 +84,7 @@ const GameStore = ({ item, game, random, loadGame, fixArtwork, focus, bg = true 
             onError={(e: any) => (e.target.style.display = "none")}
             loading="lazy"
             className="game__bg"
-            src={`https://f005.backblazeb2.com/file/emudeck-store/${game.platform}/media/box2dfront/${game.name}.png`}
+            src={`https://f005.backblazeb2.com/file/emudeck-artwork/${game.platform}/media/box2dfront/${game.name}.png`}
             alt={game.name}
           />
           <div className="game__file">

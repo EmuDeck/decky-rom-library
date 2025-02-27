@@ -290,8 +290,19 @@ const GameDetailStore: VFC<{ serverAPI: any; game_name_platform: any }> = ({ ser
     return nameCleaned;
   }
 
-  const installGame = (serverAPI: any, platform: string, name: string, url: string, game_id: string) => {
+  const installGame = (serverAPI: any, platform: string, name: string, url: string, game_id: string, price: any) => {
     const token = localStorage.getItem("emudeck-store-token");
+
+    if (price == 0) {
+      const response = fetch("https://store.emudeck.com/rest/add-free-order.php", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ game_id: game_id }),
+      });
+    }
+
     setState({ ...state, installing: true });
     console.log(`Store_installGame ${platform} ${name} ${url} ${token} ${game_id}`);
     serverAPI
@@ -591,11 +602,22 @@ const GameDetailStore: VFC<{ serverAPI: any; game_name_platform: any }> = ({ ser
                 className="game-detail__blur"
               />
               <div className="game-detail__hero">
-                <img
-                  className="game-detail__logo"
-                  src={`https://f005.backblazeb2.com/file/emudeck-artwork/${game.platform}/media/screenshot/${game.name}.png`}
-                  alt={game.name}
-                />
+                {game.video && (
+                  <video
+                    className="game-detail__logo"
+                    controls
+                    autoPlay
+                    loop
+                    muted
+                    src={`https://f005.backblazeb2.com/file/emudeck-artwork/${game.platform}/media/video/${game.name}.webm`}></video>
+                )}
+                {!game.video && (
+                  <img
+                    className="game-detail__logo"
+                    src={`https://f005.backblazeb2.com/file/emudeck-artwork/${game.platform}/media/screenshot/${game.name}.png`}
+                    alt={game.name}
+                  />
+                )}
                 <div className="game-detail__tabs">
                   {game && game.description && (
                     <>
@@ -634,7 +656,7 @@ const GameDetailStore: VFC<{ serverAPI: any; game_name_platform: any }> = ({ ser
                       purchased == true &&
                       gameUrl !== undefined && (
                         <Button
-                          onClick={() => installGame(serverAPI, game.platform, game.name, gameUrl, game.id)}
+                          onClick={() => installGame(serverAPI, game.platform, game.name, gameUrl, game.id, game.price)}
                           className="game-detail__play-btn _3ydigb6zZAjJ0JCDgHwSYA _2AzIX5kl9k6JnxLfR5H4kX">
                           Download
                         </Button>
@@ -686,7 +708,7 @@ const GameDetailStore: VFC<{ serverAPI: any; game_name_platform: any }> = ({ ser
                         noFocusRing={false}
                         disabled={installing}
                         className="game-detail__play-btn _3ydigb6zZAjJ0JCDgHwSYA _2AzIX5kl9k6JnxLfR5H4kX"
-                        onClick={() => installGame(serverAPI, game.platform, game.name, gameUrl, game.id)}>
+                        onClick={() => installGame(serverAPI, game.platform, game.name, gameUrl, game.id, game.price)}>
                         Install free game
                       </Button>
                     )}

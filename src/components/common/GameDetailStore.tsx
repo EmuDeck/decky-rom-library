@@ -52,7 +52,7 @@ const GameDetailStore: VFC<{ serverAPI: any; game_name_platform: any }> = ({ ser
     z-index:0
   }
   .game-detail__hero{
-    height: 190px;
+    min-height: 190px;
     overflow: hidden;
     position: relative;
     margin-top: 50px;
@@ -70,7 +70,7 @@ const GameDetailStore: VFC<{ serverAPI: any; game_name_platform: any }> = ({ ser
 
   .game-detail__logo{
     position:static;
-    height: 180px;
+    height: 340px;
     margin-right:20px;
   }
 
@@ -602,22 +602,13 @@ const GameDetailStore: VFC<{ serverAPI: any; game_name_platform: any }> = ({ ser
                 className="game-detail__blur"
               />
               <div className="game-detail__hero">
-                {game.video && (
-                  <video
-                    className="game-detail__logo"
-                    controls
-                    autoPlay
-                    loop
-                    muted
-                    src={`https://f005.backblazeb2.com/file/emudeck-artwork/${game.platform}/media/video/${game.name}.webm`}></video>
-                )}
-                {!game.video && (
-                  <img
-                    className="game-detail__logo"
-                    src={`https://f005.backblazeb2.com/file/emudeck-artwork/${game.platform}/media/screenshot/${game.name}.png`}
-                    alt={game.name}
-                  />
-                )}
+                <video
+                  className="game-detail__logo"
+                  autoPlay
+                  loop
+                  muted
+                  poster={`https://f005.backblazeb2.com/file/emudeck-artwork/${game.platform}/media/screenshot/${game.name}.png`}
+                  src={`https://f005.backblazeb2.com/file/emudeck-artwork/${game.platform}/media/video/${game.name}.webm`}></video>
                 <div className="game-detail__tabs">
                   {game && game.description && (
                     <>

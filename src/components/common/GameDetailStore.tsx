@@ -349,7 +349,7 @@ const GameDetailStore: VFC<{ serverAPI: any; game_name_platform: any }> = ({ ser
   const uninstallGame = (serverAPI: any, platform: string, name: string, url: string) => {
     setState({ ...state, installing: true });
     serverAPI
-      .callPluginMethod("emudeck", { command: `Store_uninstallGame ${platform} ${name} ${url}` })
+      .callPluginMethod("emudeck", { command: `Store_uninstallGame "${platform}" "${name}" "${url}"` })
       .then((response: any) => {
         const result = response.result;
         setInstalled(false);

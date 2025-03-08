@@ -423,8 +423,9 @@ const GameDetailStore: VFC<{ serverAPI: any; game_name_platform: any }> = ({ ser
     }
   };
 
-  const handlePay = (amount) => {
-    window.open(`https://artwork.emudeck.com/paypal?amount=${amount}&token=35ddcd33abac842d9b8425a3e794cf66`, "_blank");
+  const handlePay = (game) => {
+    const token = localStorage.getItem("emudeck-store-token");
+    window.open(`https://store.emudeck.com/payment.php?id=${game.id}&token=${token}`, "_blank");
   };
 
   const checkOrder = (gameID) => {
@@ -634,7 +635,7 @@ const GameDetailStore: VFC<{ serverAPI: any; game_name_platform: any }> = ({ ser
                       purchased == false &&
                       gameUrl !== undefined && (
                         <Button
-                          onClick={() => handlePay(game.price)}
+                          onClick={() => handlePay(game)}
                           className="game-detail__play-btn _3ydigb6zZAjJ0JCDgHwSYA _2AzIX5kl9k6JnxLfR5H4kX">
                           Buy ( ${game.price} )
                         </Button>

@@ -3,7 +3,7 @@ import { Tabs, Button, Focusable, SteamSpinner, Router, TextField } from "decky-
 import { launchApp } from "common/steamshortcuts";
 import { getTranslateFunc } from "TranslationsF";
 import { Game } from "components/common/Game";
-import { getDataSettings, launchGame, getDataAchievements, getDataStates } from "common/helpers";
+import { getDataSettings, launchGame, getDataAchievements, getDataStates, getHLTB } from "common/helpers";
 import { useFetchCond } from "hooks/useFetchCond";
 
 const GameDetail: VFC<{ serverAPI: any; game_name_platform: any }> = ({ serverAPI, game_name_platform = "" }) => {
@@ -261,6 +261,11 @@ const GameDetail: VFC<{ serverAPI: any; game_name_platform: any }> = ({ serverAP
     earnedHardcore: null,
     neither: null,
   });
+  const [stateHLTB, setStateHLTB] = useState<any>({
+    main_story: null,
+    main_extra: null,
+    completionist: null,
+  });
   const [percentage, setPercentage] = useState(0);
   const [currentTab, setCurrentTab] = useState<string>("Tab1");
   const [dataState, setDataState] = useState<any>(undefined);
@@ -328,7 +333,8 @@ const GameDetail: VFC<{ serverAPI: any; game_name_platform: any }> = ({ serverAP
         const filteredGame = gamesArray.filter((game: any) => game.name?.toLowerCase().includes(name.toLowerCase()));
 
         setState({ ...state, game: filteredGame[0], launcher: filteredPlatform[0].launcher, platform: platform });
-        //getDataAchievements(serverAPI, setStateAchievements, stateAchievements, platform, filteredGame[0].hash);
+        getDataAchievements(serverAPI, setStateAchievements, stateAchievements, platform, game.filename);
+        getHLTB(serverAPI, setStateHLTB, stateHLTB, game.name);
       } catch (error) {
         console.error("Error al parsear los juegos:", error);
       }
@@ -345,8 +351,8 @@ const GameDetail: VFC<{ serverAPI: any; game_name_platform: any }> = ({ serverAP
         );
         // Actualizar el estado con los datos del juego y los datos adicionales
         setDataState(filteredData[0]);
-        getDataAchievements(serverAPI, setStateAchievements, stateAchievements, platform, game.hash);
-        getDataStates(serverAPI, setState, state, game.name);
+        getDataAchievements(serverAPI, setStateAchievements, stateAchievements, platform, game.filename);
+        getHLTB(serverAPI, setStateHLTB, stateHLTB, game.name);
       });
     }
   }, [platform]);
@@ -416,17 +422,19 @@ const GameDetail: VFC<{ serverAPI: any; game_name_platform: any }> = ({ serverAP
                       Play
                     </Button>
                   </div>
-                  {/*
-                  <div className="game-detail__info-last-played">
-                    <span>Last Played</span>
-                    -NYI-
-                  </div>
-                  <div className="game-detail__info-play-time">
-                    <span>Play Time</span>
-                    -NYI-
-                  </div>
-*/}
-                  {stateAchievements.achievements != null && (
+                  {stateHLTB.main_story && (
+                    <div className="game-detail__info-last-played">
+                      <span>Main Story</span>
+                      {stateHLTB.main_story}
+                    </div>
+                  )}
+                  {stateHLTB.completionist && (
+                    <div className="game-detail__info-play-time">
+                      <span>Completionist</span>
+                      {stateHLTB.completionist}
+                    </div>
+                  )}
+                  {stateAchievements.hlhlt != null && (
                     <>
                       <div className="game-detail__info-achievements">
                         <span>Achievements</span>

@@ -131,9 +131,9 @@ export const launchGame = (
   launchApp(serverAPI, { name, picture, exec: launcherComplete }, emuDeckConfig.systemOS, platform);
 };
 
-export const getDataAchievements = async (serverAPI, setState, state, platform, hash) => {
+export const getDataAchievements = async (serverAPI, setState, state, platform, filename) => {
   serverAPI
-    .callPluginMethod("emudeck", { command: `generateGameLists_retroAchievements ${hash} ${platform}` })
+    .callPluginMethod("emudeck", { command: `generateGameLists_retroAchievements ${filename} ${platform}` })
     .then((response: any) => {
       console.log({ response });
       const result = response.result;
@@ -179,5 +179,26 @@ export const getDataAchievements = async (serverAPI, setState, state, platform, 
     })
     .catch((error: any) => {
       console.log({ error });
+    });
+};
+
+export const getHLTB = async (serverAPI, setState, state, game) => {
+  //console.log("Asking for Games");
+  const jsonUrl = `https://token.emudeck.com/hltb/?game=${game}`;
+
+  // Llamada a fetch para obtener los datos
+  fetch(jsonUrl)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`Error al obtener JSON: ${response.statusText}`);
+      }
+      return response.json(); // Convierte la respuesta en JSON
+    })
+    .then((data) => {
+      console.log("Contenido del JSON:", data); // Muestra los datos en la consola
+      setState(data);
+    })
+    .catch((error) => {
+      console.error("Error al acceder al JSON:", error); // Manejo de errores
     });
 };

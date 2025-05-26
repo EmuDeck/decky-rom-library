@@ -1,7 +1,6 @@
-import os
+import os, json, platform
 import subprocess
 import re
-import json
 from glob import glob
 from pathlib import Path
 import decky_plugin
@@ -52,6 +51,14 @@ class Plugin:
         result = subprocess.run(bash_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
         branch = result.stdout.strip()
 
+        file_path = Path("$HOME/.config/EmuDeck/backend/functions/appImageInit.sh")
+        if os.name == 'nt':
+            file_path = Path(f"{appdata_roaming}/EmuDeck/backend/functions/all.ps1")
+
+        if file_path.exists():
+            mode = "LEGACY"
+        else:
+            mode = "CURRENT"
 
         if mode == "LEGACY":
             pattern = re.compile(r'([A-Za-z_][A-Za-z0-9_]*)=(.*)')
@@ -104,6 +111,15 @@ class Plugin:
 
     async def emudeck(self, command):
 
+        file_path = Path("$HOME/.config/EmuDeck/backend/functions/appImageInit.sh")
+        if os.name == 'nt':
+            file_path = Path(f"{appdata_roaming}/EmuDeck/backend/functions/all.ps1")
+
+        if file_path.exists():
+            mode = "LEGACY"
+        else:
+            mode = "CURRENT"
+
         # Determinar el comando según el sistema operativo
         if os.name == 'nt':
             # Obtener la ruta completa del script .ps1 usando Python
@@ -120,6 +136,38 @@ class Plugin:
 
             if "setSetting" in command:
                 command = command.split("&&", 1)[1]
+
+            #Command Naming substitution
+
+            if "generateGameLists_artwork" in command:
+               command = "rl_get_artwork"
+
+            if "generateGameLists" in command:
+                command = "rl_init"
+
+            if "generateGameListsJson" in command:
+                command = "rl_print_json"
+
+            if "generateGameLists_getPercentage" in command:
+                command = "generate_game_lists_get_percentage"
+
+            if "generateGameLists_retroAchievements" in command:
+                command = "rl_get_artwork"
+
+            if "addGameListsArtwork" in command:
+                command = command.replace("addGameListsArtwork","rl_add_game_lists_artwork")
+
+            if "saveImage" in command:
+                command = command.replace("saveImage","rl_save_game")
+
+            if "Store_installGame" in command:
+                command = command.replace("Store_installGame","store_install_game")
+
+            if "Store_uninstallGame" in command:
+                command = command.replace("Store_uninstallGame","store_uninstall_game")
+
+            if "Store_isGameInstalled" in command:
+                command = command.replace("Store_isGameInstalled","store_is_game_installed")
 
             if os.name == 'nt':
                 bash_command = f"python {emudeck_backend}/api.py {command}"

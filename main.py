@@ -16,7 +16,7 @@ def error(txt):
     decky_plugin.logger.error(txt)
 
 mode = "LEGACY" #Bash or python?
-
+confdir = os.environ["DECKY_PLUGIN_SETTINGS_DIR"]
 system = platform.system().lower()  # 'linux', 'darwin', 'windows'
 home = Path.home()
 emudeck_backend = home / ".config/EmuDeck/backend"

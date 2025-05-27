@@ -298,17 +298,21 @@ const RetryHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, versio
   //
 
   useEffect(() => {
-    //console.log("getData launched");
+    console.log("getDataSettings launched");
     getDataSettings(serverAPI, setState, state);
 
-    intervalid = setInterval(() => {
-      checkParserStatus(serverAPI, setPercentage, intervalid);
-    }, 5000);
-
-    return () => {
-      clearInterval(intervalid);
-    };
+    //     intervalid = setInterval(() => {
+    //       checkParserStatus(serverAPI, setPercentage, intervalid);
+    //     }, 5000);
+    //
+    //     return () => {
+    //       clearInterval(intervalid);
+    //     };
   }, []);
+
+  useEffect(() => {
+    console.log(state);
+  }, [state]);
 
   useEffect(() => {
     const readLastCategory = () => {
@@ -331,7 +335,7 @@ const RetryHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, versio
 
   useEffect(() => {
     if (emuDeckConfig.systemOS !== "") {
-      //console.log("getDataGames launched");
+      console.log("getDataGames launched");
       const gamesLS = sessionStorage.getItem("rom_library_games");
       if (gamesLS) {
         const gamesJson: any = JSON.parse(gamesLS);

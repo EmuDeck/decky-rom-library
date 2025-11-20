@@ -9,7 +9,7 @@ import {
   routeStoreDetail,
 } from "./init";
 import { PluginIcon } from "./native-components/PluginIcon";
-import { patchMenu, patchMenu2 } from "./menuPatch";
+import { patchMenu } from "./menuPatch";
 import Settings from "components/Settings";
 import { Artwork } from "components/common/Artwork";
 import { GameGrid } from "components/common/GameGrid";
@@ -81,7 +81,6 @@ export default definePlugin((serverApi: ServerAPI) => {
   });
 
   const unpatchMenu = patchMenu(3);
-  // const unpatchMenu2 = patchMenu2(5);
 
   return {
     title: <div>EmuDeck</div>,

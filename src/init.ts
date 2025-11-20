@@ -14,4 +14,4 @@ export const defaultUrl = "https://store.steampowered.com";
 
 export const windowRouter = Router.WindowStore?.GamepadUIMainWindowInstance;
 export const SP_Window = windowRouter?.BrowserWindow;
-export const reactTree = getReactRoot(document.getElementById("root") as any);
+export const getReactTree = () => getReactRoot(document.getElementById("root") as any);

@@ -112,7 +112,8 @@ export const launchGame = (
   const gameKey = `${name}_${platform}`;
   localStorage.setItem("last_selected_game_key", gameKey);
 
-  let launcherComplete = launcher.replace(/{file.path}/g, `'${game}'`);
+  const escapedGame = game.replace(/'/g, "'\\''");
+  let launcherComplete = launcher.replace(/{file.path}/g, `'${escapedGame}'`);
   if (emuDeckConfig.systemOS == "nt") {
     launcherComplete = launcherComplete
       .replace(

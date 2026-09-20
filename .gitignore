@@ -50,3 +50,4 @@ backend/out
 decky_plugin.py
 /decky-loader-main
 .nova
+.credentials

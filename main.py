@@ -43,10 +43,21 @@ if system.startswith("win"):
     pegasus_folder = Path(os.path.expandvars(emudeck_folder / "Pegasus"))
 
 
+def clean_env():
+    """Quita el LD_LIBRARY_PATH solo si apunta al temporal de PyInstaller de Decky (rompe libssl/curl del sistema)."""
+    env = os.environ.copy()
+    ld_path = env.get("LD_LIBRARY_PATH", "")
+    pyi_dir = env.get("_PYI_APPLICATION_HOME_DIR", "")
+    if ld_path and ((pyi_dir and ld_path.startswith(pyi_dir)) or "_MEI" in ld_path):
+        env.pop("LD_LIBRARY_PATH")
+        if env.get("LD_LIBRARY_PATH_ORIG"):
+            env["LD_LIBRARY_PATH"] = env["LD_LIBRARY_PATH_ORIG"]
+    return env
+
+
 class Plugin:
     @staticmethod
     async def getSettings(self):
-        return True
         if system.startswith("win"):
             bash_command = f"cd {appdata_roaming}/EmuDeck/backend/ && git rev-parse --abbrev-ref HEAD"
         else:
@@ -62,7 +73,7 @@ class Plugin:
         )
         branch = result.stdout.strip()
 
-        file_path = Path("$HOME/.config/EmuDeck/backend/functions/appImageInit.sh")
+        file_path = Path(os.path.expandvars("$HOME/.config/EmuDeck/backend/functions/appImageInit.sh"))
         if system.startswith("win"):
             file_path = Path(f"{appdata_roaming}/EmuDeck/backend/functions/all.ps1")
 
@@ -115,7 +126,7 @@ class Plugin:
 
     async def emudeck(self, command):
 
-        file_path = Path("$HOME/.config/EmuDeck/backend/functions/appImageInit.sh")
+        file_path = Path(os.path.expandvars("$HOME/.config/EmuDeck/backend/functions/appImageInit.sh"))
         if system.startswith("win"):
             file_path = Path(f"{appdata_roaming}/EmuDeck/backend/functions/all.ps1")
 
@@ -185,8 +196,6 @@ class Plugin:
             else:
                 bash_command = f"python3 {emudeck_backend}/api.py {command}"
 
-        bash_command = f"python3 {emudeck_backend}/api.py {command}"
-
         log(bash_command)
 
         result = subprocess.run(
@@ -195,6 +204,7 @@ class Plugin:
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
             text=True,
+            env=clean_env(),
         )
 
         cleaned_stdout = result.stdout.strip()
@@ -212,7 +222,7 @@ class Plugin:
         return cleaned_stdout
 
     async def _main(self):
-        file_path = Path("$HOME/.config/EmuDeck/backend/functions/appImageInit.sh")
+        file_path = Path(os.path.expandvars("$HOME/.config/EmuDeck/backend/functions/appImageInit.sh"))
         if system.startswith("win"):
             file_path = Path(f"{appdata_roaming}/EmuDeck/backend/functions/all.ps1")
 

@@ -7,7 +7,8 @@ import { logN } from "./log";
 interface MainMenuItemPropsBase {
   route: string;
   label: ReactNode;
-  onFocus: () => void;
+  onFocus?: () => void;
+  onGamepadFocus?: () => void;
   icon?: ReactElement;
   onActivate?: () => void;
 }
@@ -40,7 +41,8 @@ export const patchMenu = (position: number) => {
       ret.props.children.props.children[0].type = patchedInnerMenu;
     } else {
       afterPatch(ret.props.children.props.children[0], "type", (_: any, ret: any) => {
-        const isMenuItemElt = (e: any) => e.props?.label && e.props.onFocus && e.props.route && e.type?.toString;
+        const isMenuItemElt = (e: any) =>
+          e.props?.label && (e.props.onFocus || e.props.onGamepadFocus) && e.props.route && e.type?.toString;
         const menuItems = findInReactTree(ret, (node) => Array.isArray(node) && node.some(isMenuItemElt)) as Array<any>;
 
         if (!menuItems) {
@@ -56,6 +58,7 @@ export const patchMenu = (position: number) => {
             key={"retrolibrary"}
             route={routePath}
             onFocus={menuItem.props.onFocus}
+            onGamepadFocus={menuItem.props.onGamepadFocus}
             label="Retro Library"
             useIconAsProp={!!menuItem.props.icon}
             MenuItemComponent={menuItem.type}>

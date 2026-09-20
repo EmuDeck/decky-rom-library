@@ -267,7 +267,8 @@ const TabsHome: VFC<{ serverAPI: any }> = ({ serverAPI }) => {
     localStorage.setItem("last_selected_game_key", gameKey);
     localStorage.setItem("current_visible_count", visibleCount);
 
-    let launcherComplete = launcher.replace(/{file.path}/g, `'${game}'`);
+    const escapedGame = game.replace(/'/g, "'\\''");
+    let launcherComplete = launcher.replace(/{file.path}/g, `'${escapedGame}'`);
     if (emuDeckConfig.systemOS == "nt") {
       launcherComplete = launcherComplete
         .replace(

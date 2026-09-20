@@ -1,6 +1,6 @@
 import { VFC, useState, useEffect } from "react";
 import { Tabs, Button, Focusable, SteamSpinner, Router, TextField, useParams } from "decky-frontend-lib";
-import { routePathGames, routeStore } from "init";
+import { routePathGames, routeStore, storeEnabled } from "init";
 import { getTranslateFunc } from "TranslationsF";
 import { Category } from "components/common/Category";
 import { getDataGames, getDataSettings, checkParserStatus, checkStatus } from "common/helpers";
@@ -252,6 +252,7 @@ const SteamyHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, versi
               style={{
                 width: version === "vertical" ? `${games.length * 28}vw` : "auto",
               }}>
+              {storeEnabled && (
               <Category
                 version=""
                 focus={isFocused("store")}
@@ -263,6 +264,7 @@ const SteamyHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, versi
                   Router.Navigate(`${routeStore}`);
                 }}
               />
+              )}
               {games.map((platform: any, index: number = 0) => {
                 index = index + 1;
                 const gameKey = `${platform.name}_${platform.id}`;

@@ -9,6 +9,7 @@ export const routePathGameDetail = "/emudeck-rom-detail";
 export const routeStore = "/emudeck-store";
 export const routeStoreGames = "/emudeck-store-games";
 export const routeStoreDetail = "/emudeck-store-detail";
+export const storeEnabled = false;
 
 export const defaultUrl = "https://store.steampowered.com";
 

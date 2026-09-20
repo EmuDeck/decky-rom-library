@@ -1,6 +1,6 @@
 import { VFC, useState, useEffect } from "react";
 import { Tabs, Button, Focusable, SteamSpinner, Router, TextField, useParams } from "decky-frontend-lib";
-import { routePathGames, routeStore } from "init";
+import { routePathGames, routeStore, storeEnabled } from "init";
 import { getTranslateFunc } from "TranslationsF";
 import { Category } from "components/common/Category";
 import { getDataGames, getDataSettings, checkParserStatus } from "common/helpers";
@@ -385,6 +385,7 @@ const RetryHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, versio
             <Focusable
               className={`categories CSSGrid Grid Panel ${version}`}
               style={{ width: `${games.length * 28}vw` }}>
+              {storeEnabled && (
               <Category
                 version=""
                 focus={isFocused("emulators")}
@@ -396,6 +397,7 @@ const RetryHome: VFC<{ serverAPI: any; version: string }> = ({ serverAPI, versio
                   Router.Navigate(`${routeStore}`);
                 }}
               />
+              )}
 
               {games.map((platform: any, index: number = 0) => {
                 index = index + 1;

@@ -18,6 +18,7 @@
     "strict": true,
     "suppressImplicitAnyIndexErrors": true,
     "allowSyntheticDefaultImports": true,
+    "types": ["react"],
     "skipLibCheck": true,
     "resolveJsonModule": true
   },
